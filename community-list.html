@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>소설 커뮤니티</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* CSS 스타일은 이전과 동일 */
+        body { font-family: Arial, sans-serif; margin: 0; background-color: #f4f4f4; }
+        .header { background-color: #556b2f; color: white; padding: 10px 0; border-bottom: 3px solid #455a20; }
+        .header-inner { width: 1000px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 1.5em; font-weight: bold; color: #f0f0d0; }
+        .main-menu a { color: white; text-decoration: none; margin: 0 15px; font-weight: 500; }
+        .main-menu a.active { color: #f0f0d0; }
+        .user-info span { margin-right: 15px; font-size: 0.9em; }
+        .login-button { background-color: #7b8d64; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; }
+
+        .community-main { width: 1000px; margin: 20px auto; background-color: white; padding: 20px; border: 1px solid #ddd; }
+        .top-bar { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #556b2f; padding-bottom: 10px; margin-bottom: 15px; }
+        .board-tabs .tab-item { display: inline-block; padding: 8px 15px; border-radius: 5px 5px 0 0; font-weight: bold; text-decoration: none; color: #333; cursor: pointer; }
+        .board-tabs .tab-item.active { background-color: #556b2f; color: white; }
+        .write-button { padding: 8px 15px; background-color: #556b2f; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; }
+
+        .post-table { width: 100%; border-collapse: collapse; }
+        .post-table thead tr { border-top: 2px solid #556b2f; border-bottom: 1px solid #ddd; }
+        .post-table th { padding: 12px 10px; text-align: center; background-color: #f9f9f9; }
+        .post-table td { padding: 10px; border-bottom: 1px solid #eee; text-align: center; }
+        .post-table td.col-title { text-align: left; cursor: pointer; color: #333; }
+        .post-table tr:hover { background-color: #fafafa; }
+        .col-number { width: 8%; }
+        .col-title { width: 45%; }
+        .col-writer { width: 15%; }
+        .col-date { width: 15%; }
+        .col-views, .col-recomm { width: 8%; }
+        .notice-row { background-color: #fffbe6; font-weight: bold; }
+        .pagination { text-align: center; padding: 20px 0; }
+        .pagination a { text-decoration: none; color: #333; padding: 8px 12px; border: 1px solid #ddd; margin: 0 3px; border-radius: 4px; }
+        .pagination a.active { background-color: #556b2f; color: white; border-color: #556b2f; }
+    </style>
+</head>
+<body>
+<header class="header">
+    <div class="header-inner">
+        <div class="logo">
+            MILLI ROAD
+        </div>
+        <nav class="main-menu">
+            <a href="#">뉴스</a>
+            <a href="#" class="active">소설</a>
+            <a href="#">건강</a>
+            <a href="#">대중교통 위치/시간표</a>
+        </nav>
+        <div class="user-info">
+            <span>니인내조님 님</span>
+            <button class="login-button">로그아웃</button>
+        </div>
+    </div>
+</header>
+
+<main class="community-main">
+    <div class="top-bar">
+        <div class="board-tabs">
+            <span class="tab-item active">소설 커뮤니티</span>
+            <a href="unit-search.html" class="tab-item">부대 평가</a>
+        </div>
+
+        <a href="community-write.html" class="write-button">글쓰기</a>
+    </div>
+
+    <table class="post-table">
+        <thead>
+        <tr>
+            <th class="col-number">번호</th>
+            <th class="col-title">제목</th>
+            <th class="col-writer">글쓴이</th>
+            <th class="col-date">작성일</th>
+            <th class="col-views">조회</th>
+            <th class="col-recomm">추천</th>
+        </tr>
+        </thead>
+        <tbody id="post-list-body">
+
+        <tr data-post-id="1902870" data-post-type="static" data-post-title="선임들한테 수고하십쇼 할 때" data-post-writer="육갤러" data-post-body="본문1" data-post-public="public">
+            <td class="col-number">1902870</td>
+            <td class="col-title">선임들한테 수고하십쇼 할 때</td>
+            <td class="col-writer">육갤러</td>
+            <td class="col-date">2025.10.08</td>
+            <td class="col-views">3</td>
+            <td class="col-recomm">2</td>
+        </tr>
+        <tr data-post-id="1902869" data-post-type="static" data-post-title="나에게 수고했다고 해줄 수 있겠니..?" data-post-writer="니인내조" data-post-body="본문2" data-post-public="public">
+            <td class="col-number">1902869</td>
+            <td class="col-title">나에게 수고했다고 해줄 수 있겠니..?</td>
+            <td class="col-writer">니인내조</td>
+            <td class="col-date">2025.09.22</td>
+            <td class="col-views">9</td>
+            <td class="col-recomm">11</td>
+        </tr>
+        <tr data-post-id="1902866" data-post-type="static" data-post-title="군대에서 소총 ㄱㄴ?" data-post-writer="익명" data-post-body="본문3 (익명)" data-post-public="private">
+            <td class="col-number">1902866</td>
+            <td class="col-title">군대에서 소총 ㄱㄴ?</td>
+            <td class="col-writer">익명</td>
+            <td class="col-date">2025.09.07</td>
+            <td class="col-views">54</td>
+            <td class="col-recomm">0</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="pagination">
+        <a href="#" class="page-num active">1</a>
+        <a href="#" class="page-num">2</a>
+        <a href="#" class="page-num">3</a>
+        <a href="#" class="page-next">▶</a>
+    </div>
+</main>
+
+<script>
+    const ALL_POSTS_STORAGE_KEY = 'allDynamicPosts';
+    const CURRENT_POST_STORAGE_KEY = 'currentPostData';
+    const START_POST_NUMBER = 9999; // 동적 글 번호 시작점
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const postListBody = document.getElementById('post-list-body');
+
+        // 1. 모든 동적 글 로드
+        const allPostsJSON = localStorage.getItem(ALL_POSTS_STORAGE_KEY);
+        const allPosts = allPostsJSON ? JSON.parse(allPostsJSON) : [];
+
+        // 2. 동적 글을 목록 맨 위에 렌더링
+        allPosts.forEach((post, index) => {
+            // 익명 여부에 따라 글쓴이 결정
+            const postWriter = post.publicOption === 'private' ? '익명' : post.writerId;
+            const postNumber = START_POST_NUMBER - index; // 글 번호를 역순으로 매김 (쌓이는 순서대로)
+
+            const newRow = document.createElement('tr');
+
+            // 동적 글임을 표시하는 타입과, 배열 내의 인덱스를 저장
+            newRow.setAttribute('data-post-type', 'dynamic');
+            newRow.setAttribute('data-post-index', index);
+            newRow.setAttribute('data-post-id', post.postId); // 고유 ID도 저장
+
+
+            newRow.innerHTML = `
+                    <td class="col-number">${postNumber}</td>
+                    <td class="col-title">${post.title}</td>
+                    <td class="col-writer">${postWriter}</td>
+                    <td class="col-date">${post.date}</td>
+                    <td class="col-views">${post.views}</td>
+                    <td class="col-recomm">${post.recomm}</td>
+                `;
+            postListBody.prepend(newRow); // 맨 앞에 추가
+        });
+
+        // 3. 게시글 클릭 이벤트 처리
+        postListBody.addEventListener('click', function(event) {
+            let targetRow = event.target.closest('tr');
+            if (!targetRow) return;
+
+            let postData = null;
+            const postType = targetRow.getAttribute('data-post-type');
+
+            if (postType === 'dynamic') {
+                // 동적 글 (작성/수정된 글): 배열에서 최신 데이터 로드
+                const index = parseInt(targetRow.getAttribute('data-post-index'));
+                postData = allPosts[index];
+
+            } else {
+                // 정적 글 (HTML에 박혀있는 기본 글): HTML 속성에서 데이터 추출
+                postData = {
+                    postId: targetRow.getAttribute('data-post-id'),
+                    title: targetRow.getAttribute('data-post-title'),
+                    body: targetRow.getAttribute('data-post-body'),
+                    writerId: targetRow.getAttribute('data-post-writer'),
+                    publicOption: targetRow.getAttribute('data-post-public') || 'public',
+                    date: targetRow.querySelector('.col-date').textContent,
+                    views: parseInt(targetRow.querySelector('.col-views').textContent),
+                    recomm: parseInt(targetRow.querySelector('.col-recomm').textContent)
+                };
+            }
+
+            if (postData) {
+                // 클릭된 글의 데이터를 CURRENT_POST_STORAGE_KEY에 임시 저장
+                localStorage.setItem(CURRENT_POST_STORAGE_KEY, JSON.stringify(postData));
+
+                // 상세 페이지로 이동
+                window.location.href = 'community-view.html';
+            }
+        });
+    });
+</script>
+</body>
+</html>

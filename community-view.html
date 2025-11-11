@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시글 보기 - 소설 커뮤니티</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* CSS styles remain the same */
+        .view-container { width: 800px; margin: 20px auto; background-color: white; padding: 30px; border: 1px solid #ddd; }
+        .post-content-box { padding: 20px 0; border-bottom: 1px solid #ddd; }
+        .view-badge { display: inline-block; background-color: #556b2f; color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.85em; margin-bottom: 15px; }
+        .post-title-view { font-size: 1.8em; font-weight: bold; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        .post-body-view { min-height: 250px; line-height: 1.6; font-size: 1.05em; color: #333; padding-top: 15px; }
+        .view-button-area { display: flex; justify-content: space-between; margin-top: 30px; }
+        .btn-list { padding: 10px 20px; background-color: #aaa; color: white; text-decoration: none; border-radius: 5px; font-size: 1em; cursor: pointer; }
+        .float-right-buttons a, .float-right-buttons button { padding: 10px 20px; border: none; border-radius: 5px; font-size: 1em; cursor: pointer; margin-left: 10px; text-decoration: none; }
+        .btn-view-edit { background-color: #7b8d64; color: white; }
+        .btn-view-delete { background-color: #c9302c; color: white; }
+        /* Modal Style (Delete Modal) */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); display: flex; justify-content: center; align-items: center; z-index: 1000; }
+        .modal-overlay.hidden { display: none; }
+        .modal-content { background-color: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); width: 350px; text-align: center; }
+        .modal-header { font-size: 1.5em; font-weight: bold; color: #333; margin-bottom: 15px; }
+        .modal-body { font-size: 1.1em; color: #666; margin-bottom: 25px; line-height: 1.4; }
+        .modal-footer button { padding: 10px 20px; background-color: #556b2f; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 1em; margin: 0 5px; }
+        .modal-footer .btn-cancel-confirm { background-color: #aaa; }
+    </style>
+</head>
+<body>
+<header class="header">
+    <div class="header-inner">
+        <div class="logo">
+            MILLI ROAD
+        </div>
+        <nav class="main-menu">
+            <a href="#">뉴스</a>
+            <a href="#" class="active">소설</a>
+            <a href="#">건강</a>
+            <a href="#">대중교통 위치/시간표</a>
+        </nav>
+        <div class="user-info">
+            <span>니인내조님</span>
+            <button class="login-button">로그아웃</button>
+        </div>
+    </div>
+</header>
+
+<main class="view-container">
+
+    <div class="post-content-box full-view-mode">
+        <div class="view-badge" id="view-badge" style="display:none;">아이디 비공개</div>
+
+        <h1 class="post-title-view" id="view-title">글을 불러오는 중...</h1>
+
+        <div class="post-body-view" id="view-body">
+            <p>내용을 불러오는 중...</p>
+        </div>
+    </div>
+
+    <div class="view-button-area">
+        <a href="community-list.html" class="btn-list">목록</a>
+
+        <div class="float-right-buttons">
+            <a href="community-edit.html" class="btn-view-edit">수정</a>
+            <button type="button" class="btn-view-delete" onclick="showDeleteModal()">삭제</button>
+        </div>
+    </div>
+</main>
+
+<div class="modal-overlay hidden" id="deleteModal">
+    <div class="modal-content">
+        <div class="modal-header">삭제 확인</div>
+        <div class="modal-body">
+            정말로 게시글을 삭제하시겠습니까?
+        </div>
+        <div class="modal-footer">
+            <button class="btn-confirm" onclick="deletePost()">예</button>
+            <button class="btn-confirm btn-cancel-confirm" onclick="hideDeleteModal()">아니오</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const ALL_POSTS_STORAGE_KEY = 'allDynamicPosts';
+    const CURRENT_POST_STORAGE_KEY = 'currentPostData';
+
+    function showDeleteModal() {
+        document.getElementById('deleteModal').classList.remove('hidden');
+    }
+    function hideDeleteModal() {
+        document.getElementById('deleteModal').classList.add('hidden');
+    }
+
+    // 삭제 로직 업데이트: allDynamicPosts 배열에서 해당 글을 제거
+    function deletePost() {
+        const currentPostJSON = localStorage.getItem(CURRENT_POST_STORAGE_KEY);
+        if (currentPostJSON) {
+            const currentPost = JSON.parse(currentPostJSON);
+            const postIdToDelete = currentPost.postId;
+
+            const allPostsJSON = localStorage.getItem(ALL_POSTS_STORAGE_KEY);
+            let allPosts = allPostsJSON ? JSON.parse(allPostsJSON) : [];
+
+            // 해당 postId를 가진 글을 배열에서 제외하고 다시 저장
+            const updatedPosts = allPosts.filter(post => post.postId !== postIdToDelete);
+            localStorage.setItem(ALL_POSTS_STORAGE_KEY, JSON.stringify(updatedPosts));
+
+            // 현재 글 임시 저장소도 비움
+            localStorage.removeItem(CURRENT_POST_STORAGE_KEY);
+        }
+        // 목록으로 이동
+        window.location.href = 'community-list.html';
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const viewTitle = document.getElementById('view-title');
+        const viewBody = document.getElementById('view-body');
+        const viewBadge = document.getElementById('view-badge');
+
+        // 핵심: currentPostData 로드 (가장 최신 정보를 가져옴)
+        const savedDataJSON = localStorage.getItem(CURRENT_POST_STORAGE_KEY);
+
+        if (savedDataJSON) {
+            const savedData = JSON.parse(savedDataJSON);
+
+            viewTitle.textContent = savedData.title;
+            // 줄바꿈 문자(\n)를 HTML <br> 태그로 변환하여 본문 내용을 정확히 표시
+            viewBody.innerHTML = savedData.body.replace(/\n/g, '<br>');
+
+            // 공개 여부 확인
+            const isPrivate = savedData.publicOption === 'private';
+            viewBadge.textContent = '아이디 비공개';
+            viewBadge.style.display = isPrivate ? 'inline-block' : 'none';
+        } else {
+            // 저장된 글이 없는 경우
+            viewTitle.textContent = '글을 찾을 수 없습니다.';
+            viewBody.innerHTML = '<p>게시글 데이터가 존재하지 않거나, 삭제된 글입니다.</p>';
+            viewBadge.style.display = 'none';
+        }
+    });
+</script>
+</body>
+</html>
