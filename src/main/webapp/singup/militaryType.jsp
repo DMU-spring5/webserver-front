@@ -6,7 +6,7 @@
     </head>
     <body>
         <img src="<%=request.getContextPath()%>/img/WebServerLogo.png" width="300px">
-        <form id="serviceTypeForm" action="signup_next.jsp" method="post">
+        <form id="serviceTypeForm" action="militaryInfo.jsp" method="post">
             <h3>복무 타입</h3>
             <label>
                 <input type="radio" name="serviceType" value="ARMY">

@@ -10,6 +10,7 @@ repositories {
 }
 
 dependencies {
+    implementation 'javax.servlet:javax.servlet-api:4.0.1'  //Servlet API 추가
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
