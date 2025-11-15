@@ -4,35 +4,38 @@
     <head>
         <meta charset="UTF-8">
         <title>아이디 찾기</title>
-        <link rel="stylesheet" type="text/css" href="login.css"> <!-- 동일 CSS 사용 -->
+        <link rel="stylesheet" type="text/css" href="find_id.css">
     </head>
-
     <body>
         <div>
-            <img src="<%=request.getContextPath()%>/img/WebServerLogo.png" alt="MILLI ROAD 로고" width="200">
+            <img src="<%=request.getContextPath()%>/img/WebServerLogo.png"
+                 alt="MILLI ROAD 로고" width="200">
         </div>
         <form id="findIdForm" action="find_id_ok.jsp" method="post">
             <!-- 닉네임 -->
-            <div class="id-box">
+            <div class="nickname-box">
                 <label for="nickname">닉네임</label><br>
                 <input type="text" id="nickname" name="nickname"
                        placeholder="닉네임을 입력해 주세요.">
+                <p id="nickError" style="color:red; margin:4px 0 10px 2px;"></p>
             </div>
             <!-- 비밀번호 -->
             <div class="pw-box">
                 <label for="password">비밀번호</label><br>
-                <input type="password" id="password" name="password"
-                       placeholder="비밀번호를 입력해 주세요.">
-                <img class="eyeoff" id="togglePw" src="../img/eye.png">
+                <div class="pw-input-wrap">
+                    <input type="password" id="password" name="password" placeholder="비밀번호를 입력해 주세요.">
+                    <img class="eyeoff" id="togglePw" src="../img/eye.png">
+                </div>
             </div>
-            <p id="errorMsg" style="color:red;"></p>
-            <button type="submit">아이디 찾기</button>
+            <p id="pwError" style="color:red; margin:4px 0 10px 2px;"></p>
+            <button type="submit" id="findIdBtn">아이디 찾기</button>
         </form>
 
         <script>
             // 비밀번호 보기/숨기기
             const pwInput  = document.getElementById("password");
             const togglePw = document.getElementById("togglePw");
+
             if (togglePw && pwInput) {
                 togglePw.addEventListener("click", () => {
                     if (pwInput.type === "password") {
@@ -45,25 +48,57 @@
                     }
                 });
             }
-            // 입력값 검증
-            const findIdForm = document.getElementById("findIdForm");
-            const nickname   = document.getElementById("nickname");
-            const errorMsg   = document.getElementById("errorMsg");
-            findIdForm.addEventListener("submit", (e) => {
-                let msg = "";
 
-                if (nickname.value.trim() === "") {
-                    msg = "닉네임을 입력해 주세요.";
-                }
-                else if (pwInput.value.trim() === "") {
-                    msg = "비밀번호를 입력해 주세요.";
-                }
-                if (msg !== "") {
-                    e.preventDefault();
-                    errorMsg.textContent = msg;
+            // 요소 가져오기
+            const nickname   = document.getElementById("nickname");
+            const nickError  = document.getElementById("nickError");
+            const pwError    = document.getElementById("pwError");
+            const findIdBtn  = document.getElementById("findIdBtn");
+            const findIdForm = document.getElementById("findIdForm");
+
+            // 버튼 색만 바꾸는 함수 (더 이상 disabled 사용 X)
+            function updateFindBtnState() {
+                if (nickname.value.trim() !== "" && pwInput.value.trim() !== "") {
+                    findIdBtn.classList.add("active");   // 초록색 (CSS에서 .active로 스타일)
                 }
                 else {
-                    errorMsg.textContent = "";
+                    findIdBtn.classList.remove("active"); // 회색
+                }
+            }
+
+            // 입력 변화 시: 에러는 지우고, 버튼 색만 갱신
+            nickname.addEventListener("input", () => {
+                nickError.textContent = "";
+                updateFindBtnState();
+            });
+
+            pwInput.addEventListener("input", () => {
+                pwError.textContent = "";
+                updateFindBtnState();
+            });
+
+            // 첫 로드시 초기 설정
+            nickError.textContent = "";
+            pwError.textContent   = "";
+            updateFindBtnState();
+
+            // 제출 시 최종 검사 → 여기서 오류 메시지 띄움
+            findIdForm.addEventListener("submit", (e) => {
+                let hasError = false;
+
+                nickError.textContent = "";
+                pwError.textContent   = "";
+
+                if (nickname.value.trim() === "") {
+                    nickError.textContent = "닉네임을 입력해 주세요.";
+                    hasError = true;
+                }
+                if (pwInput.value.trim() === "") {
+                    pwError.textContent = "비밀번호를 입력해 주세요.";
+                    hasError = true;
+                }
+                if (hasError) {
+                    e.preventDefault();
                 }
             });
         </script>
