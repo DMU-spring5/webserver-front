@@ -43,7 +43,7 @@
     <div class="link-box">
         <a href="find_id.jsp">아이디 찾기</a> |
         <a href="find_pw.jsp">비밀번호 찾기</a> |
-        <a href="signup.jsp">회원가입</a>
+        <a href="<%=request.getContextPath()%>/signup/signupAgree.jsp">회원가입</a>
     </div><br>
 </form>
 
