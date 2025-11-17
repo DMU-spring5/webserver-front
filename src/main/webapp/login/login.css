@@ -65,13 +65,13 @@ body > img {
     outline: none;
 }
 
-/* 비밀번호 아이콘 */
-.pw-box {
+/* 비밀번호 입력창 + 아이콘 래퍼 */
+.pw-input-wrap {
     position: relative;
 }
 
 /* 눈 아이콘 */
-.eyeoff {
+.pw-input-wrap .eyeoff {
     position: absolute;
     right: 12px;
     top: 50%;
@@ -81,9 +81,10 @@ body > img {
     opacity: 0.75;
 }
 
-.eyeoff:hover {
+.pw-input-wrap .eyeoff:hover {
     opacity: 1;
 }
+
 
 /* 에러 메시지 */
 #errorMsg,
@@ -91,7 +92,7 @@ body > img {
 .error-msg,
 #idError,
 #pwError {
-    color: #e53935;
+    color: #FF0000FF;
     font-size: 13px;
     margin: 4px 0 0 2px;  /* 위로만 살짝, 아래는 0 */
 }
@@ -162,12 +163,11 @@ body > img {
     }
 }
 
-/* 로고 위치: find_id.css 에 있는 값과 완전히 동일하게 */
 .logo-wrap {
     text-align: center;
 }
 
 .logo-wrap img {
-    width: 200px;          /* 아이디 찾기랑 동일 */
+    width: 200px;
     display: inline-block;
 }

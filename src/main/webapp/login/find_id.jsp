@@ -22,12 +22,15 @@
             <!-- 비밀번호 -->
             <div class="pw-box">
                 <label for="password">비밀번호</label><br>
+
                 <div class="pw-input-wrap">
-                    <input type="password" id="password" name="password" placeholder="비밀번호를 입력해 주세요.">
+                    <input type="password" id="password" name="password"
+                           placeholder="비밀번호를 입력해 주세요.">
                     <img class="eyeoff" id="togglePw" src="../img/eye.png">
                 </div>
+
+                <p id="pwError" class="error-msg"></p>
             </div>
-            <p id="pwError" style="color:red; margin:4px 0 10px 2px;"></p>
             <button type="submit" id="findIdBtn">아이디 찾기</button>
         </form>
 
