@@ -10,7 +10,11 @@
     String pwErrorParam = request.getParameter("pwError");
 %>
 <body>
-<img src="<%=request.getContextPath()%>/img/WebServerLogo.png">
+<!-- 로고 영역 (아이디 찾기와 동일 구조로 div 감싸기) -->
+<div class="logo-wrap">
+    <img src="<%=request.getContextPath()%>/img/WebServerLogo.png" alt="MILLI ROAD 로고">
+</div>
+
 <form id="loginForm" action="login_ok.jsp" method="post">
     <!-- 아이디 -->
     <div class="id-box">
@@ -95,7 +99,7 @@
 
         checkInputs(); // 초기 상태 설정
 
-        /* 제출 시 아이디/비밀번호 미입력 체크 → 아이디 찾기와 같은 느낌 */
+        /* 제출 시 아이디/비밀번호 미입력 체크 */
         loginForm.addEventListener("submit", (e) => {
             let hasError = false;
 
