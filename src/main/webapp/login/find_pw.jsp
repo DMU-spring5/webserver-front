@@ -4,14 +4,8 @@
     <head>
         <meta charset="UTF-8">
         <title>비밀번호 찾기</title>
-        <link rel="stylesheet" type="text/css" href="login.css">
-        <style>  /*일단 여기에 작성*/
-            .error-msg {
-                color: red;
-                font-size: 13px;
-                margin: 4px 0 10px 2px;
-            }
-        </style>
+        <!-- find_pw.css 대신 find_id.css를 재사용해도 됨 -->
+        <link rel="stylesheet" type="text/css" href="find_pw.css">
     </head>
     <body>
         <div>
@@ -20,50 +14,72 @@
         </div>
         <form id="findPwForm" action="find_pw_ok.jsp" method="post">
             <!-- 닉네임 -->
-            <div class="id-box">
+            <div class="nickname-box">
                 <label for="nickname">닉네임</label><br>
                 <input type="text" id="nickname" name="nickname"
                        placeholder="닉네임을 입력해 주세요.">
-                <p id="nicknameError" class="error-msg"></p>
+                <p id="nickError" style="color:red; margin:4px 0 10px 2px;"></p>
             </div>
             <!-- 아이디 -->
             <div class="id-box">
                 <label for="userid">아이디</label><br>
                 <input type="text" id="userid" name="userid"
                        placeholder="아이디를 입력해 주세요.">
-                <p id="useridError" class="error-msg"></p>
+                <p id="idError" style="color:red; margin:4px 0 10px 2px;"></p>
             </div>
-            <button type="submit">비밀번호 찾기</button>
+            <button type="submit" id="findPwBtn">비밀번호 찾기</button>
         </form>
 
         <script>
-            const findPwForm   = document.getElementById("findPwForm");
-            const nickname     = document.getElementById("nickname");
-            const userid       = document.getElementById("userid");
+            const nickname   = document.getElementById("nickname");
+            const userid     = document.getElementById("userid");
+            const nickError  = document.getElementById("nickError");
+            const idError    = document.getElementById("idError");
+            const findPwBtn  = document.getElementById("findPwBtn");
+            const findPwForm = document.getElementById("findPwForm");
 
-            const nicknameError = document.getElementById("nicknameError");
-            const useridError   = document.getElementById("useridError");
+            // 버튼 색만 바꾸는 함수 (항상 클릭 가능)
+            function updateFindBtnState() {
+                if (nickname.value.trim() !== "" && userid.value.trim() !== "") {
+                    findPwBtn.classList.add("active");   // 초록색 (CSS에서 .active 스타일)
+                }
+                else {
+                    findPwBtn.classList.remove("active"); // 회색
+                }
+            }
+            // 입력 시 에러 제거 + 버튼 색 갱신
+            nickname.addEventListener("input", () => {
+                nickError.textContent = "";
+                updateFindBtnState();
+            });
+            userid.addEventListener("input", () => {
+                idError.textContent = "";
+                updateFindBtnState();
+            });
 
+            // 초기 상태
+            nickError.textContent = "";
+            idError.textContent   = "";
+            updateFindBtnState();
+
+            // 제출 시 최종 검사
             findPwForm.addEventListener("submit", (e) => {
-                let valid = true;
+                let hasError = false;
 
-                // 닉네임 검사
+                nickError.textContent = "";
+                idError.textContent   = "";
+
                 if (nickname.value.trim() === "") {
-                    nicknameError.textContent = "닉네임을 입력해 주세요.";
-                    valid = false;
+                    nickError.textContent = "닉네임을 입력해 주세요.";
+                    hasError = true;
                 }
-                else {
-                    nicknameError.textContent = "";
-                }
-                // 아이디 검사
                 if (userid.value.trim() === "") {
-                    useridError.textContent = "아이디를 입력해 주세요.";
-                    valid = false;
+                    idError.textContent = "아이디를 입력해 주세요.";
+                    hasError = true;
                 }
-                else {
-                    useridError.textContent = "";
+                if (hasError) {
+                    e.preventDefault();
                 }
-                if (!valid) e.preventDefault();
             });
         </script>
     </body>

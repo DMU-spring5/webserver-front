@@ -12,8 +12,7 @@ body {
 /* 로고 */
 body > img {
     margin-top: 60px;
-    margin-bottom: 24px;
-    width: 280px;
+    width: 200px;
 }
 
 /* 전체 카드 */

@@ -59,10 +59,10 @@
             // 버튼 색만 바꾸는 함수 (더 이상 disabled 사용 X)
             function updateFindBtnState() {
                 if (nickname.value.trim() !== "" && pwInput.value.trim() !== "") {
-                    findIdBtn.classList.add("active");   // 초록색 (CSS에서 .active로 스타일)
+                    findIdBtn.classList.add("active");
                 }
                 else {
-                    findIdBtn.classList.remove("active"); // 회색
+                    findIdBtn.classList.remove("active");
                 }
             }
 

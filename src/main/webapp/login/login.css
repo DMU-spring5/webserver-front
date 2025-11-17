@@ -7,16 +7,18 @@ body {
     flex-direction: column;
     align-items: center;
     background-color: #f5f5f5;
+
+    justify-content: flex-start;  /* 더 이상 가운데 정렬 X, 위에서부터 쌓기 */
+    padding-bottom: 80px;
 }
 
 /* 로고 */
 body > img {
     margin-top: 60px;
-    margin-bottom: 24px;
-    width: 280px;
+    width: 200px;
 }
 
-/* 로그인 카드 */
+/* 전체 카드 */
 #loginForm {
     width: min(90vw, 640px);
     background-color: #ffffff;
@@ -26,19 +28,26 @@ body > img {
     box-sizing: border-box;
 }
 
-/* 아이디/비밀번호 박스 */
+/* 입력 박스 */
 .id-box,
 .pw-box {
     width: 100%;
     margin-bottom: 14px;
 }
 
-/* 아이디 & 비밀번호 입력창 */
+/* 입력창 라벨 (아이디 찾기/비번 찾기와 동일 구조 적용) */
+.id-box label,
+.pw-box label {
+    margin-bottom: 6px;
+    display: inline-block;
+}
+
+/* 입력창 */
 .id-box input,
 .pw-box input {
     width: 100%;
     max-width: 600px;
-    height: 60px;
+    height: 55px;
     padding-left: 15px;
     padding-right: 40px;
     font-size: 15px;
@@ -56,7 +65,7 @@ body > img {
     outline: none;
 }
 
-/* 비밀번호 아이콘 영역 */
+/* 비밀번호 아이콘 */
 .pw-box {
     position: relative;
 }
@@ -71,6 +80,7 @@ body > img {
     cursor: pointer;
     opacity: 0.75;
 }
+
 .eyeoff:hover {
     opacity: 1;
 }
@@ -83,7 +93,7 @@ body > img {
 #pwError {
     color: #e53935;
     font-size: 13px;
-    margin: 4px 0 10px 2px;
+    margin: 4px 0 0 2px;  /* 위로만 살짝, 아래는 0 */
 }
 
 /* 자동 로그인 */
@@ -95,23 +105,23 @@ body > img {
     gap: 6px;
 }
 
-/* 기본 로그인 버튼 (비활성: 회색) */
+/* 로그인 버튼 */
 #loginBtn {
     width: 100%;
     max-width: 600px;
     height: 60px;
     border: none;
     border-radius: 8px;
-    background-color: #A1A49D;
+    background-color: #A1A49D; /* 비활성(회색) */
     color: #ffffff;
     font-size: 18px;
     font-weight: 500;
-    cursor: not-allowed;
-    transition: background-color 0.2s ease, cursor 0.2s ease;
     margin-top: 20px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
 }
 
-/* 활성화된 버튼 (초록색) */
+/* 활성화(초록색) */
 #loginBtn.active {
     background-color: #78866B;
     cursor: pointer;
@@ -136,6 +146,7 @@ body > img {
 
 /* 반응형 */
 @media (max-width: 480px) {
+
     #loginForm {
         padding: 24px 20px;
     }
