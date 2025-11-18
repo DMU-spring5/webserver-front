@@ -64,12 +64,12 @@ body > img {
     outline: none;
 }
 
-/* ★ 비밀번호 입력창 + 아이콘 래퍼 */
+/* 비밀번호 입력창 + 아이콘 래퍼 */
 .pw-input-wrap {
     position: relative;          /* 아이콘 기준이 되는 박스 */
 }
 
-/* ★ 눈 아이콘 – 인풋 세로 중앙 고정 */
+/* 눈 아이콘 – 인풋 세로 중앙 고정 */
 .pw-input-wrap .eyeoff {
     position: absolute;
     right: 12px;
@@ -118,6 +118,11 @@ body > img {
 #findIdBtn.active {
     background-color: #78866B;
     cursor: pointer;
+}
+
+#loginBtn {
+    background-color: #78866B !important;
+    cursor: pointer !important;
 }
 
 /* 반응형 */
