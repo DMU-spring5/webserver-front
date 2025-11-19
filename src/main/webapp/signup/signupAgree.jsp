@@ -2,56 +2,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>회원가입 - 약관 동의</title>
-    <!-- [추가] 모달과 날짜 리스트를 보기 좋게 하기 위한 최소 스타일 -->
-    <style>
-        /* [추가] 모달 전체 배경 */
-        #dateModal {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.3);
-            justify-content: center;
-            align-items: center;
-        }
-        /* [추가] 모달 안 박스 */
-        .date-modal-inner {
-            background: #fff;
-            padding: 16px;
-            border-radius: 8px;
-            min-width: 420px;
-        }
-        /* [추가] 연/월/일 리스트 영역 */
-        .date-modal-body {
-            display: flex;
-            gap: 12px;
-            max-height: 220px;
-            overflow-y: auto;
-        }
-        .date-col {
-            flex: 1;
-            border: 1px solid #ddd;
-            padding: 8px;
-            box-sizing: border-box;
-        }
-        .date-col h4 {
-            margin: 0 0 6px 0;
-            font-size: 13px;
-        }
-        .date-col p {
-            margin: 0;
-            padding: 3px 4px;
-            cursor: pointer;
-        }
-        .date-modal-footer {
-            margin-top: 10px;
-            text-align: right;
-        }
-    </style>
+    <title>회원가입</title>
+    <link rel="stylesheet" type="text/css" href="signupAgree.css">
 </head>
 <body>
+
 <h2>회원가입</h2>
+
 <form id="termsForm" action="militaryType.jsp" method="post">
+
     <h3>서비스 약관 동의</h3>
     <p>서비스 약관 동의 (필수)</p>
     <textarea rows="8" cols="60" readonly style="resize:none;">
@@ -73,13 +32,14 @@
 ② 회사는 관련 법령을 위배하지 않는 범위에서 이 약관을 변경할 수 있습니다.
             </textarea>
     <br>
-    <!-- 체크박스, 에러 메시지 -->
+
     <label>
         <input type="checkbox" id="chkService" name="chkService">
         서비스 약관에 동의합니다.
     </label>
     <span id="serviceError"></span>
     <br><br>
+
     <h3>위치기반 서비스 약관 동의</h3>
     <p>위치기반 서비스 약관 동의 (필수)</p>
     <textarea rows="8" cols="60" readonly style="resize:none;">
@@ -99,169 +59,89 @@
    요구할 수 있습니다.
             </textarea>
     <br>
+
     <label>
         <input type="checkbox" id="chkLocation" name="chkLocation">
         위치 기반 서비스 약관에 동의합니다.
     </label>
     <span id="locationError"></span>
-    <br><br>
-
-    <!-- [추가] 입대일 입력 필드 -->
-    <h3>입대일 선택</h3>
-    <input type="text"
-           id="armyDate"
-           name="armyDate"
-           readonly
-           placeholder="입대일을 선택하세요">
-
-    <!-- [추가] 날짜 선택 모달 -->
-    <div id="dateModal">
-        <div class="date-modal-inner">
-            <div class="date-modal-body">
-                <div class="date-col">
-                    <h4>연도</h4>
-                    <div id="yearList"></div>
-                </div>
-                <div class="date-col">
-                    <h4>월</h4>
-                    <div id="monthList"></div>
-                </div>
-                <div class="date-col">
-                    <h4>일</h4>
-                    <div id="dayList"></div>
-                </div>
-            </div>
-            <div class="date-modal-footer">
-                <button type="button" id="okBtn">확인</button>
-                <button type="button" id="cancelBtn">취소</button>
-            </div>
-        </div>
-    </div>
 
     <br><br>
+
     <button type="submit">다음</button>
 </form>
 
 <script>
-    const armyDateInput = document.getElementById("armyDate");
-    const dateModal = document.getElementById("dateModal");
-
-    const yearList = document.getElementById("yearList");
-    const monthList = document.getElementById("monthList");
-    const dayList   = document.getElementById("dayList");
-
-    let selectedYear = null;
-    let selectedMonth = null;
-    let selectedDay = null;
-
-    // [추가] 요소가 제대로 잡히는지 콘솔 확인용
-    console.log("armyDateInput =", armyDateInput);
-    console.log("dateModal =", dateModal);
-    console.log("yearList, monthList, dayList =", yearList, monthList, dayList);
-
-    /*폼 클릭 → 모달 오픈*/
-    armyDateInput.addEventListener("click", () => {
-        dateModal.style.display = "flex"; // [수정] block → flex (모달 중앙 정렬용)
+    /* 체크박스 선택 시 오류 메시지 즉시 제거 */
+    document.getElementById("chkService").addEventListener("change", () => {
+        if (document.getElementById("chkService").checked) {
+            document.getElementById("serviceError").textContent = "";
+        }
     });
 
-    /*특정 div 안의 모든 p 스타일 초기화*/
-    function clearSelection(listDiv) {
-        const items = listDiv.querySelectorAll("p");
-        items.forEach(i => i.style.background = "none");
-    }
-
-    /*input에 미리보기 값 넣음*/ // [추가] 네 주석은 그대로 두고, 함수 내용만 구현
-    function updateInputPreview() {
-        if (!armyDateInput) return;
-
-        const y = selectedYear ? String(selectedYear) : "----";
-        const m = selectedMonth ? String(selectedMonth).padStart(2, "0") : "--";
-        const d = selectedDay ? String(selectedDay).padStart(2, "0") : "--";
-
-        armyDateInput.value = `${y}.${m}.${d}`;
-    }
-
-    /*연, 월 생성*/
-    function createDateList() {
-        const currentYear = new Date().getFullYear();
-        /*연도*/
-        for (let y = 1950; y <= currentYear; y++) {
-            const p = document.createElement("p");
-            p.textContent = y;
-            p.style.cursor = "pointer";
-
-            p.addEventListener("click", () => {
-                clearSelection(yearList);
-                p.style.background = "#eee";
-
-                selectedYear = y;
-                updateDays();
-                updateInputPreview();   // [추가] 연 클릭 시 입력폼 바로 반영
-            });
-            yearList.appendChild(p);
+    document.getElementById("chkLocation").addEventListener("change", () => {
+        if (document.getElementById("chkLocation").checked) {
+            document.getElementById("locationError").textContent = "";
         }
-        /*월*/
-        for (let m = 1; m <= 12; m++) {
-            const p = document.createElement("p");
-            p.textContent = m.toString().padStart(2, "0");
-            p.style.cursor = "pointer";
-
-            p.addEventListener("click", () => {
-                clearSelection(monthList);
-                p.style.background = "#eee";
-                selectedMonth = m;
-                updateDays();
-                updateInputPreview();   // [추가] 월 클릭 시 입력폼 바로 반영
-            });
-            monthList.appendChild(p);
-        }
-    }
-
-    /*일(연 + 월 선택 후)*/
-    function updateDays() {
-        dayList.innerHTML = "";
-        if (!selectedYear || !selectedMonth) return;
-
-        const last = new Date(selectedYear, selectedMonth, 0).getDate();
-        for (let d = 1; d <= last; d++) {
-            const p = document.createElement("p");
-            p.textContent = d.toString().padStart(2, "0");
-            p.style.cursor = "pointer";
-            p.addEventListener("click", () => {
-                clearSelection(dayList);
-                p.style.background = "#eee";
-                selectedDay = d;
-                updateInputPreview();   // [추가] 일 클릭 시 입력폼 바로 반영
-            });
-            dayList.appendChild(p);
-        }
-    }
-
-    /*완료*/
-    document.getElementById("okBtn").addEventListener("click", () => {
-        if (!selectedYear || !selectedMonth || !selectedDay) {
-            alert("날짜를 모두 선택하세요!");
-            return;
-        }
-        /*날짜 적용*/
-        const result =
-            selectedYear + "."
-            + String(selectedMonth).padStart(2, '0') + "."
-            + String(selectedDay).padStart(2, '0');
-
-        armyDateInput.value =
-            selectedYear + "." +
-            String(selectedMonth).padStart(2, '0') + "." +
-            String(selectedDay).padStart(2, '0');
-
-        dateModal.style.display = "none";
-    })
-    /*취소 버튼*/
-    document.getElementById("cancelBtn").addEventListener("click", () => {
-        dateModal.style.display = "none";
     });
-    /*실행*/
-    createDateList();
+
+    /* 필수 약관 체크 확인 */
+    document.getElementById("termsForm").addEventListener("submit", function(e) {
+
+        let ok = true;
+
+        // 초기화
+        document.getElementById("serviceError").textContent = "";
+        document.getElementById("locationError").textContent = "";
+
+        // 서비스 약관 체크 확인
+        if (!document.getElementById("chkService").checked) {
+            document.getElementById("serviceError").textContent = "필수 약관에 동의해 주세요.";
+            document.getElementById("serviceError").style.color = "#FF0000FF";
+            ok = false;
+        }
+
+        // 위치 기반 서비스 체크 확인
+        if (!document.getElementById("chkLocation").checked) {
+            document.getElementById("locationError").textContent = "필수 약관에 동의해 주세요.";
+            document.getElementById("locationError").style.color = "#FF0000FF";
+            ok = false;
+        }
+
+        if (!ok) {
+            e.preventDefault();
+        }
+    });
+
+    /* 필수 약관 체크 확인 */
+    document.getElementById("termsForm").addEventListener("submit", function(e) {
+
+        let ok = true;
+
+        // 초기화
+        document.getElementById("serviceError").textContent = "";
+        document.getElementById("locationError").textContent = "";
+
+        // 서비스 약관 체크 확인
+        if (!document.getElementById("chkService").checked) {
+            document.getElementById("serviceError").textContent = "필수 약관에 동의해 주세요.";
+            document.getElementById("serviceError").style.color = "#FF0000FF";  // 오류색 적용
+            ok = false;
+        }
+
+        // 위치 기반 서비스 체크 확인
+        if (!document.getElementById("chkLocation").checked) {
+            document.getElementById("locationError").textContent = "필수 약관에 동의해 주세요.";
+            document.getElementById("locationError").style.color = "#FF0000FF";  // 오류색 적용
+            ok = false;
+        }
+
+        // 하나라도 미동의하면 제출 막기
+        if (!ok) {
+            e.preventDefault();
+        }
+    });
 </script>
+
 </body>
 </html>
