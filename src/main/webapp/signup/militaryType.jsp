@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>회원가입 - 복무 타입</title>
+    <title>회원가입</title>
     <link rel="stylesheet" type="text/css" href="militaryType.css">
 </head>
 <body>
