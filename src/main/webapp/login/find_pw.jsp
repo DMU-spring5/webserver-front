@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <title>비밀번호 찾기</title>
-        <link rel="stylesheet" type="text/css" href="login.css">
+        <link rel="stylesheet" type="text/css" href="find_pw.css">
         <style>  /*일단 여기에 작성*/
             .error-msg {
                 color: red;
@@ -33,38 +33,51 @@
                        placeholder="아이디를 입력해 주세요.">
                 <p id="useridError" class="error-msg"></p>
             </div>
-            <button type="submit">비밀번호 찾기</button>
+            <button type="submit" id="findIdPwBtn">비밀번호 찾기</button>
         </form>
 
         <script>
             const findPwForm   = document.getElementById("findPwForm");
             const nickname     = document.getElementById("nickname");
             const userid       = document.getElementById("userid");
+            const submitBtn    = findPwForm.querySelector("button[type='submit']");
 
             const nicknameError = document.getElementById("nicknameError");
             const useridError   = document.getElementById("useridError");
 
+            // 🔥 입력 시 버튼 활성/비활성
+            function updateButtonState() {
+                if (nickname.value.trim() !== "" && userid.value.trim() !== "") {
+                    submitBtn.classList.add("active");   // 초록색
+                } else {
+                    submitBtn.classList.remove("active"); // 회색
+                }
+            }
+
+            nickname.addEventListener("input", updateButtonState);
+            userid.addEventListener("input", updateButtonState);
+
+            // 🔍 제출 검사
             findPwForm.addEventListener("submit", (e) => {
                 let valid = true;
 
-                // 닉네임 검사
                 if (nickname.value.trim() === "") {
                     nicknameError.textContent = "닉네임을 입력해 주세요.";
                     valid = false;
-                }
-                else {
+                } else {
                     nicknameError.textContent = "";
                 }
-                // 아이디 검사
+
                 if (userid.value.trim() === "") {
                     useridError.textContent = "아이디를 입력해 주세요.";
                     valid = false;
-                }
-                else {
+                } else {
                     useridError.textContent = "";
                 }
+
                 if (!valid) e.preventDefault();
             });
         </script>
+
     </body>
 </html>
