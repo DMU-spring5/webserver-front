@@ -6,7 +6,10 @@
     <link rel="stylesheet" type="text/css" href="signupAgree.css">
 </head>
 <body>
-
+<div>
+    <img src="<%=request.getContextPath()%>/img/WebServerLogo.png"
+         alt="MILLI ROAD 로고" width="200">
+</div>
 <h2>회원가입</h2>
 
 <form id="termsForm" action="militaryType.jsp" method="post">
