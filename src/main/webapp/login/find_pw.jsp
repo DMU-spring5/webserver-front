@@ -40,24 +40,32 @@
             const findPwForm   = document.getElementById("findPwForm");
             const nickname     = document.getElementById("nickname");
             const userid       = document.getElementById("userid");
-            const submitBtn    = findPwForm.querySelector("button[type='submit']");
+            const submitBtn    = document.getElementById("findIdPwBtn");
 
             const nicknameError = document.getElementById("nicknameError");
             const useridError   = document.getElementById("useridError");
 
-            // 🔥 입력 시 버튼 활성/비활성
+            // 버튼 활성화 함수 (두 칸 모두 입력되어야 활성화)
             function updateButtonState() {
                 if (nickname.value.trim() !== "" && userid.value.trim() !== "") {
-                    submitBtn.classList.add("active");   // 초록색
+                    submitBtn.classList.add("active");
                 } else {
-                    submitBtn.classList.remove("active"); // 회색
+                    submitBtn.classList.remove("active");
                 }
             }
 
-            nickname.addEventListener("input", updateButtonState);
-            userid.addEventListener("input", updateButtonState);
+            // 입력 변화 발생 시: 에러 제거 + 버튼 활성화 갱신
+            nickname.addEventListener("input", () => {
+                nicknameError.textContent = "";
+                updateButtonState();
+            });
 
-            // 🔍 제출 검사
+            userid.addEventListener("input", () => {
+                useridError.textContent = "";
+                updateButtonState();
+            });
+
+            // 제출 시 유효성 검사
             findPwForm.addEventListener("submit", (e) => {
                 let valid = true;
 
@@ -75,9 +83,10 @@
                     useridError.textContent = "";
                 }
 
-                if (!valid) e.preventDefault();
+                if (!valid) {
+                    e.preventDefault(); // 화면 이동 막기
+                }
             });
         </script>
-
     </body>
 </html>
