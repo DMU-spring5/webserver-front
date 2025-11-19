@@ -20,7 +20,7 @@ body {
     width: 450px;
     margin: 0 auto;
     background: white;
-    padding: 30px 40px;
+    padding: 10px 40px 35px;
     border-radius: 12px;
     box-shadow: 0 8px 16px rgba(0,0,0,0.05);
 }
@@ -42,13 +42,18 @@ body {
 .type-btn {
     width: 130px;
     height: 120px;
-    padding: 14px 0;
-    border: 1px solid #ddd;
-    border-radius: 8px;
+    border-radius: 0;
     background: #ffffff;
     cursor: pointer;
     font-size: 15px;
     font-weight: 500;
+    margin-top: 16px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    box-sizing: border-box;
 }
 
 /* 선택 시 */
@@ -71,5 +76,5 @@ body {
 }
 
 #nextBtn:enabled {
-    background: #6a8f6d; /* 활성 색 */
+    background: #78866B; /* 활성 색 */
 }

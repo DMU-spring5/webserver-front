@@ -15,7 +15,7 @@
 <form id="serviceTypeForm" action="militaryInfo.jsp" method="post" class="type-form">
 
     <h3 class="form-title">복무 타입</h3>
-
+    <hr>
     <div class="type-select-box">
 
         <!-- 육군 -->
