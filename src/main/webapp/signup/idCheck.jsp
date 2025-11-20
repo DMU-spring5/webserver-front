@@ -1,53 +1,70 @@
-<%@ page contentType="application/json; charset=UTF-8" language="java" %>
+<%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%@ page import="java.sql.*" %>
 
 <%
     request.setCharacterEncoding("UTF-8");
-    String userId = request.getParameter("userId");
-    boolean exists = false;
+    String userId   = request.getParameter("userId");
+    String nickname = request.getParameter("nickname");
+    String password = request.getParameter("password");
 
-    if (userId != null && !userId.trim().isEmpty()) {
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
+    boolean success = false;
 
-        try {
-            // 1. JDBC 드라이버 로드
-            Class.forName("com.mysql.cj.jdbc.Driver");
+    Connection conn = null;
+    PreparedStatement pstmt = null;
 
-            // 2. DB 접속 (여기 너 DB정보에 맞게 수정!)
-            String url = "jdbc:mysql://localhost:3306/your_db_name?serverTimezone=Asia/Seoul&characterEncoding=UTF-8";
-            String dbUser = "your_db_user";
-            String dbPass = "your_db_password";
-            conn = DriverManager.getConnection(url, dbUser, dbPass);
+    try {
+        Class.forName("com.mysql.cj.jdbc.Driver");
 
-            // 3. 아이디 존재 여부 조회 (테이블/컬럼 이름 수정!)
-            String sql = "SELECT COUNT(*) FROM user WHERE user_id = ?";
-            pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, userId);
-            rs = pstmt.executeQuery();
+        // ⚠️ DB 정보 수정
+        String url = "jdbc:mysql://localhost:3306/your_db_name?serverTimezone=Asia/Seoul&characterEncoding=UTF-8";
+        String dbUser = "your_db_user";
+        String dbPass = "your_db_password";
 
-            if (rs.next()) {
-                int count = rs.getInt(1);
-                exists = (count > 0);
-            }
+        conn = DriverManager.getConnection(url, dbUser, dbPass);
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try { if (rs != null) rs.close(); } catch (Exception ignored) {}
-            try { if (pstmt != null) pstmt.close(); } catch (Exception ignored) {}
-            try { if (conn != null) conn.close(); } catch (Exception ignored) {}
-        }
+        // ⚠️ 테이블 / 컬럼 이름 수정
+        String sql = "INSERT INTO user (user_id, nickname, password) VALUES (?, ?, ?)";
+        pstmt = conn.prepareStatement(sql);
+
+        pstmt.setString(1, userId);
+        pstmt.setString(2, nickname);
+        pstmt.setString(3, password);
+
+        int rows = pstmt.executeUpdate();
+        success = (rows > 0);
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        success = false;
+    } finally {
+        try { if (pstmt != null) pstmt.close(); } catch (Exception ignored) {}
+        try { if (conn  != null) conn.close();  } catch (Exception ignored) {}
     }
-
-    boolean available = !exists;   // true면 사용 가능
-
-    // JSON 문자열 안전하게 만들기
-    StringBuilder sb = new StringBuilder();
-    sb.append("{\"available\":");
-    sb.append(available ? "true" : "false");
-    sb.append("}");
-
-    out.print(sb.toString());
 %>
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>회원가입 처리</title>
+</head>
+<body>
+<%
+    if (success) {
+%>
+<script>
+    alert("가입이 완료되었습니다.");
+    location.href = "login.jsp";   // ← 로그인 페이지로 이동
+</script>
+<%
+} else {
+%>
+<script>
+    alert("회원가입 오류가 발생했습니다. 다시 시도해 주세요.");
+    history.back();
+</script>
+<%
+    }
+%>
+</body>
+</html>

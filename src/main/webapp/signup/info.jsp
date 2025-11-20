@@ -18,7 +18,7 @@
         <img src="../img/profile.png" id="previewImg" class="profile">
 
         <label for="profileInput" class="camera">
-            <img src="../img/camera.png">
+            <img src="../img/camera.png" alt="camera">
         </label>
 
         <input type="file" id="profileInput" accept="image/*" style="display:none;">
@@ -30,27 +30,33 @@
         <!-- 아이디 -->
         <div class="form-box">
             <label>아이디</label>
-            <div class="id-area">
+
+            <div class="id-input-wrap">
                 <input type="text" id="userId" name="userId"
                        placeholder="3~15자 영대소문자, 숫자 사용 가능">
-                <button type="button" id="idCheckBtn" class="check-btn">중복확인</button>
+                <button type="button" id="idCheckBtn" class="id-check-btn" disabled>
+                    중복확인
+                </button>
             </div>
+
             <p id="userIdError" class="error-msg"></p>
         </div>
 
         <!-- 닉네임 -->
         <div class="form-box">
-            <label>닉네임</label>
+            <label for="nickname">닉네임</label>
             <input type="text" id="nickname" name="nickname"
+                   class="height-48"
                    placeholder="2~8자 영대소문자, 한글, 숫자 사용 가능">
             <p id="nicknameError" class="error-msg"></p>
         </div>
 
         <!-- 비밀번호 -->
         <div class="form-box">
-            <label>비밀번호</label>
+            <label for="password">비밀번호</label>
             <div class="pw-area">
                 <input type="password" id="password" name="password"
+                       class="height-48"
                        placeholder="8~16자 영대소문자, 숫자, 특수문자 사용 가능">
                 <img class="togglePw" src="../img/eye.png" alt="show pw">
             </div>
@@ -59,9 +65,10 @@
 
         <!-- 비밀번호 확인 -->
         <div class="form-box">
-            <label>비밀번호 확인</label>
+            <label for="passwordCheck">비밀번호 확인</label>
             <div class="pw-area">
                 <input type="password" id="passwordCheck"
+                       class="height-48"
                        placeholder="비밀번호를 다시 입력해 주세요.">
                 <img class="togglePw" src="../img/eye.png" alt="show pw">
             </div>
@@ -75,12 +82,23 @@
 </div>
 
 <script>
-    const ctx = '<%=ctx%>';
+    const profileInput       = document.getElementById("profileInput");
+    const previewImg         = document.getElementById("previewImg");
+
+    const userIdInput        = document.getElementById("userId");
+    const nicknameInput      = document.getElementById("nickname");
+    const passwordInput      = document.getElementById("password");
+    const passwordCheckInput = document.getElementById("passwordCheck");
+
+    const userIdError        = document.getElementById("userIdError");
+    const nicknameError      = document.getElementById("nicknameError");
+    const passwordError      = document.getElementById("passwordError");
+    const passwordCheckError = document.getElementById("passwordCheckError");
+
+    const idCheckBtn         = document.getElementById("idCheckBtn");
+    const form               = document.getElementById("infoForm");
 
     // 프로필 이미지 미리보기
-    const profileInput = document.getElementById("profileInput");
-    const previewImg = document.getElementById("previewImg");
-
     if (profileInput) {
         profileInput.addEventListener("change", () => {
             const file = profileInput.files[0];
@@ -90,30 +108,30 @@
         });
     }
 
-    // 비밀번호 보이기/숨기기
+    //비밀번호 보이기/숨기기
     document.querySelectorAll(".togglePw").forEach(icon => {
         icon.addEventListener("click", () => {
             const input = icon.previousElementSibling;
             if (input.type === "password") {
                 input.type = "text";
-                icon.src = ctx + "../img/eyeoff.png";
+                icon.src = "../img/eyeoff.png";
             } else {
                 input.type = "password";
-                icon.src = ctx + "../img/eye.png";
+                icon.src = "../img/eye.png";
             }
         });
     });
 
-    // 아이디 중복확인
-    const idCheckBtn = document.getElementById("idCheckBtn");
-    const userIdInput = document.getElementById("userId");
-    const userIdError = document.getElementById("userIdError");
-
+    //  아이디 중복확인
     let lastIdChecked = "";      // 마지막으로 중복확인한 아이디
     let isIdAvailable = false;   // 사용 가능 여부
 
     idCheckBtn.addEventListener("click", () => {
         const userId = userIdInput.value.trim();
+            if (userId === "") {
+                userIdError.textContent = "아이디를 입력해 주세요.";
+                return;
+            }
 
         // 메시지 초기화
         userIdError.textContent = "";
@@ -124,19 +142,21 @@
             return;
         }
 
-        // 필요하면 정규식 체크도 가능 (예: 영문+숫자 3~15자)
         const idPattern = /^[A-Za-z0-9]{3,15}$/;
         if (!idPattern.test(userId)) {
             userIdError.textContent = "아이디 형식이 올바르지 않습니다. (3~15자 영대소문자, 숫자)";
             return;
         }
 
-        fetch(ctx + "/idCheck.jsp?userId=" + encodeURIComponent(userId))
-            .then(res => res.json())
-            .then(data => {
-                if (data.available) {
+        // idCheck.jsp가 "true" / "false" 텍스트를 반환한다고 가정
+        fetch("<%=ctx%>/idCheck.jsp?userId=" + encodeURIComponent(userId))
+            .then(res => res.text())
+            .then(result => {
+                const available = result.trim() === "true";
+
+                if (available) {
                     userIdError.textContent = "사용할 수 있는 아이디예요.";
-                    userIdError.classList.add("ok-msg");  // 초록색
+                    userIdError.classList.add("ok-msg");  // 초록색 (CSS에 정의)
                     isIdAvailable = true;
                     lastIdChecked = userId;
                 } else {
@@ -152,28 +172,57 @@
             });
     });
 
-    // 아이디를 수정하면 다시 중복확인 하도록 상태 초기화
+    // ================== 입력 시 에러메시지 즉시 제거 ==================
     userIdInput.addEventListener("input", () => {
+        userIdError.textContent = "";
+        userIdError.classList.remove("ok-msg");
         if (userIdInput.value.trim() !== lastIdChecked) {
-            isIdAvailable = false;
+            isIdAvailable = false;  // 아이디 바꾸면 다시 중복확인 필요
         }
     });
 
-    // 폼 검증
-    document.getElementById("infoForm").addEventListener("submit", (e) => {
+    // 아이디 길이에 따라 중복확인 버튼 활성/비활성
+    userIdInput.addEventListener("input", () => {
+        const val = userIdInput.value.trim();
+        const validLength = val.length >= 3 && val.length <= 15;
+
+        if (validLength) {
+            idCheckBtn.classList.add("active");
+            idCheckBtn.disabled = false;
+        } else {
+            idCheckBtn.classList.remove("active");
+            idCheckBtn.disabled = true;
+        }
+    });
+
+
+    nicknameInput.addEventListener("input", () => {
+        nicknameError.textContent = "";
+    });
+
+    passwordInput.addEventListener("input", () => {
+        passwordError.textContent = "";
+    });
+
+    passwordCheckInput.addEventListener("input", () => {
+        passwordCheckError.textContent = "";
+    });
+
+    // ================== 폼 최종 검증 ==================
+    form.addEventListener("submit", (e) => {
         let ok = true;
 
         const userId = userIdInput.value.trim();
-        const nickname = document.getElementById("nickname").value.trim();
-        const pw = document.getElementById("password").value.trim();
-        const pw2 = document.getElementById("passwordCheck").value.trim();
+        const nickname = nicknameInput.value.trim();
+        const pw = passwordInput.value.trim();
+        const pw2 = passwordCheckInput.value.trim();
 
-        // 초기화
-        userIdError.textContent = "";
+        // 에러 초기화
+        userIdError.textContent        = "";
         userIdError.classList.remove("ok-msg");
-        document.getElementById("nicknameError").textContent = "";
-        document.getElementById("passwordError").textContent = "";
-        document.getElementById("passwordCheckError").textContent = "";
+        nicknameError.textContent      = "";
+        passwordError.textContent      = "";
+        passwordCheckError.textContent = "";
 
         if (userId === "") {
             userIdError.textContent = "아이디를 입력해 주세요.";
@@ -184,23 +233,25 @@
         }
 
         if (nickname === "") {
-            document.getElementById("nicknameError").textContent = "닉네임을 입력해 주세요.";
+            nicknameError.textContent = "닉네임을 입력해 주세요.";
             ok = false;
         }
         if (pw === "") {
-            document.getElementById("passwordError").textContent = "비밀번호를 입력해 주세요.";
+            passwordError.textContent = "비밀번호를 입력해 주세요.";
             ok = false;
         }
         if (pw2 === "") {
-            document.getElementById("passwordCheckError").textContent = "비밀번호 확인을 입력해 주세요.";
+            passwordCheckError.textContent = "비밀번호 확인을 입력해 주세요.";
             ok = false;
         }
         if (pw !== "" && pw2 !== "" && pw !== pw2) {
-            document.getElementById("passwordCheckError").textContent = "비밀번호가 일치하지 않습니다.";
+            passwordCheckError.textContent = "비밀번호가 일치하지 않습니다.";
             ok = false;
         }
 
-        if (!ok) e.preventDefault();
+        if (!ok) {
+            e.preventDefault();
+        }
     });
 </script>
 
