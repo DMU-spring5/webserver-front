@@ -8,15 +8,10 @@ body {
     background-color: #f5f5f5;
 }
 
-/* 로고 */
-body > img {
-    margin-top: 60px;
-    width: 200px;
-}
-
 /* 가운데 카드 레이아웃 */
 #termsForm {
     width: 440px;
+    margin: 35px;
     padding: 28px 62px 32px 38px;
     background: #ffffff;
     border-radius: 8px;
@@ -33,7 +28,6 @@ h2 {
 h3 {
     margin: 18px 0 8px;
     font-size: 16px;
-    font-weight: 600;
 }
 
 #termsForm p {
@@ -58,7 +52,7 @@ h3 {
 }
 
 #termsForm textarea:focus {
-    border-color: #6a8f6d;
+    border-color: #78866B;
     background: #ffffff;
 }
 
@@ -114,7 +108,7 @@ h3 {
     padding: 10px 32px;
     border: none;
     border-radius: 8px;
-    background: #6a8f6d;
+    background: #78866B;
     color: #ffffff;
     font-size: 15px;
     font-weight: 500;
@@ -195,7 +189,7 @@ h3 {
 }
 
 #okBtn {
-    background: #6a8f6d;
+    background: #78866B;
     color: #ffffff;
 }
 

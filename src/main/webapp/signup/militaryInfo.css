@@ -69,9 +69,18 @@ input[type="text"]:focus {
     color: white;
 }
 
-/* 활성화 */
+/* 입내 날짜 활성화 */
 #nextBtn.active {
-    background: #6a8f6d; /* 초록 */
+    background: #78866B; /* 초록 */
+}
+
+#nextBtn {
+    background: #c8cfc8; /* 비활성 */
+    cursor: default;
+}
+#nextBtn.active {
+    background: #78866B; /* 활성 초록 */
+    cursor: pointer;
 }
 
 /* 모달 전체 배경 */
@@ -145,6 +154,6 @@ input[type="text"]:focus {
 }
 
 #okBtn {
-    background: #6a8f6d;
+    background: #78866B;
     color: white;
 }
