@@ -1,5 +1,8 @@
 plugins {
     id 'java'
+    id 'org.springframework.boot' version '3.2.0'
+    // 'war' 플러그인을 유지하여 WAR 파일 빌드를 지원합니다.
+    id 'war'
 }
 
 group = 'com.webSever'
@@ -10,6 +13,23 @@ repositories {
 }
 
 dependencies {
+    // Spring Boot 종속성 관리 플랫폼 설정
+    implementation(platform('org.springframework.boot:spring-boot-dependencies:3.2.0'))
+
+    // 1. 웹 구동 필수 (내장 Tomcat 포함)
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    // 2. JSP 렌더링 엔진 (핵심 해결책)
+    // Spring Boot 내장 서버(starter-web에 포함)가 JSP 파일을 해석할 수 있도록 해주는 라이브러리입니다.
+    // providedRuntime이 아닌 implementation을 사용하여 jar에 포함시켜야 정상 동작합니다.
+    implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
+
+    // 3. JSTL (JSP Standard Tag Library) 사용을 위한 의존성
+    // Spring Boot 3.x부터는 Jakarta EE 기반의 JSTL을 사용해야 합니다.
+    implementation 'jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api'
+    implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl'
+
+    // 4. 테스트 의존성 (버전 통일)
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
