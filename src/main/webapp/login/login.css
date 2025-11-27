@@ -1,0 +1,173 @@
+/* 전체 레이아웃 */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Noto Sans KR", sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f5f5f5;
+
+    justify-content: flex-start;
+    padding-bottom: 62px;
+}
+
+/* 로고 */
+body > img {
+    margin-top: 60px;
+    width: 200px;
+}
+
+/* 전체 카드 */
+#loginForm {
+    width: min(90vw, 640px);
+    background-color: #ffffff;
+    border: 1px solid #A1A49D;
+    border-radius: 12px;
+    padding: 32px 38px;
+    box-sizing: border-box;
+}
+
+/* 입력 박스 */
+.id-box,
+.pw-box {
+    width: 100%;
+    margin-bottom: 14px;
+}
+
+/* 입력창 라벨 (아이디 찾기/비번 찾기와 동일 구조 적용) */
+.id-box label,
+.pw-box label {
+    margin-bottom: 6px;
+    display: inline-block;
+}
+
+/* 입력창 */
+.id-box input,
+.pw-box input {
+    width: 100%;
+    max-width: 600px;
+    height: 55px;
+    padding-left: 15px;
+    padding-right: 40px;
+    font-size: 15px;
+    border-radius: 8px;
+    border: 1.5px solid #A1A49D;
+    box-sizing: border-box;
+    background-color: #fff;
+}
+
+/* 포커스 시 테두리 강조 */
+.id-box input:focus,
+.pw-box input:focus {
+    border-color: #78866B;
+    border-width: 2px;
+    outline: none;
+}
+
+/* 비밀번호 입력창 + 아이콘 래퍼 */
+.pw-input-wrap {
+    position: relative;
+}
+
+/* 눈 아이콘 */
+.pw-input-wrap .eyeoff {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    width: 22px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    opacity: 0.75;
+}
+
+.pw-input-wrap .eyeoff:hover {
+    opacity: 1;
+}
+
+
+/* 에러 메시지 */
+#errorMsg,
+#errorPw,
+.error-msg,
+#idError,
+#pwError {
+    color: #FF0000FF;
+    font-size: 13px;
+    margin: 4px 0 0 2px;  /* 위로만 살짝, 아래는 0 */
+}
+
+/* 자동 로그인 */
+#loginForm label {
+    font-size: 14px;
+    margin-top: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* 로그인 버튼 */
+#loginBtn {
+    width: 100%;
+    max-width: 600px;
+    height: 60px;
+    border: none;
+    border-radius: 8px;
+    background-color: #A1A49D; /* 비활성(회색) */
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: 500;
+    margin-top: 20px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+/* 활성화(초록색) */
+#loginBtn.active {
+    background-color: #78866B;
+    cursor: pointer;
+}
+
+/* 링크 영역 */
+.link-box {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 13px;
+    color: #8c8c8c;
+}
+
+.link-box a {
+    color: #A1A49D;
+    text-decoration: none;
+}
+
+.link-box a:hover {
+    text-decoration: underline;
+}
+
+/* 반응형 */
+@media (max-width: 480px) {
+
+    #loginForm {
+        padding: 24px 20px;
+    }
+
+    .id-box input,
+    .pw-box input {
+        height: 52px;
+    }
+
+    #loginBtn {
+        height: 52px;
+        font-size: 16px;
+    }
+}
+
+.logo-wrap {
+    text-align: center;
+}
+
+.logo-wrap img {
+    width: 200px;
+    display: inline-block;
+}
