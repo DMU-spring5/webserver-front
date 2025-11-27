@@ -9,11 +9,14 @@ body {
     background-color: #f5f5f5;
 }
 
-/* 상단 로고 */
-body > div img {
-    width: 200px;
+/* 로고 */
+body > img {
+    margin-top: 60px;
+    width: 280px;
 }
 
+/* 전체 카드 */
+#findIdForm,
 /* 비밀번호 찾기 카드 */
 #findPwForm {
     width: min(90vw, 640px);
@@ -25,25 +28,27 @@ body > div img {
 }
 
 /* 입력 박스 */
-.id-box {
+.nickname-box,
+.pw-box {
     width: 100%;
-    margin-bottom: 16px;
+    margin-bottom: 14px;
 }
 
-/* 라벨 */
-.id-box label {
+/* 입력창 라벨 공통 여백 추가 */
+.nickname-box label,
+.pw-box label {
     margin-bottom: 6px;
     display: inline-block;
-    font-size: 15px;
-    font-weight: 500;
 }
 
 /* 입력창 */
-.id-box input {
+.nickname-box input,
+.pw-box input {
     width: 100%;
+    max-width: 600px;
     height: 60px;
     padding-left: 15px;
-    padding-right: 15px;
+    padding-right: 40px;
     font-size: 15px;
     border-radius: 8px;
     border: 1.5px solid #A1A49D;
@@ -51,22 +56,57 @@ body > div img {
     background-color: #fff;
 }
 
-/* 포커스 */
-.id-box input:focus {
+/* 포커스 시 테두리 강조 */
+.nickname-box input:focus,
+.pw-box input:focus {
     border-color: #78866B;
     border-width: 2px;
     outline: none;
 }
 
+/* 비밀번호 아이콘 */
+.pw-box {
+    position: relative;
+}
+
+/* 눈 아이콘 */
+.eyeoff {
+    position: absolute;
+    right: 12px;
+    top: 65%;
+    width: 22px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    opacity: 0.75;
+}
+.eyeoff:hover {
+    opacity: 1;
+}
+
 /* 에러 메시지 */
-.error-msg {
+#errorMsg {
     color: #e53935;
     font-size: 13px;
     margin: 4px 0 10px 2px;
 }
 
+/* 버튼 */
+button {
+    width: 100%;
+    max-width: 600px;
+    height: 60px;
+    border: none;
+    border-radius: 8px;
+    background-color: #A1A49D;
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: 500;
+    margin-top: 20px;
+    cursor: pointer;
+}
+
 /* 기본 로그인 버튼 (비활성: 회색) */
-#findIdPwBtn {
+#findIdBtn {
     width: 100%;
     max-width: 600px;
     height: 60px;
@@ -81,23 +121,24 @@ body > div img {
 }
 
 /* 활성화된 버튼 (초록색) */
-#findIdPwBtn.active {
+#findIdBtn.active {
     background-color: #78866B;
     cursor: pointer;
 }
 
 /* 반응형 */
 @media (max-width: 480px) {
+    #findIdForm,
     #findPwForm {
         padding: 24px 20px;
     }
 
-    .id-box input {
+    .nickname-box input,
+    .pw-box input {
         height: 52px;
-        font-size: 14px;
     }
 
-    button[type="submit"] {
+    button {
         height: 52px;
         font-size: 16px;
     }

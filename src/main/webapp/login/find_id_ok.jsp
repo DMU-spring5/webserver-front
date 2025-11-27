@@ -1,59 +1,92 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
-<%@ page import="java.sql.*" %>
 <%
     request.setCharacterEncoding("UTF-8");
 
-    String nickname = request.getParameter("nickname");
-    String password = request.getParameter("password");
-
-    String userId = null; // 찾은 아이디 저장 변수
-
-    Connection conn = null;
-    PreparedStatement pstmt = null;
-    ResultSet rs = null;
-
-    try {
-        // ====== DB 연결 ======
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        String url = "jdbc:mysql://localhost:3306/yourDB?useSSL=false&characterEncoding=UTF-8";
-        String dbUser = "yourDBUser";
-        String dbPass = "yourDBPassword";
-        conn = DriverManager.getConnection(url, dbUser, dbPass);
-
-        // ====== 아이디 찾기 쿼리 ======
-        String sql = "SELECT userid FROM members WHERE nickname = ? AND password = ?";
-        pstmt = conn.prepareStatement(sql);
-        pstmt.setString(1, nickname);
-        pstmt.setString(2, password);
-        rs = pstmt.executeQuery();
-
-        if (rs.next()) {
-            userId = rs.getString("userid");
-        }
-
-    } catch (Exception e) {
-        e.printStackTrace();
-    } finally {
-        try { if (rs != null) rs.close(); } catch (Exception e) {}
-        try { if (pstmt != null) pstmt.close(); } catch (Exception e) {}
-        try { if (conn != null) conn.close(); } catch (Exception e) {}
+    // 아이디 찾기 로직에서 넘겨준 userid
+    String userid = request.getParameter("userid");
+    if (userid == null) {
+        Object attr = request.getAttribute("userid");
+        if (attr != null) userid = attr.toString();
     }
 %>
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>아이디 찾기 결과</title>
-    </head>
-    <body>
-    <% if (userId != null) { %>
-    <h2>아이디 찾기 결과</h2>
-    <p>회원님의 아이디는 <strong><%= userId %></strong> 입니다.</p>
-    <a href="login.jsp">로그인하러 가기</a>
-    <% } else { %>
-    <h2>아이디를 찾을 수 없습니다.</h2>
-    <p>닉네임 또는 비밀번호가 일치하지 않습니다.</p>
-    <a href="find_id.jsp">다시 시도하기</a>
-    <% } %>
-    </body>
+<head>
+    <meta charset="UTF-8">
+    <title>아이디 찾기 완료</title>
+    <link rel="stylesheet" type="text/css" href="find_id.css">
+
+    <!-- 존재하지 않는 아이디 처리 -->
+    <%
+        if (userid == null || userid.trim().equals("")) {
+    %>
+    <script>
+        alert("존재하지 않는 아이디입니다.\n회원가입 진행 후 로그인해주세요.");
+        location.href = "<%=request.getContextPath()%>/signup/signupAgree.jsp";
+    </script>
+    <%
+            return;
+        }
+    %>
+
+</head>
+<body>
+
+<div>
+    <img src="<%=request.getContextPath()%>/img/WebServerLogo.png"
+         alt="MILLI ROAD 로고" width="200">
+</div>
+
+<form id="findIdForm">
+
+    <!-- 닉네임 -->
+    <div class="nickname-box">
+        <label for="nickname">닉네임</label><br>
+        <input type="text" id="nickname" name="nickname"
+               placeholder="닉네임을 입력해 주세요.">
+    </div>
+
+    <!-- 비밀번호 -->
+    <div class="pw-box">
+        <label for="password">비밀번호</label><br>
+        <div class="pw-input-wrap">
+            <input type="password" id="password" name="password"
+                   placeholder="비밀번호를 입력해 주세요.">
+            <img class="eyeoff" id="togglePw" src="../img/eye.png">
+        </div>
+        <p id="pwError" class="error-msg"></p>
+    </div>
+
+    <!-- 찾은 아이디 안내 -->
+    <p style="text-align:center; margin:16px 0;">
+        회원님의 아이디는 <b><%= userid %></b> 입니다.
+    </p>
+
+    <!-- 로그인 -->
+    <button type="button" id="findIdBtn" class="active"
+            onclick="location.href='login.jsp'">
+        로그인하기
+    </button>
+</form>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const pwInput  = document.getElementById("password");
+        const togglePw = document.getElementById("togglePw");
+
+        if (togglePw && pwInput) {
+            togglePw.addEventListener("click", () => {
+                if (pwInput.type === "password") {
+                    pwInput.type = "text";
+                    togglePw.src = "../img/eyeoff.png";
+                } else {
+                    pwInput.type = "password";
+                    togglePw.src = "../img/eye.png";
+                }
+            });
+        }
+    });
+</script>
+
+</body>
 </html>
