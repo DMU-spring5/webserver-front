@@ -65,7 +65,6 @@
         nickError.textContent = "";
         idError.textContent   = "";
         updateFindBtnState();
-
         findPwForm.addEventListener("submit", (e) => {
             let hasError = false;
 
