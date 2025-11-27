@@ -1,0 +1,207 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Noto Sans KR", sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f5f5f5;
+}
+
+/* 가운데 카드 레이아웃 */
+#termsForm {
+    width: 440px;
+    margin: 35px;
+    padding: 28px 62px 32px 38px;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.06);
+}
+
+h2 {
+    margin: 0 0 24px;
+    text-align: center;
+    font-size: 22px;
+    font-weight: 600;
+}
+
+h3 {
+    margin: 18px 0 8px;
+    font-size: 16px;
+}
+
+#termsForm p {
+    margin: 0 0 8px;
+    font-size: 13px;
+    color: #666666;
+}
+
+/* 약관 텍스트 영역 */
+#termsForm textarea {
+    width: 100%;
+    height: 140px;
+    resize: none;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid #dcdcdc;
+    font-size: 12px;
+    line-height: 1.5;
+    color: #333333;
+    background: #fafafa;
+    outline: none;
+}
+
+#termsForm textarea:focus {
+    border-color: #78866B;
+    background: #ffffff;
+}
+
+/* 약관 체크박스 라인 */
+#termsForm label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 8px;
+    font-size: 13px;
+    color: #333333;
+}
+
+#termsForm input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+}
+
+/* 오류 메시지 */
+#serviceError,
+#locationError {
+    margin-left: 4px;
+    font-size: 12px;
+    color: #d9534f;
+}
+
+/* 입대일 입력 영역 */
+#armyDate {
+    width: 100%;
+    margin-top: 6px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid #dcdcdc;
+    font-size: 13px;
+    cursor: pointer;
+    background: #fafafa;
+}
+
+#armyDate::placeholder {
+    color: #aaaaaa;
+}
+
+#armyDate:focus {
+    outline: none;
+    border-color: #6a8f6d;
+    background: #ffffff;
+}
+
+/* '다음' 버튼 */
+#termsForm button[type="submit"] {
+    display: block;
+    margin: 0 0 0 auto;
+    padding: 10px 32px;
+    border: none;
+    border-radius: 8px;
+    background: #78866B;
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+#termsForm button[type="submit"]:hover {
+    background: #5b7b5f;
+}
+
+/* ---------- 날짜 선택 모달 ---------- */
+
+#dateModal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.date-modal-inner {
+    background: #ffffff;
+    padding: 18px 20px;
+    border-radius: 10px;
+    min-width: 420px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.date-modal-body {
+    display: flex;
+    gap: 12px;
+    max-height: 220px;
+    margin-top: 4px;
+}
+
+.date-col {
+    flex: 1;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 8px;
+    overflow-y: auto;
+    font-size: 12px;
+}
+
+.date-col h4 {
+    margin: 0 0 6px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #666666;
+}
+
+.date-col p {
+    margin: 0;
+    padding: 4px 6px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.date-col p:hover {
+    background: #f0f4f0;
+}
+
+.date-modal-footer {
+    margin-top: 12px;
+    text-align: right;
+}
+
+.date-modal-footer button {
+    min-width: 70px;
+    padding: 6px 10px;
+    font-size: 12px;
+    border-radius: 999px;
+    border: none;
+    cursor: pointer;
+    margin-left: 6px;
+}
+
+#okBtn {
+    background: #78866B;
+    color: #ffffff;
+}
+
+#okBtn:hover {
+    background: #5b7b5f;
+}
+
+#cancelBtn {
+    background: #e0e0e0;
+    color: #333333;
+}
+
+#cancelBtn:hover {
+    background: #d0d0d0;
+}
