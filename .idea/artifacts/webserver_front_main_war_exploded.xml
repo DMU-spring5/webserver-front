@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="webserver_front.main:war exploded">
+    <output-path>$PROJECT_DIR$/out/artifacts/webserver_front_main_war_exploded</output-path>
+    <root id="root">
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="webserver_front.main" />
+        </element>
+      </element>
+      <element id="javaee-facet-resources" facet="webserver_front.main/web/Web" />
+      <element id="javaee-facet-resources" facet="webserver_front.main/web/Web Gradle : webserver_front-1.0-SNAPSHOT.war" />
+    </root>
+  </artifact>
+</component>
