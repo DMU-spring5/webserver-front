@@ -3,7 +3,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>건강 페이지 - 등</title>
+    <title>건강 페이지 - 하체</title>
 
     <style>
         * { box-sizing:border-box; margin:0; padding:0; }
@@ -12,6 +12,7 @@
             background:#f5f5f5;
             color:#333;
         }
+
         header{
             height:64px;background:#78866B;color:#fff;
             padding:0 40px;
@@ -125,104 +126,32 @@
         </a>
     </div>
 
-    <div class="section-title">등</div>
+    <div class="section-title">하체</div>
 
-    <!-- 기구 버튼들: data-type 으로 구분 -->
     <div class="filter-row">
-        <button class="filter-btn filter-btn-active" data-type="ALL">전체</button>
-        <button class="filter-btn" data-type="DB">덤벨</button>
-        <button class="filter-btn" data-type="BB">바벨</button>
-        <button class="filter-btn" data-type="BW">맨몸</button>
-        <button class="filter-btn" data-type="BD">밴드</button>
-        <button class="filter-btn" data-type="BALL">볼</button>
+        <button class="filter-btn filter-btn-active">덤벨</button>
+        <button class="filter-btn">바벨</button>
+        <button class="filter-btn">맨몸</button>
+        <button class="filter-btn">밴드</button>
+        <button class="filter-btn">볼</button>
     </div>
 
-    <!-- 운동 리스트는 JS가 채움 -->
-    <div id="workoutList" class="workout-list"></div>
+    <div class="workout-list">
+        <a class="workout-btn"
+           href="${pageContext.request.contextPath}/health_exercise_detail?part=하체&type=덤벨&name=덤벨%20데드리프트">
+            덤벨 데드리프트
+        </a>
+        <a class="workout-btn"
+           href="${pageContext.request.contextPath}/health_exercise_detail?part=하체&type=덤벨&name=고블릿%20스쿼트">
+            고블릿 스쿼트
+        </a>
+        <a class="workout-btn"
+           href="${pageContext.request.contextPath}/health_exercise_detail?part=하체&type=덤벨&name=덤벨%20스쿼트">
+            덤벨 스쿼트
+        </a>
+    </div>
 
 </div>
-
-<script>
-    (function () {
-        const ctx = '<%= request.getContextPath() %>';
-        const buttons = document.querySelectorAll('.filter-btn');
-        const listEl  = document.getElementById('workoutList');
-
-        // 등 부위 운동 데이터
-        const data = {
-            DB: [ // 덤벨
-                '벤트오버 덤벨로우',
-                '벤트오버 리버스 플라이',
-                '인클라인 덤벨로우'
-            ],
-            BB: [
-                '바벨 로우',
-                '바벨 데드리프트',
-                'T바 로우'
-            ],
-            BW: [
-                '풀업',
-                '친업',
-                '슈퍼맨 백 익스텐션'
-            ],
-            BD: [
-                '밴드 풀어파트',
-                '밴드 라트 풀다운',
-                '밴드 로우'
-            ],
-            BALL: [
-                '스위스볼 백 익스텐션',
-                '스위스볼 힙 익스텐션'
-            ]
-        };
-        data.ALL = [...data.DB, ...data.BB, ...data.BW, ...data.BD, ...data.BALL];
-
-        // type 에 따라 리스트 다시 그리기
-        function render(type) {
-            const items = data[type] || [];
-            listEl.innerHTML = '';
-            if (!items.length) {
-                listEl.innerHTML = '<div class="workout-btn">등록된 운동이 없습니다.</div>';
-                return;
-            }
-            items.forEach(name => {
-                const a = document.createElement('a');
-                a.className = 'workout-btn';
-                a.textContent = name;
-                a.href = ctx + '/health_exercise_detail?part='
-                    + encodeURIComponent('등')
-                    + '&type=' + encodeURIComponent(mapType(type))
-                    + '&name=' + encodeURIComponent(name);
-                listEl.appendChild(a);
-            });
-        }
-
-        // 화면에 보여줄 기구명 매핑
-        function mapType(type) {
-            switch (type) {
-                case 'DB': return '덤벨';
-                case 'BB': return '바벨';
-                case 'BW': return '맨몸';
-                case 'BD': return '밴드';
-                case 'BALL': return '볼';
-                default: return '';
-            }
-        }
-
-        // 버튼 클릭 시 active 변경 + render
-        buttons.forEach(btn => {
-            btn.addEventListener('click', function () {
-                const type = this.getAttribute('data-type');
-                buttons.forEach(b => b.classList.remove('filter-btn-active'));
-                this.classList.add('filter-btn-active');
-                render(type);
-            });
-        });
-
-        // 첫 로드시 전체 보기
-        render('ALL');
-    })();
-</script>
 
 </body>
 </html>

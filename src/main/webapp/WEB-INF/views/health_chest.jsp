@@ -3,7 +3,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>건강 페이지 - 등</title>
+    <title>건강 페이지 - 가슴</title>
 
     <style>
         * { box-sizing:border-box; margin:0; padding:0; }
@@ -125,9 +125,8 @@
         </a>
     </div>
 
-    <div class="section-title">등</div>
+    <div class="section-title">가슴</div>
 
-    <!-- 기구 버튼들: data-type 으로 구분 -->
     <div class="filter-row">
         <button class="filter-btn filter-btn-active" data-type="ALL">전체</button>
         <button class="filter-btn" data-type="DB">덤벨</button>
@@ -137,7 +136,6 @@
         <button class="filter-btn" data-type="BALL">볼</button>
     </div>
 
-    <!-- 운동 리스트는 JS가 채움 -->
     <div id="workoutList" class="workout-list"></div>
 
 </div>
@@ -148,36 +146,44 @@
         const buttons = document.querySelectorAll('.filter-btn');
         const listEl  = document.getElementById('workoutList');
 
-        // 등 부위 운동 데이터
         const data = {
-            DB: [ // 덤벨
-                '벤트오버 덤벨로우',
-                '벤트오버 리버스 플라이',
-                '인클라인 덤벨로우'
+            DB: [
+                '덤벨 프레스',
+                '덤벨 풀오버',
+                '덤벨 플라이'
             ],
             BB: [
-                '바벨 로우',
-                '바벨 데드리프트',
-                'T바 로우'
+                '벤치 프레스',
+                '인클라인 벤치 프레스',
+                '디클라인 벤치 프레스'
             ],
             BW: [
-                '풀업',
-                '친업',
-                '슈퍼맨 백 익스텐션'
+                '푸쉬업',
+                '니 푸쉬업',
+                '클랩 푸쉬업'
             ],
             BD: [
-                '밴드 풀어파트',
-                '밴드 라트 풀다운',
-                '밴드 로우'
+                '밴드 체스트 프레스',
+                '밴드 체스트 플라이'
             ],
             BALL: [
-                '스위스볼 백 익스텐션',
-                '스위스볼 힙 익스텐션'
+                '스위스볼 푸쉬업',
+                '스위스볼 덤벨 프레스'
             ]
         };
         data.ALL = [...data.DB, ...data.BB, ...data.BW, ...data.BD, ...data.BALL];
 
-        // type 에 따라 리스트 다시 그리기
+        function mapType(t) {
+            switch (t) {
+                case 'DB': return '덤벨';
+                case 'BB': return '바벨';
+                case 'BW': return '맨몸';
+                case 'BD': return '밴드';
+                case 'BALL': return '볼';
+                default: return '';
+            }
+        }
+
         function render(type) {
             const items = data[type] || [];
             listEl.innerHTML = '';
@@ -190,26 +196,13 @@
                 a.className = 'workout-btn';
                 a.textContent = name;
                 a.href = ctx + '/health_exercise_detail?part='
-                    + encodeURIComponent('등')
+                    + encodeURIComponent('가슴')
                     + '&type=' + encodeURIComponent(mapType(type))
                     + '&name=' + encodeURIComponent(name);
                 listEl.appendChild(a);
             });
         }
 
-        // 화면에 보여줄 기구명 매핑
-        function mapType(type) {
-            switch (type) {
-                case 'DB': return '덤벨';
-                case 'BB': return '바벨';
-                case 'BW': return '맨몸';
-                case 'BD': return '밴드';
-                case 'BALL': return '볼';
-                default: return '';
-            }
-        }
-
-        // 버튼 클릭 시 active 변경 + render
         buttons.forEach(btn => {
             btn.addEventListener('click', function () {
                 const type = this.getAttribute('data-type');
@@ -219,7 +212,6 @@
             });
         });
 
-        // 첫 로드시 전체 보기
         render('ALL');
     })();
 </script>

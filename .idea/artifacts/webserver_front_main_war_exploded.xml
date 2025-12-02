@@ -6,6 +6,9 @@
         <element id="directory" name="classes">
           <element id="module-output" name="webserver_front.main" />
         </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="Gradle: javax.servlet:jstl:1.2" />
+        </element>
       </element>
       <element id="javaee-facet-resources" facet="webserver_front.main/web/Web" />
       <element id="javaee-facet-resources" facet="webserver_front.main/web/Web Gradle : webserver_front-1.0-SNAPSHOT.war" />

@@ -1,95 +1,114 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="jakarta.tags.core" %>
-
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <title>MILLI ROAD - 게시글 상세</title>
+
     <style>
-        /* 기존 스타일 상속 및 상세 페이지용 추가 */
-        body { margin: 0; font-family: Arial, sans-serif; background-color: #f4f4f4; }
-        header { background-color: #78866B; color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; }
-        .header-left h1 { margin: 0; font-size: 1.5em; display: flex; align-items: center; gap: 10px; }
-        .header-nav a { color: white; margin: 0 15px; text-decoration: none; font-weight: 500; }
-        .header-nav a:hover { text-decoration: underline; }
-        .header-right { display: flex; align-items: center; }
-        .header-right span { margin-right: 15px; }
-        .logout-button { background-color: white; color: #78866B; border: none; padding: 8px 15px; cursor: pointer; border-radius: 5px; font-weight: bold; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: "Noto Sans KR", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        header {
+            height: 64px;
+            background-color: #78866B;
+            color: #fff;
+            padding: 0 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .header-left{display:flex;align-items:center;gap:12px;}
+        .header-logo-box{
+            width:30px;height:30px;border-radius:6px;background:#fff;
+        }
+        .header-title{font-size:20px;font-weight:700;letter-spacing:.08em;}
+        .header-nav{display:flex;align-items:center;gap:24px;font-size:15px;}
+        .header-nav a{color:#fff;text-decoration:none;}
+        .header-nav a:hover{text-decoration:underline;}
+        .header-nav a.active{font-weight:700;text-decoration:underline;}
+        .header-right{font-size:14px;}
 
-        .detail-container { padding: 40px 20px; max-width: 800px; margin: 20px auto; background-color: white; border: 1px solid #ddd; border-radius: 8px; }
-        .post-header h2 { font-size: 1.8em; color: #333; margin-bottom: 5px; }
-        .post-info { border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 20px; color: #666; font-size: 0.9em; display: flex; justify-content: space-between; }
-        .post-info span { margin-right: 15px; }
-        .post-content { min-height: 200px; padding: 15px 0; border-bottom: 1px solid #ddd; line-height: 1.6; white-space: pre-wrap; }
-
-        .action-buttons { text-align: right; margin-top: 20px; }
-        .action-buttons button, .action-buttons a { padding: 8px 15px; border: none; cursor: pointer; border-radius: 5px; font-weight: bold; margin-left: 10px; text-decoration: none; display: inline-block;}
-        .list-button { background-color: #ccc; color: #333; }
-        .edit-button { background-color: #556b2f; color: white; }
+        .page-wrap{
+            max-width:900px;margin:24px auto 40px;padding:0 16px;
+        }
+        table.detail-table{
+            width:100%;border-collapse:collapse;background:#fff;
+        }
+        .detail-table th,.detail-table td{
+            border:1px solid #ddd;padding:10px 12px;font-size:14px;
+        }
+        .detail-table th{
+            width:120px;background:#f4f4f4;text-align:center;
+        }
+        .detail-table td.content{
+            min-height:200px;white-space:pre-wrap;
+        }
+        .comment-box{
+            margin-top:16px;background:#fff;border-radius:6px;
+            padding:10px 12px;border:1px solid #ddd;
+        }
+        .comment-box input{
+            width:90%;border:none;outline:none;font-size:14px;
+        }
+        .comment-box button{
+            float:right;border:none;background:#78866B;color:#fff;
+            padding:4px 10px;border-radius:4px;cursor:pointer;
+        }
+        .btn-area{
+            margin-top:16px;text-align:right;
+        }
+        .btn-area a{
+            display:inline-block;margin-left:6px;padding:6px 14px;
+            border-radius:4px;text-decoration:none;font-size:13px;
+            border:1px solid #ccc;background:#f5f5f5;color:#333;
+        }
     </style>
 </head>
 <body>
+
 <header>
     <div class="header-left">
-        <h1 style="display: flex; align-items: center; gap: 10px;">
-            <img src="https://via.placeholder.com/30/FFFFFF/78866B?text=M" alt="M" style="height: 30px; border-radius: 5px; background: white;"> MILLI ROAD
-        </h1>
+        <div class="header-logo-box"></div>
+        <div class="header-title">MILLI ROAD</div>
     </div>
     <nav class="header-nav">
-        <a href="#">뉴스</a> |
-        <a href="/social/board" style="font-weight: bold;">소셜</a> |
-        <a href="#">건강</a> |
-        <a href="/">지도</a>
+        <a href="#">뉴스</a>
+        <span>|</span>
+        <a href="${pageContext.request.contextPath}/social/board" class="active">소셜</a>
+        <span>|</span>
+        <a href="${pageContext.request.contextPath}/health">건강</a>
+        <span>|</span>
+        <a href="${pageContext.request.contextPath}/main">지도</a>
     </nav>
     <div class="header-right">
-        <span>니인내조 님</span>
-        <button class="logout-button">로그아웃</button>
+        니인내조 님
     </div>
 </header>
 
-<div class="detail-container">
-    <c:choose>
-        <c:when test="${not empty post}">
-            <div class="post-header">
-                <h2><c:out value="${post.title}" /></h2>
-            </div>
-            <div class="post-info">
-                <div>
-                    <span>번호: ${post.postId}</span>
-                    <span>
-                        글쓴이:
-                        <c:choose>
-                            <c:when test="${post.publicOption eq 'anonymous'}">
-                                익명
-                            </c:when>
-                            <c:otherwise>
-                                ${post.writer}
-                            </c:otherwise>
-                        </c:choose>
-                    </span>
-                    <span>작성일: ${post.date}</span>
-                </div>
-                <div>
-                    <span>조회: ${post.views}</span>
-                    <span>추천: ${post.recommends}</span>
-                </div>
-            </div>
-            <div class="post-content">
-                <c:out value="${post.content}" />
-            </div>
-        </c:when>
-        <c:otherwise>
-            <div style="text-align: center; padding: 50px;">
-                <h2>게시글을 찾을 수 없습니다.</h2>
-                <p>삭제되었거나 존재하지 않는 게시글입니다.</p>
-            </div>
-        </c:otherwise>
-    </c:choose>
+<div class="page-wrap">
+    <table class="detail-table">
+        <tr>
+            <th>제목</th>
+            <td>나에게 수고했다고 해줄 수 있겠니..?</td>
+        </tr>
+        <tr>
+            <th>내용</th>
+            <td class="content">오늘 힘든 일이 있었는데 나에게 수고했다고 해줄 사람 없을까..</td>
+        </tr>
+    </table>
 
+    <div class="comment-box">
+        <span>댓글 달기 : </span>
+        <input type="text" placeholder="댓글을 입력해 주세요.">
+        <button type="button">▶</button>
+    </div>
 
-    <div class="action-buttons">
-        <a href="/social/board" class="list-button">목록으로</a>
+    <div class="btn-area">
+        <a href="${pageContext.request.contextPath}/social/board">목록</a>
     </div>
 </div>
 
