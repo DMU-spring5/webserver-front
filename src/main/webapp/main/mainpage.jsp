@@ -51,19 +51,18 @@
 
                 <!-- 회원 정보 -->
                 <div class="profile-info-text">
-                    사단 : <%= session.getAttribute("division") %><br>
-                    부대명 : <%= session.getAttribute("unit") %><br>
-                    이름 : <%= session.getAttribute("name") %><br>
-                    계급 : <%= session.getAttribute("rank") %>
+                    <p>사단 : <%= session.getAttribute("division") %></p>
+                    <p>부대명 : <%= session.getAttribute("unit") %></p>
+                    <p>이름 : <%= session.getAttribute("name") %></p>
+                    <p>계급 : <%= session.getAttribute("rank") %></p>
                 </div>
 
-                <!-- D-day -->
                 <div class="profile-dday">
                     D - <%= session.getAttribute("dDay") %>
                 </div>
 
                 <!-- 로그아웃 버튼 -->
-                <button class="login-btn" onclick="location.href='logout.jsp'">
+                <button class="logout-btn" onclick="location.href='logout.jsp'">
                     로그아웃
                 </button>
             </div>
