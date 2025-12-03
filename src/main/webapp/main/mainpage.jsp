@@ -57,13 +57,27 @@
                     계급 : <%= session.getAttribute("rank") %>
                 </div>
 
+                <!-- 상병되는 날 퍼센트 바 -->
+                <div class="progress-bar-container">
+                    <p class="top-progress">상병까지</p>
+                    <span id="sangbong-percentage">0%</span>
+                    <progress class="graybar" id="progress-sangbong" value="0" max="100"></progress>
+                </div>
+
+                <!-- 전역까지 남은 일수 퍼센트 바 -->
+                <div class="progress-bar-container">
+                    <p class="bottom-progress">전역까지</p>
+                    <span id="jeonyeok-percentage">0%</span>
+                    <progress class="graybar" id="progress-jeonyeok" value="0" max="100"></progress>
+                </div>
+
                 <!-- D-day -->
                 <div class="profile-dday">
                     D - <%= session.getAttribute("dDay") %>
                 </div>
 
                 <!-- 로그아웃 버튼 -->
-                <button class="login-btn" onclick="location.href='logout.jsp'">
+                <button class="logout-btn" onclick="location.href='/logout/logout.jsp'">
                     로그아웃
                 </button>
             </div>
@@ -293,6 +307,48 @@
                 descEl.textContent = "날씨 정보를 불러올 수 없어요.";
             });
     });
+</script>
+
+<script type="text/javascript">
+    window.onload = function() {
+        // 상병 되는 날짜와 전역 날짜를 설정 (예시로 작성된 날짜)
+        const sangbongDate = new Date("2025-06-01");  // 상병 날짜
+        const jeonyeokDate = new Date("2026-12-01");  // 전역 날짜
+        const currentDate = new Date();  // 현재 날짜
+
+        // 날짜 차이를 계산하는 함수
+        function getRemainingDays(targetDate) {
+            const timeDiff = targetDate - currentDate;
+            return Math.ceil(timeDiff / (1000 * 3600 * 24)); // 남은 일수 계산
+        }
+
+        // 상병까지 남은 일수
+        const sangbongRemainingDays = getRemainingDays(sangbongDate);
+        const sangbongTotalDays = getRemainingDays(new Date("2025-01-01")); // 예시: 입대일 (2025년 1월 1일)
+        const sangbongPercentage = Math.max(0, Math.min(100, (sangbongRemainingDays / sangbongTotalDays) * 100)); // 퍼센트 계산
+
+        // 전역까지 남은 일수
+        const jeonyeokRemainingDays = getRemainingDays(jeonyeokDate);
+        const jeonyeokTotalDays = getRemainingDays(new Date("2025-01-01")); // 예시: 입대일 (2025년 1월 1일)
+        const jeonyeokPercentage = Math.max(0, Math.min(100, (jeonyeokRemainingDays / jeonyeokTotalDays) * 100)); // 퍼센트 계산
+
+        // 퍼센트 바 업데이트
+        document.getElementById("progress-sangbong").value = sangbongPercentage;
+        document.getElementById("sangbong-percentage").innerText = `${Math.round(sangbongPercentage)}%`;
+
+        document.getElementById("progress-jeonyeok").value = jeonyeokPercentage;
+        document.getElementById("jeonyeok-percentage").innerText = `${Math.round(jeonyeokPercentage)}%`;
+    };
+</script>
+
+<script>
+    function confirmLogout() {
+        // 로그아웃 확인 알림
+        const userConfirmed = confirm("로그아웃 하시겠습니까?");
+        if (userConfirmed) {
+            location.href = 'logout.jsp';
+        }
+    }
 </script>
 
 </body>

@@ -144,6 +144,8 @@ body {
 
 .profile-box {
     width: 100%;
+    min-width: 250px;
+    min-height: 400px;
     background: #DFCEB3;
     padding: 20px;
     border: 1px solid #ddd;
@@ -153,7 +155,6 @@ body {
     align-items: center;
     text-align: center;
 }
-
 
 .profile-image {
     width: 150px;
@@ -168,19 +169,31 @@ body {
     object-fit: cover;
 }
 
-
 .profile-text{
     font-size: 16px;
     font-weight: bold;
     color: #7B7B7B;
 }
 
-.login-btn {
+.profile-info-text {
+    text-align: center;
+    width: 100%;
+    line-height: 1.7;
+    padding: 10px;
+    color: #000000;
+}
+
+.profile-dday{
+    font-weight: bold;
+}
+
+.logout-btn {
     width: 100%;
     padding: 10px;
+    margin-top: 20px;
     background: #E9E9E2;
     border: none;
-    color: #828282;
+    color: #000000;
     cursor: pointer;
     font-size: 18px;
 }
@@ -189,6 +202,43 @@ body {
     margin-top: 10px;
     font-size: 13px;
     text-align: center;
+}
+
+.progress-bar-container {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 15px;
+}
+
+progress {
+    width: 80%;
+    height: 20px;
+}
+
+.top-progress,
+.bottom-progress {
+    margin-bottom: 0px;
+}
+
+.progress-bar-container p,
+.progress-bar-container span {
+    display: inline-block; /* p와 span을 나란히 배치 */
+    margin: 0; /* 기본 여백 제거 */
+    vertical-align: middle; /* 텍스트 정렬 */
+}
+
+
+.progress-bar-container p {
+    margin-right: 10px;
+}
+
+.graybar{
+    width: 158px;
+}
+
+span {
+    display: block;
+    font-weight: bold;
 }
 
 /* 캘린더 */
@@ -272,13 +322,13 @@ body {
 
 /* 왼쪽/오른쪽 박스 기본 */
 .main-news-left {
-    /* 필요하면 높이, 스크롤 등 추가 가능 */
+
 }
 
 .main-news-right {
     display: flex;
     flex-direction: column;
-    gap: 20px; /* 위: 맞춤, 아래: 군대 사이 간격 */
+    gap: 20px;
 }
 
 .main-news-header {
