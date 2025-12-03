@@ -75,7 +75,7 @@
         </div>
         <div class="date-modal-footer">
             <button type="button" id="cancelBtn">취소</button>
-            <button type="button" id="okBtn">날짜 적용 (Debug)</button>
+            <button type="button" id="okBtn">확인</button>
         </div>
     </div>
 </div>
@@ -147,8 +147,8 @@
         // 날짜 입력 필드 클릭 처리
         function handleDateInputClick(e) {
             e.preventDefault();
-            e.stopPropagation(); // 이벤트 전파 중단
-            joinDateText.blur(); // 포커스 해제
+            e.stopPropagation();
+            joinDateText.blur();
             openDateModal();
         }
 
@@ -175,25 +175,38 @@
             buildYearMonthList();
             updateDayList();
 
-            // UI 하이라이트
-            if(selectedYear) highlightSelected(yearList, selectedYear);
-            if(selectedMonth) highlightSelected(monthList, selectedMonth);
-            if(selectedDay) highlightSelected(dayList, selectedDay);
+            // UI 하이라이트와 스크롤을 DOM 갱신 후 실행 (필수)
+            setTimeout(() => {
+                if(selectedYear) highlightAndScroll(yearList, selectedYear);
+                if(selectedMonth) highlightAndScroll(monthList, selectedMonth);
+                if(selectedDay) highlightAndScroll(dayList, selectedDay);
+            }, 0);
         }
 
         function closeDateModal() {
             dateModal.style.display = "none";
         }
 
-        function highlightSelected(listElement, value) {
+        // --- 수정된 부분: 하이라이트 및 스크롤 로직 추가 ---
+        function highlightAndScroll(listElement, value) {
+            let targetElement = null;
             listElement.querySelectorAll("p").forEach(p => {
-                if (parseInt(p.textContent, 10) === value) {
+                const pValue = parseInt(p.textContent, 10);
+                if (pValue === value) {
                     p.style.background = "#e8e8e8";
+                    p.style.fontWeight = "bold";
+                    targetElement = p;
                 } else {
                     p.style.background = "transparent";
+                    p.style.fontWeight = "normal";
                 }
             });
+            // 선택된 요소가 있으면 그 위치로 스크롤 이동 (중앙 정렬)
+            if (targetElement) {
+                targetElement.scrollIntoView({ block: "center", behavior: "auto" });
+            }
         }
+        // --- 수정된 부분 끝 ---
 
         // 연, 월 리스트 생성
         function buildYearMonthList() {
@@ -205,7 +218,6 @@
                 const p = document.createElement("p");
                 p.textContent = y;
                 p.style.cursor = "pointer";
-                // 클로저 문제 방지를 위해 값을 직접 전달
                 p.onclick = () => selectYear(y, p);
                 yearList.appendChild(p);
             }
@@ -222,14 +234,14 @@
         function selectYear(y, element) {
             selectedYear = y;
             selectedDay = null;
-            highlightSelected(yearList, y);
+            highlightAndScroll(yearList, y);
             updateDayList();
         }
 
         function selectMonth(m, element) {
             selectedMonth = m;
             selectedDay = null;
-            highlightSelected(monthList, m);
+            highlightAndScroll(monthList, m);
             updateDayList();
         }
 
@@ -257,23 +269,19 @@
             }
 
             if (selectedDay) {
-                highlightSelected(dayList, selectedDay);
+                highlightAndScroll(dayList, selectedDay);
             }
         }
 
         function selectDay(d, element) {
             selectedDay = d;
-            highlightSelected(dayList, d);
+            highlightAndScroll(dayList, d);
         }
 
-        // 확인 버튼 (가장 중요한 부분)
+        // 확인 버튼
         okBtn.addEventListener("click", () => {
-            // 1. 디버깅: 현재 선택된 값 확인 (팝업창)
-            const debugMsg = "선택된 값 -> 연:" + selectedYear + ", 월:" + selectedMonth + ", 일:" + selectedDay;
-            // alert(debugMsg); // 이 줄의 주석을 풀면 팝업으로 값을 확인할 수 있습니다.
-
             if (!selectedYear || !selectedMonth || !selectedDay) {
-                alert("연, 월, 일을 모두 선택해 주세요.\n(" + debugMsg + ")");
+                alert("연, 월, 일을 모두 선택해 주세요.");
                 return;
             }
 
@@ -290,7 +298,7 @@
             // setAttribute로 HTML 속성 자체도 변경 (화면 갱신 유도)
             joinDateText.setAttribute('value', dateStr);
 
-            // 4. CSS 및 스타일 강제 적용 (화면에 --가 뜨는 문제 해결 시도)
+            // 4. CSS 및 스타일 강제 적용
             joinDateText.removeAttribute('placeholder');
             joinDateText.style.color = "black";
             joinDateText.style.visibility = "visible";
