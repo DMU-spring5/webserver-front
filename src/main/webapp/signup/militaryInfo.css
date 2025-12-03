@@ -69,17 +69,18 @@ input[type="text"]:focus {
     color: white;
 }
 
-/* 입내 날짜 활성화 */
+/* 입대 날짜 활성화 */
 #nextBtn.active {
-    background: #78866B; /* 초록 */
+    background: #78866B;
 }
 
 #nextBtn {
     background: #c8cfc8; /* 비활성 */
     cursor: default;
 }
+
 #nextBtn.active {
-    background: #78866B; /* 활성 초록 */
+    background: #78866B;
     cursor: pointer;
 }
 
@@ -109,6 +110,7 @@ input[type="text"]:focus {
     max-height: 240px;
     overflow-y: auto;
 }
+
 
 .date-col {
     flex: 1;
@@ -157,3 +159,5 @@ input[type="text"]:focus {
     background: #78866B;
     color: white;
 }
+
+
