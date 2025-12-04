@@ -31,7 +31,7 @@
                 <span class="divider">|</span>
                 <a href="health/health.jsp">건강</a>
                 <span class="divider">|</span>
-                <a href="#">대중교통</a>
+                <a href="#">지도</a>
             </nav>
         </div>
     </div>

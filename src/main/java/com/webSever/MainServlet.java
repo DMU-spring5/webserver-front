@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/main")   // /main 은 여기 하나만
+@WebServlet("/main")   // /main 으로 들어오면 main.jsp 로 forward
 public class MainServlet extends HttpServlet {
 
     @Override

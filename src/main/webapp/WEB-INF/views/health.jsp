@@ -7,7 +7,6 @@
 
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-
         body {
             font-family: "Noto Sans KR", -apple-system, BlinkMacSystemFont,
             "Segoe UI", system-ui, sans-serif;
@@ -15,7 +14,6 @@
             color: #333;
         }
 
-        /* ===== 헤더 ===== */
         header {
             height: 64px;
             background-color: #78866B;
@@ -25,54 +23,28 @@
             align-items: center;
             justify-content: space-between;
         }
-        .header-left { display:flex;align-items:center;gap:14px; }
-
-        /* 여기만 로고 이미지로 변경 */
-        .header-logo-box {
-            width:34px;
-            height:34px;
-            border-radius:4px; /* 필요 없으면 지워도 됨 */
-            background: url('${pageContext.request.contextPath}/img/KakaoTalk_20251204_101657760.png')
-            center / cover no-repeat;
+        .header-left{display:flex;align-items:center;gap:14px;}
+        .header-logo-box{
+            width:34px;height:34px;border-radius:4px;
+            background:url('${pageContext.request.contextPath}/img/KakaoTalk_20251204_101657760.png')
+            center / contain no-repeat;
         }
-
-        .header-title {
-            font-size:22px;
-            font-weight:700;
-            letter-spacing:.10em;
-        }
-        .header-nav {
-            display:flex;
-            align-items:center;
-            gap:26px;
-            font-size:15px;
-        }
-        .header-nav a { color:#fff; text-decoration:none; }
-        .header-nav a:hover { text-decoration:underline; }
-        .header-nav a.active { font-weight:700; text-decoration:underline; }
-        .header-right {
-            display:flex;
-            align-items:center;
-            gap:16px;
-            font-size:14px;
-        }
+        .header-title{font-size:22px;font-weight:700;letter-spacing:.10em;}
+        .header-nav{display:flex;align-items:center;gap:26px;font-size:15px;}
+        .header-nav a{color:#fff;text-decoration:none;}
+        .header-nav a:hover{text-decoration:underline;}
+        .header-nav a.active{text-decoration:underline;font-weight:700;}
+        .header-right{display:flex;align-items:center;gap:16px;font-size:14px;}
         .btn-logout{
-            padding:6px 16px;
-            border-radius:4px;
-            border:none;
-            background:#fff;
-            color:#78866B;
-            font-weight:600;
-            cursor:pointer;
+            padding:6px 16px;border-radius:4px;border:none;
+            background:#fff;color:#78866B;font-weight:600;cursor:pointer;
         }
 
-        /* ===== 본문 ===== */
         .page-wrap {
             max-width:1200px;
             margin:40px auto 80px;
             padding:0 32px;
         }
-
         .category-box-wrap {
             margin-top:60px;
             display:flex;
@@ -80,7 +52,6 @@
             gap:80px;
             align-items:center;
         }
-
         .category-box {
             width:480px;
             height:180px;
@@ -92,9 +63,7 @@
             font-size:20px;
             cursor:pointer;
         }
-        .category-box:hover {
-            background:#eee7d8;
-        }
+        .category-box:hover { background:#eee7d8; }
         a.category-link {
             display:block;
             text-decoration:none;
@@ -109,7 +78,6 @@
         <div class="header-logo-box"></div>
         <div class="header-title">MILLI ROAD</div>
     </div>
-
     <nav class="header-nav">
         <a href="#">뉴스</a>
         <span>|</span>
@@ -119,7 +87,6 @@
         <span>|</span>
         <a href="${pageContext.request.contextPath}/main">지도</a>
     </nav>
-
     <div class="header-right">
         니인내조 님
         <button class="btn-logout">로그아웃</button>
@@ -127,25 +94,13 @@
 </header>
 
 <div class="page-wrap">
-
     <div class="category-box-wrap">
-
-        <!-- 운동 칼로리 검색 → health_main -->
-        <a class="category-link"
-           href="${pageContext.request.contextPath}/health_main">
-            <div class="category-box">
-                운동 칼로리 검색
-            </div>
+        <a class="category-link" href="${pageContext.request.contextPath}/health_main">
+            <div class="category-box">운동 칼로리 검색</div>
         </a>
-
-        <!-- 칼로리 계산기 → health_calculator -->
-        <a class="category-link"
-           href="${pageContext.request.contextPath}/health_calculator">
-            <div class="category-box">
-                칼로리 계산기
-            </div>
+        <a class="category-link" href="${pageContext.request.contextPath}/health_calculator">
+            <div class="category-box">칼로리 계산기</div>
         </a>
-
     </div>
 </div>
 
