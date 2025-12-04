@@ -7,31 +7,26 @@
     <link rel="stylesheet" type="text/css" href="mypage.css">
 </head>
 <body>
-
 <!-- 상단 헤더 -->
 <header class="header">
     <div class="header-inner">
         <!-- 로고 -->
         <div class="logo">
-            <!-- 실제 로고 이미지 경로로 변경 -->
-            <img src="../img/WebServerLogo.png" alt="MILLI ROAD 로고">
+            <img src="../img/WebServerLogo2.png" alt="MILLI ROAD 로고">
         </div>
 
-        <!-- 메뉴 -->
-        <nav class="gnb">
-            <a href="#">뉴스</a>
-            <span class="divider">|</span>
-            <a href="#">소셜</a>
-            <span class="divider">|</span>
-            <a href="#">건강</a>
-            <span class="divider">|</span>
-            <a href="#">대중교통 위치 / 시간표</a>
-        </nav>
-
-        <!-- 우측 사용자 정보 + 로그아웃 -->
-        <div class="header-right">
-            <span class="header-username">니인내죠 님</span>
-            <button type="button" class="btn-logout">로그아웃</button>
+        <!-- 검색 + 메뉴 영역 -->
+        <div class="header-center">
+            <!-- 메뉴 -->
+            <nav class="nav">
+                <a href="index.jsp" class="active">뉴스</a>
+                <span class="divider">|</span>
+                <a href="#">소셜</a>
+                <span class="divider">|</span>
+                <a href="health/health.jsp">건강</a>
+                <span class="divider">|</span>
+                <a href="#">지도</a>
+            </nav>
         </div>
     </div>
 </header>
@@ -44,15 +39,19 @@
 
     <!-- 프로필 카드 -->
     <section class="profile-card">
-        <!-- 왼쪽: 프로필 -->
-        <div class="profile-left">
-            <div class="profile-img-wrap">
-                <div class="profile-img"><!-- 아이콘 자리 --></div>
-                <div class="profile-camera"><!-- 카메라 아이콘 자리 --></div>
-            </div>
+        <!-- 프로필 영역 -->
+        <div class="profile-img">
+            <img src="../img/profile.png" id="previewImg" class="profile" alt="Profile Image">
+
+            <label for="profileInput" class="camera">
+                <img src="../img/camera.png" alt="camera">
+            </label>
+
+            <input type="file" id="profileInput" accept="image/*" style="display:none;" onchange="previewImage();">
+        </div>
 
             <div class="profile-text">
-                <p class="profile-name"><strong>니인내죠</strong> 님</p>
+                <p class="profile-name"><strong>니인내조</strong> 님</p>
                 <p>사단 : 1사단</p>
                 <p>부대명 : 제11보병여단</p>
                 <p>계급 : 일병</p>
@@ -106,8 +105,23 @@
             </a>
         </div>
     </section>
-
 </main>
+
+<script>
+    // 프로필 이미지 미리보기 함수
+    function previewImage() {
+        const file = document.getElementById('profileInput').files[0];
+        const reader = new FileReader();
+
+        reader.onloadend = function () {
+            document.getElementById('previewImg').src = reader.result;
+        }
+
+        if (file) {
+            reader.readAsDataURL(file);
+        }
+    }
+</script>
 
 </body>
 </html>
