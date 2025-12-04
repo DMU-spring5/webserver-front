@@ -26,11 +26,16 @@
             justify-content: space-between;
         }
         .header-left { display:flex;align-items:center;gap:14px; }
+
+        /* 여기만 로고 이미지로 변경 */
         .header-logo-box {
-            width:34px;height:34px;
-            border-radius:4px;
-            background:#fff;
+            width:34px;
+            height:34px;
+            border-radius:4px; /* 필요 없으면 지워도 됨 */
+            background: url('${pageContext.request.contextPath}/img/KakaoTalk_20251204_101657760.png')
+            center / cover no-repeat;
         }
+
         .header-title {
             font-size:22px;
             font-weight:700;
