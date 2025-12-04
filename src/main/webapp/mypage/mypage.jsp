@@ -42,20 +42,13 @@
         <!-- 프로필 영역 -->
         <div class="profile-img">
             <img src="../img/profile.png" id="previewImg" class="profile" alt="Profile Image">
-
-            <label for="profileInput" class="camera">
-                <img src="../img/camera.png" alt="camera">
-            </label>
-
-            <input type="file" id="profileInput" accept="image/*" style="display:none;" onchange="previewImage();">
         </div>
 
-            <div class="profile-text">
-                <p class="profile-name"><strong>니인내조</strong> 님</p>
-                <p>사단 : 1사단</p>
-                <p>부대명 : 제11보병여단</p>
-                <p>계급 : 일병</p>
-            </div>
+        <div class="profile-text">
+            <p class="profile-name" id="profileName"><strong>...</strong>&nbsp &nbsp님</p>
+            <p id="division">사단 : ...</p>
+            <p id="unit">부대명 : ...</p>
+            <p id="rank">계급 : ...</p>
         </div>
 
         <!-- 오른쪽: D-day + 진행바 -->
@@ -68,7 +61,7 @@
                     <div class="progress-fill fill-green" style="width:34.3%;"></div>
                 </div>
             </div>
-
+            <br />
             <div class="progress-row">
                 <span class="progress-label">전역까지 89.1%</span>
                 <div class="progress-bar">
@@ -123,5 +116,27 @@
     }
 </script>
 
+<script>
+    const apiUrl = 'https://example.com/api/user'; // API 주소
+
+    // fetch()를 사용하여 API에서 데이터 가져오기
+    fetch(apiUrl)
+        .then(response => response.json()) // JSON 형식으로 응답 받기
+        .then(data => {
+            // 가져온 데이터로 HTML 요소 업데이트
+            document.getElementById('profileName').innerHTML = `<strong>${data.name}</strong> 님`;
+            document.getElementById('division').textContent = `사단 : ${data.division}`;
+            document.getElementById('unit').textContent = `부대명 : ${data.unit}`;
+            document.getElementById('rank').textContent = `계급 : ${data.rank}`;
+        })
+        .catch(error => {
+            console.error('API 요청 중 오류 발생:', error);
+            // 오류가 발생하면 기본값을 표시
+            document.getElementById('profileName').innerHTML = `<strong>알 수 없음</strong> 님`;
+            document.getElementById('division').textContent = '사단 : 알 수 없음';
+            document.getElementById('unit').textContent = '부대명 : 알 수 없음';
+            document.getElementById('rank').textContent = '계급 : 알 수 없음';
+        });
+</script>
 </body>
 </html>

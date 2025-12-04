@@ -84,7 +84,9 @@ body {
 .profile-card {
     display: flex;
     justify-content: center;
-    margin-bottom: 25px;
+    margin: 40px;
+    box-sizing: border-box;
+    position: relative;
 }
 
 .profile-img {
@@ -171,14 +173,8 @@ body {
 
 .top-line,
 .middle-line {
-    height: 1px;
+    height: 1.5px;
     background: #dddddd;
-}
-
-.profile-card {
-    display: flex;
-    padding: 40px;
-    box-sizing: border-box;
 }
 
 .profile-left {
@@ -216,12 +212,15 @@ body {
 }
 
 .profile-text{
-
+    text-align: center;
+    left: 223px;
+    position: absolute;
+    margin-top: 16px;
 }
 
 .profile-text p {
     margin: 4px 0;
-    font-size: 14px;
+    font-size: 17px;
 }
 
 .profile-name {
@@ -231,30 +230,34 @@ body {
 
 .profile-right {
     flex: 1;
-    padding-left: 40px;
     box-sizing: border-box;
+    align-items: flex-end;
 }
 
 .d-day {
     text-align: right;
-    font-size: 14px;
-    margin-bottom: 24px;
+    font-size: 18px;
+    margin-bottom: 11px;
+    font-weight: bold;
 }
 
 .progress-row {
     display: flex;
-    justify-content: flex-end; /* 오른쪽 정렬 */
-    align-items: center;
+    flex-direction: column; /* 텍스트와 진행바를 세로로 배치 */
+    align-items: flex-start; /* 왼쪽 정렬 */
     width: 100%;
+    align-items: flex-end;
 }
 
 .progress-label {
-    margin-left: 10px; /* 진행바와 간격을 주기 위한 여백 */
+    margin-bottom: 5px;
+    font-size: 14px;
+    width: 63%;
 }
 
 .progress-bar {
-    width: 100%; /* 진행바가 전체 너비를 차지 */
-    height: 8px;
+    width: 63%;
+    height: 12px;
     background: #e5e5e5;
     border-radius: 999px;
     overflow: hidden;
@@ -277,22 +280,34 @@ body {
 .mypage-menu {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    padding: 24px 60px 40px;
+    padding: 40px 60px 40px;
     box-sizing: border-box;
     gap: 12px 80px;
-    font-size: 14px;
+    font-size: 17px;
 }
 
+/* 메뉴 아이템 */
 .menu-item {
     padding: 20px 0;
-    border-bottom: 1px solid #eeeeee;
     display: flex;
     justify-content: space-between;
     align-items: center;
     text-decoration: none;
     color: #333333;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    padding: 20px;
 }
 
-.menu-item .arrow {
+/* 호버 시 배경 색상과 텍스트 색상 변경 */
+.menu-item:hover {
+    background-color: #E9E9E2;
+    color: #555555;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.18);
+    padding: 20px;
+}
+
+/* 화살표 기본 색상 */
+.arrow {
     font-size: 16px;
+    transition: color 0.3s ease;
 }
