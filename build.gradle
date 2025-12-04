@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'war'
 }
 
 group = 'com.webSever'
@@ -10,6 +11,9 @@ repositories {
 }
 
 dependencies {
+
+    // JSTL (c:forEach, c:if 등)
+    implementation 'javax.servlet:jstl:1.2'
     implementation 'javax.servlet:javax.servlet-api:4.0.1'  //Servlet API 추가
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
