@@ -77,7 +77,7 @@
     <!-- 마이페이지 메뉴 -->
     <section class="mypage-menu">
         <div class="menu-column">
-            <a href="#" class="menu-item">
+            <a href="myinfo.jsp" class="menu-item">
                 <span>내 정보</span>
                 <span class="arrow">&gt;</span>
             </a>
