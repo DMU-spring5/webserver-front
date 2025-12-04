@@ -1,66 +1,59 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ page import="java.sql.*" %>
-
 <%
     request.setCharacterEncoding("UTF-8");
 
     String nickname = request.getParameter("nickname");
     String userid   = request.getParameter("userid");
 
-    String userPw = null;   // 찾은 비밀번호 저장
+    boolean match = false;  // 일치하는 회원이 있는지 여부
 
     Connection conn = null;
     PreparedStatement pstmt = null;
     ResultSet rs = null;
 
     try {
-        // ===== DB 연결 정보(네 프로젝트에 맞게 수정) =====
-        Class.forName("com.mysql.cj.jdbc.Driver"); // MySQL 기준
-        String url    = "jdbc:mysql://localhost:3306/yourDB?useSSL=false&characterEncoding=UTF-8";
+        // DB 연결 -> 수정 해야함
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        String url = "jdbc:mysql://localhost:3306/yourDB?useSSL=false&characterEncoding=UTF-8";
         String dbUser = "yourDBUser";
         String dbPass = "yourDBPassword";
-
         conn = DriverManager.getConnection(url, dbUser, dbPass);
 
-        // ===== 비밀번호 찾기 쿼리 =====
-        // 예: members(userid, password, nickname)
-        String sql = "SELECT password FROM members WHERE userid = ? AND nickname = ?";
+        // 닉네임 + userid 검증
+        String sql = "SELECT * FROM members WHERE nickname=? AND userid=?";
         pstmt = conn.prepareStatement(sql);
-        pstmt.setString(1, userid);
-        pstmt.setString(2, nickname);
-
+        pstmt.setString(1, nickname);
+        pstmt.setString(2, userid);
         rs = pstmt.executeQuery();
 
         if (rs.next()) {
-            userPw = rs.getString("password");
+            match = true; // 정보 일치
         }
 
     } catch (Exception e) {
         e.printStackTrace();
     } finally {
-        try { if (rs != null)    rs.close(); }   catch (Exception e) {}
-        try { if (pstmt != null) pstmt.close(); }catch (Exception e) {}
-        try { if (conn != null)  conn.close(); } catch (Exception e) {}
+        try { if (rs != null) rs.close(); } catch (Exception e) {}
+        try { if (pstmt != null) pstmt.close(); } catch (Exception e) {}
+        try { if (conn != null) conn.close(); } catch (Exception e) {}
     }
+
+    // ===== 정보 일치 여부에 따른 처리 =====
+    if (!match) {
 %>
+<script>
+    alert("입력하신 정보가 일치하지 않습니다. 다시 시도해 주세요.");
+    location.href = "new_pw.jsp";
+</script>
+<%
+        return;
+    }
 
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>비밀번호 찾기 결과</title>
-</head>
-<body>
+    // 일치하면 → reset_pw.jsp로 값 전달
+    request.setAttribute("userid", userid);
+    request.setAttribute("nickname", nickname);
 
-<% if (userPw != null) { %>
-<h2>비밀번호 찾기 결과</h2>
-<p>회원님의 비밀번호는 <strong><%= userPw %></strong> 입니다.</p>
-<a href="login.jsp">로그인하러 가기</a>
-<% } else { %>
-<h2>비밀번호를 찾을 수 없습니다.</h2>
-<p>닉네임 또는 아이디가 일치하지 않습니다.</p>
-<a href="find_pw.jsp">다시 시도하기</a>
-<% } %>
-
-</body>
-</html>
+    RequestDispatcher rd = request.getRequestDispatcher("reset_pw.jsp");
+    rd.forward(request, response);
+%>
