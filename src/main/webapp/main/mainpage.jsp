@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>MILLI ROAD</title>
-    <link rel="stylesheet" type="text/css" href="index.css">
+    <link rel="stylesheet" type="text/css" href="mainpage.css">
 </head>
 <body>
 <!-- 상단 헤더 -->
@@ -39,20 +39,32 @@
 
 <!-- 메인 레이아웃 -->
 <div class="container">
-
     <!-- 로그인 + 캘린더 -->
     <aside class="left-box">
         <!-- 로그인 박스 -->
-        <div class="profile-box">
-            <div class="profile-image">
-                <img src="../img/profile.png" alt="프로필 사진">
-            </div>
-            <p class="profile-text">로그인 후 사용 가능</p>
-            <button class="login-btn" onclick="location.href='login/login.jsp'">로그인</button>
-            <div class="profile-links">
-                <a href="login/find_id.jsp">아이디</a> /
-                <a href="login/find_pw.jsp">비밀번호 찾기</a> |
-                <a href="#">회원가입</a>
+        <div class="left-box">
+            <div class="profile-box">
+                <!-- 프로필 이미지 -->
+                <div class="profile-image">
+                    <img src="../img/profile.png" alt="프로필 이미지">
+                </div>
+
+                <!-- 회원 정보 -->
+                <div class="profile-info-text">
+                    <p>사단 : <%= session.getAttribute("division") %></p>
+                    <p>부대명 : <%= session.getAttribute("unit") %></p>
+                    <p>이름 : <%= session.getAttribute("name") %></p>
+                    <p>계급 : <%= session.getAttribute("rank") %></p>
+                </div>
+
+                <div class="profile-dday">
+                    D - <%= session.getAttribute("dDay") %>
+                </div>
+
+                <!-- 로그아웃 버튼 -->
+                <button class="logout-btn" onclick="location.href='logout.jsp'">
+                    로그아웃
+                </button>
             </div>
         </div>
 
