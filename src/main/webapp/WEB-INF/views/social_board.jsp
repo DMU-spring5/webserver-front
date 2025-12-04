@@ -3,7 +3,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>커뮤니티 목록</title>
+    <title>소셜 커뮤니티 | 부대별 평가</title>
 
     <style>
         *{box-sizing:border-box;margin:0;padding:0;}
@@ -12,14 +12,17 @@
             background:#f5f5f5;color:#333;
         }
 
-        /* ===== 헤더 ===== */
         header{
             height:64px;background:#78866B;color:#fff;
             padding:0 40px;
             display:flex;align-items:center;justify-content:space-between;
         }
         .header-left{display:flex;align-items:center;gap:14px;}
-        .header-logo-box{width:34px;height:34px;border-radius:4px;background:#fff;}
+        .header-logo-box{
+            width:34px;height:34px;border-radius:4px;
+            background:url('${pageContext.request.contextPath}/img/KakaoTalk_20251204_101657760.png')
+            center / contain no-repeat;
+        }
         .header-title{font-size:22px;font-weight:700;letter-spacing:.10em;}
         .header-nav{display:flex;align-items:center;gap:26px;font-size:15px;}
         .header-nav a{color:#fff;text-decoration:none;}
@@ -31,24 +34,30 @@
             background:#fff;color:#78866B;font-weight:600;cursor:pointer;
         }
 
-        /* ===== 본문 ===== */
         .page-wrap{
             max-width:1100px;
             margin:42px auto 60px;
             padding:0 24px;
         }
 
-        /* 상단 탭 (부대별 평가 / 커뮤니티) */
-        .top-tabs{
+        .page-title{font-size:24px;font-weight:700;margin-bottom:6px;}
+        .page-subtitle{font-size:13px;color:#777;margin-bottom:24px;}
+
+        .tab-row{
+            display:flex;
+            align-items:center;
+            gap:10px;
             font-size:18px;
             margin-bottom:24px;
         }
-        .tab-link{
+        .tab-row .tab{
             text-decoration:none;
-            margin-right:16px;
+            color:#b6b6b6;
         }
-        .tab-text-main{font-weight:700;color:#000;}
-        .tab-text-sub{font-weight:400;color:#b6b6b6;}
+        .tab-row .tab.active{
+            color:#000;
+            font-weight:700;
+        }
 
         .board-header{
             display:flex;justify-content:flex-end;margin-bottom:10px;
@@ -124,17 +133,21 @@
 </header>
 
 <div class="page-wrap">
+    <h2 class="page-title">소셜 커뮤니티 | 부대별 평가</h2>
+    <p class="page-subtitle">
+        군부대, 훈련소, 자대 생활 등에 대한 솔직한 후기를 공유해 주세요.
+    </p>
 
-    <!-- 탭: 부대별 평가(흐리게) / 커뮤니티(진하게) -->
-    <div class="top-tabs">
-        <a class="tab-link"
-           href="${pageContext.request.contextPath}/social_unit">
-            <span class="tab-text-sub">부대별 평가</span>
+    <!-- 상단 탭 -->
+    <div class="tab-row">
+        <a href="${pageContext.request.contextPath}/social/board"
+           class="tab active">
+            소셜 커뮤니티
         </a>
         <span>|</span>
-        <a class="tab-link"
-           href="${pageContext.request.contextPath}/social/board">
-            <span class="tab-text-main">커뮤니티</span>
+        <a href="${pageContext.request.contextPath}/social_unit"
+           class="tab">
+            부대 별 평가
         </a>
     </div>
 
@@ -154,7 +167,6 @@
         </tr>
         </thead>
         <tbody>
-        <!-- 더미 데이터 3개 -->
         <tr onclick="location.href='${pageContext.request.contextPath}/social/detail?id=1'">
             <td>1</td>
             <td class="title">훈련소 생활 괜찮았어요</td>
@@ -184,9 +196,9 @@
 
     <div class="pagination">
         <span class="active">1</span>
-        <!-- 나중에 글 많아지면 2,3… 동적으로 추가 -->
     </div>
 </div>
 
 </body>
 </html>
+

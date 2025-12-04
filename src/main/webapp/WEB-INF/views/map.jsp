@@ -34,9 +34,11 @@
         }
         .header-left{display:flex;align-items:center;gap:14px;}
         .header-logo-box{
-            width:34px;height:34px;
+            width:34px;
+            height:34px;
             border-radius:4px;
-            background:#fff;
+            background:url('${pageContext.request.contextPath}/img/KakaoTalk_20251204_101657760.png')
+            center / contain no-repeat;
         }
         .header-title{
             font-size:22px;
@@ -224,7 +226,6 @@
 
     <!-- 오른쪽: 지도 영역 -->
     <section class="map-area">
-        <!-- 지도 라이브러리 연동 전까지는 빈 div -->
         <div id="map"></div>
 
         <button class="map-pin-btn" type="button">
