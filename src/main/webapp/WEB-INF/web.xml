@@ -5,7 +5,9 @@
                              http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
 
-    <!-- ===== 건강 영역 ===== -->
+    <!-- =======================
+         건강 영역
+         ======================= -->
 
     <!-- 건강 첫 화면 -->
     <servlet>
@@ -87,7 +89,7 @@
         <url-pattern>/health_sports</url-pattern>
     </servlet-mapping>
 
-    <!-- 운동 상세 -->
+    <!-- 운동 상세 (어깨/가슴/등/하체/유산소/스포츠 공통) -->
     <servlet>
         <servlet-name>healthExerciseDetailPage</servlet-name>
         <jsp-file>/WEB-INF/views/health_exercise_detail.jsp</jsp-file>
@@ -127,8 +129,11 @@
         <url-pattern>/health_calculator3</url-pattern>
     </servlet-mapping>
 
-    <!-- ===== 소셜 영역 (예시) ===== -->
+    <!-- =======================
+         소셜 영역
+         ======================= -->
 
+    <!-- 소셜 커뮤니티 목록 -->
     <servlet>
         <servlet-name>socialBoardPage</servlet-name>
         <jsp-file>/WEB-INF/views/social_board.jsp</jsp-file>
@@ -138,6 +143,7 @@
         <url-pattern>/social/board</url-pattern>
     </servlet-mapping>
 
+    <!-- 소셜 상세 -->
     <servlet>
         <servlet-name>socialDetailPage</servlet-name>
         <jsp-file>/WEB-INF/views/social_detail.jsp</jsp-file>
@@ -147,6 +153,7 @@
         <url-pattern>/social/detail</url-pattern>
     </servlet-mapping>
 
+    <!-- 소셜 글쓰기 -->
     <servlet>
         <servlet-name>socialWritePage</servlet-name>
         <jsp-file>/WEB-INF/views/social_write.jsp</jsp-file>
@@ -156,8 +163,32 @@
         <url-pattern>/social/write</url-pattern>
     </servlet-mapping>
 
-    <!-- 기본 진입 -->
+    <!-- 부대 별 평가 첫 화면 (/social_unit.jsp) -->
+    <servlet>
+        <servlet-name>socialUnitPage</servlet-name>
+        <jsp-file>/WEB-INF/views/social_unit.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>socialUnitPage</servlet-name>
+        <url-pattern>/social_unit</url-pattern>
+    </servlet-mapping>
+
+    <!-- 부대 별 평가 리스트 (/social_unit_list.jsp) -->
+    <servlet>
+        <servlet-name>socialUnitListPage</servlet-name>
+        <jsp-file>/WEB-INF/views/social_unit_list.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>socialUnitListPage</servlet-name>
+        <url-pattern>/social_unit_list</url-pattern>
+    </servlet-mapping>
+
+    <!-- =======================
+         기본 설정
+         ======================= -->
+
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
 </web-app>
+

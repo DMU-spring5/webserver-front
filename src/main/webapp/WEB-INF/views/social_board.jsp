@@ -3,7 +3,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>MILLI ROAD - 소셜 커뮤니티</title>
+    <title>커뮤니티 목록</title>
 
     <style>
         *{box-sizing:border-box;margin:0;padding:0;}
@@ -38,8 +38,17 @@
             padding:0 24px;
         }
 
-        .page-title{font-size:24px;font-weight:700;margin-bottom:6px;}
-        .page-subtitle{font-size:13px;color:#777;margin-bottom:24px;}
+        /* 상단 탭 (부대별 평가 / 커뮤니티) */
+        .top-tabs{
+            font-size:18px;
+            margin-bottom:24px;
+        }
+        .tab-link{
+            text-decoration:none;
+            margin-right:16px;
+        }
+        .tab-text-main{font-weight:700;color:#000;}
+        .tab-text-sub{font-weight:400;color:#b6b6b6;}
 
         .board-header{
             display:flex;justify-content:flex-end;margin-bottom:10px;
@@ -70,7 +79,6 @@
         }
         .board-table td.title{font-weight:500;}
 
-        /* ===== 페이지네이션 ===== */
         .pagination{
             display:flex;justify-content:center;gap:6px;
             margin-top:18px;font-size:13px;
@@ -116,10 +124,19 @@
 </header>
 
 <div class="page-wrap">
-    <h2 class="page-title">소셜 커뮤니티</h2>
-    <p class="page-subtitle">
-        군부대, 훈련소, 자대 생활 등에 대한 솔직한 후기를 공유해 주세요.
-    </p>
+
+    <!-- 탭: 부대별 평가(흐리게) / 커뮤니티(진하게) -->
+    <div class="top-tabs">
+        <a class="tab-link"
+           href="${pageContext.request.contextPath}/social_unit">
+            <span class="tab-text-sub">부대별 평가</span>
+        </a>
+        <span>|</span>
+        <a class="tab-link"
+           href="${pageContext.request.contextPath}/social/board">
+            <span class="tab-text-main">커뮤니티</span>
+        </a>
+    </div>
 
     <div class="board-header">
         <a href="${pageContext.request.contextPath}/social/write" class="write-button">글쓰기</a>
@@ -128,7 +145,7 @@
     <table class="board-table">
         <thead>
         <tr>
-            <th style="width:60px;">번호</th>
+            <th style="width:80px;">번호</th>
             <th>제목</th>
             <th style="width:120px;">글쓴이</th>
             <th style="width:130px;">작성일</th>
@@ -137,8 +154,7 @@
         </tr>
         </thead>
         <tbody>
-        <!-- 실제 구현 시에는 c:forEach 로 리스트를 돌리면 됨.
-             지금은 오른쪽 디자인처럼 더미 3개만 고정 -->
+        <!-- 더미 데이터 3개 -->
         <tr onclick="location.href='${pageContext.request.contextPath}/social/detail?id=1'">
             <td>1</td>
             <td class="title">훈련소 생활 괜찮았어요</td>
@@ -166,17 +182,11 @@
         </tbody>
     </table>
 
-    <!-- 지금은 글 3개뿐이니까 1페이지만 보여줌 -->
     <div class="pagination">
         <span class="active">1</span>
-        <%--
-        나중에 글 개수(totalCount)가 10개 이상일 때만
-        2, 3, 다음 ▶ 같은 링크를 동적으로 추가하면 됨.
-        예: if (totalPage > 1) { ... }
-        --%>
+        <!-- 나중에 글 많아지면 2,3… 동적으로 추가 -->
     </div>
 </div>
 
 </body>
 </html>
-

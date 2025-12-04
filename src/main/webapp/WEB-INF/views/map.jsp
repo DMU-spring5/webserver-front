@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <title>MILLI ROAD - 대중교통 위치/시간표</title>
@@ -9,154 +9,174 @@
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
 
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        * { box-sizing:border-box; margin:0; padding:0; }
+
         body {
-            font-family: "Noto Sans KR", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-            background-color: #f5f5f5;
-            color: #333;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
+            font-family:"Noto Sans KR",-apple-system,BlinkMacSystemFont,
+            "Segoe UI",system-ui,sans-serif;
+            background:#f5f5f5;
+            color:#333;
+            height:100vh;
+            display:flex;
+            flex-direction:column;
         }
 
-        header {
-            height: 64px;
-            background-color: #78866B;
-            color: #fff;
-            padding: 0 32px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+        /* ===== 헤더 ===== */
+        header{
+            height:64px;
+            background:#78866B;
+            color:#fff;
+            padding:0 40px;
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            flex-shrink:0;
         }
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
+        .header-left{display:flex;align-items:center;gap:14px;}
+        .header-logo-box{
+            width:34px;height:34px;
+            border-radius:4px;
+            background:#fff;
         }
-        .header-logo-box {
-            width: 30px;
-            height: 30px;
-            border-radius: 6px;
-            background-color: #fff;
+        .header-title{
+            font-size:22px;
+            font-weight:700;
+            letter-spacing:.10em;
         }
-        .header-title {
-            font-size: 20px;
-            font-weight: 700;
-            letter-spacing: .08em;
+        .header-nav{
+            display:flex;
+            align-items:center;
+            gap:26px;
+            font-size:15px;
         }
-        .header-nav {
-            display: flex;
-            align-items: center;
-            gap: 24px;
-            font-size: 15px;
+        .header-nav a{
+            color:#fff;
+            text-decoration:none;
         }
-        .header-nav a {
-            color: #fff;
-            text-decoration: none;
+        .header-nav a:hover{text-decoration:underline;}
+        .header-nav a.active{
+            font-weight:700;
+            text-decoration:underline;
         }
-        .header-nav a:hover { text-decoration: underline; }
-        .header-nav a.active {
-            font-weight: 700;
-            text-decoration: underline;
+        .header-right{
+            display:flex;
+            align-items:center;
+            gap:16px;
+            font-size:14px;
         }
-        .header-right {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            font-size: 14px;
-        }
-        .btn-logout {
-            padding: 6px 14px;
-            border-radius: 6px;
-            border: none;
-            background-color: #fff;
-            color: #78866B;
-            font-weight: 600;
-            cursor: pointer;
+        .btn-logout{
+            padding:6px 16px;
+            border-radius:4px;
+            border:none;
+            background:#fff;
+            color:#78866B;
+            font-weight:600;
+            cursor:pointer;
         }
 
-        .main-wrap {
-            flex: 1;
-            display: flex;
-            min-height: 0;
-        }
-        .sidebar {
-            width: 380px;
-            background-color: #ffffff;
-            padding: 24px 24px;
-            border-right: 1px solid #e0e0e0;
-        }
-        .sidebar-title {
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 18px;
-        }
-        .search-box {
-            display: flex;
-            margin-bottom: 10px;
-        }
-        .search-box input {
-            flex: 1;
-            padding: 10px 12px;
-            border: 1px solid #ccc;
-            border-right: none;
-            border-radius: 6px 0 0 6px;
-            outline: none;
-            font-size: 14px;
-        }
-        .search-box button {
-            width: 42px;
-            border-radius: 0 6px 6px 0;
-            border: 1px solid #ccc;
-            background-color: #fff;
-            cursor: pointer;
-        }
-        .search-box button i { font-size: 15px; }
-        .sidebar-desc {
-            margin-top: 8px;
-            font-size: 13px;
-            color: #777;
+        /* ===== 본문 : 왼쪽 패널 + 오른쪽 지도 ===== */
+        .page-wrap{
+            flex:1;
+            display:flex;
+            min-height:0;
+            background:#f5f5f5;
         }
 
-        .map-area {
-            flex: 1;
-            position: relative;
-            background-color: #f0f0f0;
+        /* 왼쪽 검색 패널 */
+        .sidebar{
+            width:380px;
+            background:#f5f5f5;
+            padding:40px 32px;
         }
-        #map { width: 100%; height: 100%; }
+        .page-title{
+            font-size:20px;
+            font-weight:700;
+            margin-bottom:18px;
+        }
 
-        .map-pin-btn {
-            position: absolute;
-            top: 16px;
-            right: 16px;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            border: none;
-            background-color: #ffffff;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-            cursor: pointer;
+        .search-box{
+            margin-top:4px;
         }
-        .map-pin-btn i {
-            color: #ff4b6a;
-            font-size: 18px;
+        .search-bar{
+            width:100%;
+            height:44px;
+            border-radius:4px;
+            border:1px solid #d7d7cf;
+            background:#fff;
+            display:flex;
+            align-items:center;
+            padding:0 14px;
         }
-        .map-zoom {
-            position: absolute;
-            right: 16px;
-            bottom: 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
+        .search-input{
+            flex:1;
+            border:none;
+            outline:none;
+            background:transparent;
+            font-size:13px;
+            color:#555;
         }
-        .map-zoom button {
-            width: 32px;
-            height: 32px;
-            border-radius: 4px;
-            border: 1px solid #ddd;
-            background-color: #ffffff;
-            font-size: 18px;
-            cursor: pointer;
+        .search-btn{
+            width:30px;height:30px;
+            border:none;background:transparent;
+            cursor:pointer;
+        }
+        .search-btn i{
+            font-size:14px;
+            color:#555;
+        }
+        .search-desc{
+            margin-top:10px;
+            font-size:13px;
+            color:#777;
+        }
+
+        /* 오른쪽 지도 영역 */
+        .map-area{
+            flex:1;
+            position:relative;
+            background:#f3f3f3;
+        }
+        #map{
+            width:100%;
+            height:100%;
+        }
+
+        .map-pin-btn{
+            position:absolute;
+            top:20px;
+            right:32px;
+            width:44px;
+            height:44px;
+            border-radius:50%;
+            border:none;
+            background:#fff;
+            box-shadow:0 2px 6px rgba(0,0,0,0.18);
+            cursor:pointer;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+        }
+        .map-pin-btn i{
+            color:#ff4b6a;
+            font-size:18px;
+        }
+
+        .map-zoom{
+            position:absolute;
+            right:32px;
+            bottom:32px;
+            display:flex;
+            flex-direction:column;
+            gap:4px;
+        }
+        .map-zoom button{
+            width:30px;
+            height:30px;
+            border-radius:4px;
+            border:1px solid #d0d0d0;
+            background:#fff;
+            font-size:16px;
+            cursor:pointer;
         }
     </style>
 </head>
@@ -179,31 +199,44 @@
     </nav>
 
     <div class="header-right">
-        <span>니인내조 님</span>
+        니인내조 님
         <button class="btn-logout">로그아웃</button>
     </div>
 </header>
 
-<div class="main-wrap">
+<div class="page-wrap">
+
+    <!-- 왼쪽: 검색 패널 -->
     <aside class="sidebar">
-        <h2 class="sidebar-title">대중교통 위치/시간표 - 첫 화면</h2>
+        <div class="page-title">대중교통 위치/시간표 - 첫 화면</div>
+
         <div class="search-box">
-            <input type="text" placeholder="장소, 주소, 정류장 검색">
-            <button type="button"><i class="fas fa-search"></i></button>
+            <div class="search-bar">
+                <input class="search-input" type="text"
+                       placeholder="장소, 주소, 정류장 검색">
+                <button class="search-btn" type="button">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+            <p class="search-desc">장소, 주소, 정류장을 검색해 주세요.</p>
         </div>
-        <p class="sidebar-desc">장소, 주소, 정류장을 검색해 주세요.</p>
     </aside>
 
+    <!-- 오른쪽: 지도 영역 -->
     <section class="map-area">
+        <!-- 지도 라이브러리 연동 전까지는 빈 div -->
         <div id="map"></div>
-        <button type="button" class="map-pin-btn">
+
+        <button class="map-pin-btn" type="button">
             <i class="fas fa-map-marker-alt"></i>
         </button>
+
         <div class="map-zoom">
             <button type="button">+</button>
             <button type="button">-</button>
         </div>
     </section>
+
 </div>
 
 </body>
