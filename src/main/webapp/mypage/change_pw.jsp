@@ -5,72 +5,6 @@
     <meta charset="UTF-8">
     <title>MyPage</title>
     <link rel="stylesheet" type="text/css" href="change_pw.css">
-    <script>
-        // 페이지 로드 시 오류 메시지 숨기기
-        window.onload = function() {
-            const originalInput = document.getElementById("original");
-            const newInput = document.getElementById("new");
-            const passwordInput = document.getElementById("password");
-
-            // 오류 메시지 숨기기
-            document.getElementById("originalPw-Error").style.display = 'none';
-            document.getElementById("newPw-Error").style.display = 'none';
-            document.getElementById("checkPw-Error").style.display = 'none';
-
-            // 입력 필드에 값이 입력되면 오류 메시지 숨기기
-            originalInput.addEventListener("input", function() {
-                if (originalInput.value !== "") {
-                    document.getElementById("originalPw-Error").style.display = 'none';
-                }
-            });
-            newInput.addEventListener("input", function() {
-                if (newInput.value !== "") {
-                    document.getElementById("newPw-Error").style.display = 'none';
-                }
-            });
-            passwordInput.addEventListener("input", function() {
-                if (passwordInput.value !== "") {
-                    document.getElementById("checkPw-Error").style.display = 'none';
-                }
-            });
-        };
-
-        // 폼 제출 시 유효성 검사
-        function validateForm(event) {
-            const original = document.getElementById("original").value;
-            const newPw = document.getElementById("new").value;
-            const password = document.getElementById("password").value;
-
-            let isValid = true;
-
-            // 기존 비밀번호가 비어있으면 오류 메시지 표시
-            if (original === "") {
-                document.getElementById("originalPw-Error").textContent = "기존 비밀번호를 입력해 주세요.";
-                document.getElementById("originalPw-Error").style.display = 'block';
-                isValid = false;
-            }
-
-            // 새 비밀번호가 비어있으면 오류 메시지 표시
-            if (newPw === "") {
-                document.getElementById("newPw-Error").textContent = "새 비밀번호를 입력해 주세요.";
-                document.getElementById("newPw-Error").style.display = 'block';
-                isValid = false;
-            }
-
-            // 비밀번호 확인이 비어있으면 오류 메시지 표시
-            if (password === "") {
-                document.getElementById("checkPw-Error").textContent = "비밀번호를 다시 입력해 주세요.";
-                document.getElementById("checkPw-Error").style.display = 'block';
-                isValid = false;
-            }
-
-            // 비밀번호 변경을 막고, 유효성 검사에 실패했을 경우
-            if (!isValid) {
-                event.preventDefault();
-            }
-        }
-
-    </script>
 </head>
 <body>
 <%
@@ -109,7 +43,7 @@
 <div class="wrap">
     <h3>비밀번호 변경</h3>
     <!-- 폼 시작 -->
-    <form id="infoForm" action="pwCheck.jsp" method="post" onsubmit="validateForm(event)">
+    <form id="infoForm" action="pwCheck.jsp" method="post">
         <!-- 기존 비밀번호 -->
         <div class="form-box">
             <label>기존 비밀번호</label>
@@ -141,24 +75,54 @@
         </div>
 
         <!-- 비밀번호 변경 버튼 -->
-        <button type="submit" class="change-btn">비밀번호 변경</button>
+        <button type="submit" id="change-Btn" class="change-btn">비밀번호 변경</button>
     </form>
 </div>
-</body>
+
+<!-- 모든 JS를 여기 한 곳에 통합 -->
 <script>
     document.addEventListener("DOMContentLoaded", () => {
+        const originalInput = document.getElementById("original");
+        const newInput = document.getElementById("new");
+        const passwordInput = document.getElementById("password");
+        const form = document.getElementById('infoForm');
         const pwInputs = document.querySelectorAll('.password-input');
         const togglePwIcons = document.querySelectorAll('.togglePw');
-        const form = document.getElementById('infoForm');
         const changeBtn = document.getElementById('change-Btn');
 
-        /* 비밀번호 보기/숨기기 */
+        // 초기화: 오류 메시지 숨기기
+        const originalError = document.getElementById("originalPw-Error");
+        const newError = document.getElementById("newPw-Error");
+        const checkError = document.getElementById("checkPw-Error");
+
+        originalError.style.display = 'none';
+        newError.style.display = 'none';
+        checkError.style.display = 'none';
+
+        // 입력 필드에 값이 입력되면 해당 오류 메시지 숨기기
+        originalInput.addEventListener("input", () => {
+            if (originalInput.value !== "") originalError.style.display = 'none';
+            checkInputs();
+        });
+        newInput.addEventListener("input", () => {
+            if (newInput.value !== "") newError.style.display = 'none';
+            checkInputs();
+        });
+        passwordInput.addEventListener("input", () => {
+            if (passwordInput.value !== "") checkError.style.display = 'none';
+            checkInputs();
+        });
+
+        // pwInputs 초기 타입을 password로 맞춤 (HTML이 text로 되어 있어도 안전하게 처리)
+        pwInputs.forEach(input => {
+            try { input.type = "password"; } catch (e) { /* ignore */ }
+        });
+
+        // 비밀번호 보기/숨기기 토글
         togglePwIcons.forEach((icon, index) => {
             const input = pwInputs[index];
-
-            input.type = "password";
-
             icon.addEventListener("click", () => {
+                if (!input) return;
                 if (input.type === "password") {
                     input.type = "text";
                     icon.src = "../img/eyeoff.png";
@@ -169,21 +133,72 @@
             });
         });
 
-        pwInputs.forEach(input => {
-            input.addEventListener("input", checkInputs);
+        // 폼 제출 시 유효성 검사
+        form.addEventListener("submit", function(event) {
+            // call validateForm equivalent
+            const original = originalInput.value.trim();
+            const newPw = newInput.value.trim();
+            const password = passwordInput.value.trim();
+
+            let isValid = true;
+
+            // 초기화 (숨김)
+            originalError.style.display = 'none';
+            newError.style.display = 'none';
+            checkError.style.display = 'none';
+
+            if (original === "") {
+                originalError.textContent = "기존 비밀번호를 입력해 주세요";
+                originalError.style.display = 'block';
+                isValid = false;
+            }
+
+            if (newPw === "") {
+                newError.textContent = "새 비밀번호를 입력해 주세요";
+                newError.style.display = 'block';
+                isValid = false;
+            }
+
+            if (password === "") {
+                checkError.textContent = "비밀번호를 다시 입력해 주세요";
+                checkError.style.display = 'block';
+                isValid = false;
+            }
+
+            // 새 비밀번호와 확인 일치 검사
+            if (newPw !== "" && password !== "" && newPw !== password) {
+                checkError.textContent = "새 비밀번호와 일치하지 않습니다";
+                checkError.style.display = 'block';
+                isValid = false;
+            }
+
+            // 새 비밀번호가 기존 비밀번호와 같은지 검사
+            if (newPw !== "" && original !== "" && newPw === original) {
+                newError.textContent = "기존 비밀번호와 동일한 비밀번호는 사용할 수 없습니다";
+                newError.style.display = 'block';
+                isValid = false;
+            }
+
+            if (!isValid) {
+                event.preventDefault();
+            }
+            // isValid면 폼은 서버로 전송됨 (pwCheck.jsp)
         });
 
+        // 입력값 전부 채워졌는지 체크해 버튼 활성화/비활성화 처리
         function checkInputs() {
-            const allFilled = [...pwInputs].every(input => input.value !== "");
-
+            const allFilled = [...pwInputs].every(input => input.value.trim() !== "");
             if (allFilled) {
                 form.classList.add('all-filled');
-                changeBtn.classList.add('active');
+                if (changeBtn) changeBtn.classList.add('active');
             } else {
                 form.classList.remove('all-filled');
-                changeBtn.classList.remove('active');
+                if (changeBtn) changeBtn.classList.remove('active');
             }
         }
+
+        checkInputs();
     });
 </script>
+</body>
 </html>
