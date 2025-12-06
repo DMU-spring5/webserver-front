@@ -200,7 +200,7 @@
             })
     });
 
-    // ================== 입력 시 에러메시지 즉시 제거 ==================
+    // 입력 시 에러메시지 즉시 제거
     userIdInput.addEventListener("input", () => {
         userIdError.textContent = "";
         userIdError.classList.remove("ok-msg");
@@ -223,7 +223,7 @@
         }
     });
 
-    // ================== 폼 최종 검증 ==================
+    // 폼 최종 검증
     form.addEventListener("submit", (e) => {
         let ok = true;
 

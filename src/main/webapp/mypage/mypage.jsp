@@ -81,7 +81,7 @@
                 <span>내 정보</span>
                 <span class="arrow">&gt;</span>
             </a>
-            <a href="#" class="menu-item">
+            <a href="change_pw.jsp" class="menu-item">
                 <span>비밀번호 변경</span>
                 <span class="arrow">&gt;</span>
             </a>
