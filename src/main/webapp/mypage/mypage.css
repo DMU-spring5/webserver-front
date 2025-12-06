@@ -314,3 +314,138 @@ body {
     font-size: 16px;
     transition: color 0.3s ease;
 }
+
+/* 화면 전체를 덮는 어두운 배경 */
+.modal-overlay {
+    position: fixed;
+    inset: 0; /* top:0; right:0; bottom:0; left:0; 와 동일 */
+    background: rgba(0, 0, 0, 0.45);
+    display: none;            /* 기본은 숨김 */
+    justify-content: center;  /* 중앙 정렬 */
+    align-items: center;      /* 중앙 정렬 */
+    z-index: 9999;
+}
+
+/* 중앙 흰색 박스 */
+.modal-box {
+    width: 420px;
+    max-width: calc(100% - 40px);
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 26px 28px;
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.25);
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.modal-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0 0 10px 0;
+    color: #222;
+}
+
+.modal-desc {
+    font-size: 14px;
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+/* 버튼 영역 */
+.modal-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+/* 공통 버튼 스타일 */
+.modal-buttons .btn-cancel,
+.modal-buttons .btn-withdraw {
+    min-width: 110px;
+    padding: 10px 18px;
+    font-size: 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    border: none;
+}
+
+.modal-input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.modal-error {
+    color: red;
+    font-size: 13px;
+    height: 18px;
+    margin-bottom: 10px;
+}
+
+/* 취소 버튼 */
+.btn-cancel {
+    background: #f2f2f2;
+    color: #333;
+    border: 1px solid #d0d0d0;
+}
+
+/* 탈퇴 버튼 */
+.btn-withdraw {
+    background: #c8b086;  /* 살짝 베이지 톤 */
+    color: #fff;
+    border: 1px solid rgba(0,0,0,0.1);
+}
+
+/* 비밀번호 입력 전체 박스 */
+.pw-wrap {
+    position: relative;
+    width: 100%;
+    border: 1.5px solid #dcdcdc;
+    border-radius: 12px;
+    background: #fff;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    padding: 0 14px;
+    box-sizing: border-box;
+}
+
+/* 입력창 스타일 */
+.modal-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 15px;
+    background: transparent;
+}
+
+.pw-eye {
+    width: 22px;
+    height: 22px;
+    cursor: pointer;
+    opacity: 0.7;
+}
+
+.pw-eye:hover {
+    opacity: 1;
+}
+
+/* 반응형 */
+@media (max-width: 480px) {
+    .modal-box {
+        width: 90%;
+        padding: 20px;
+    }
+    .modal-buttons {
+        flex-direction: column;
+    }
+    .modal-buttons .btn-cancel,
+    .modal-buttons .btn-withdraw {
+        width: 100%;
+    }
+}
