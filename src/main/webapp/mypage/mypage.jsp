@@ -19,7 +19,7 @@
         <div class="header-center">
             <!-- 메뉴 -->
             <nav class="nav">
-                <a href="index.jsp" class="active">뉴스</a>
+                <a href="index.jsp">뉴스</a>
                 <span class="divider">|</span>
                 <a href="#">소셜</a>
                 <span class="divider">|</span>
@@ -88,7 +88,7 @@
         </div>
 
         <div class="menu-column">
-            <a href="#" class="menu-item">
+            <a href="post.jsp" class="menu-item">
                 <span>게시판 관리</span>
                 <span class="arrow">&gt;</span>
             </a>
