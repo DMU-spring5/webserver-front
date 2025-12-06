@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>MyPage</title>
-    <link rel="stylesheet" type="text/css" href="mypage.css">
+    <link rel="stylesheet" type="text/css" href="out.css">
 </head>
 <body>
 <!-- 상단 헤더 -->
