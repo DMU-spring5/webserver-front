@@ -1,6 +1,18 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%
+    request.setCharacterEncoding("UTF-8");
     String ctx = request.getContextPath();
+
+    // 앞 단계에서 넘어온 군 정보들
+    String serviceType = request.getParameter("serviceType"); // army / navy / airforce
+    String division    = request.getParameter("division");
+    String unit        = request.getParameter("unit");
+    String enlistDate  = request.getParameter("joinDate");    // yyyy-MM-dd
+
+    if (serviceType == null) serviceType = "";
+    if (division    == null) division    = "";
+    if (unit        == null) unit        = "";
+    if (enlistDate  == null) enlistDate  = "";
 %>
 <!DOCTYPE html>
 <html lang="ko">
@@ -26,7 +38,6 @@
 
     <!-- 폼 시작 -->
     <form id="infoForm" action="info_ok.jsp" method="post">
-
         <!-- 아이디 -->
         <div class="form-box">
             <label>아이디</label>
@@ -82,6 +93,8 @@
 </div>
 
 <script>
+    const API_BASE = "https://webserver-backend.onrender.com";
+
     const profileInput       = document.getElementById("profileInput");
     const previewImg         = document.getElementById("previewImg");
 
@@ -98,9 +111,22 @@
     const idCheckBtn         = document.getElementById("idCheckBtn");
     const form               = document.getElementById("infoForm");
 
+    // 군 정보: JSP에서 받아온 값 JS로 넘기기
+    const serviceTypeFromJsp = "<%=serviceType%>";
+    const divisionFromJsp    = "<%=division%>";
+    const unitFromJsp        = "<%=unit%>";
+    const enlistDateFromJsp  = "<%=enlistDate%>";
+
+    console.log("군 정보 from JSP:", {
+        serviceTypeFromJsp,
+        divisionFromJsp,
+        unitFromJsp,
+        enlistDateFromJsp
+    });
+
     // 프로필 이미지 미리보기
     if (profileInput) {
-        profileInput.addEventListener("change", () => {
+        profileInput.addEventListener("change", function () {
             const file = profileInput.files[0];
             if (file) {
                 previewImg.src = URL.createObjectURL(file);
@@ -108,9 +134,9 @@
         });
     }
 
-    //비밀번호 보이기/숨기기
-    document.querySelectorAll(".togglePw").forEach(icon => {
-        icon.addEventListener("click", () => {
+    // 비밀번호 보이기/숨기기
+    document.querySelectorAll(".togglePw").forEach(function (icon) {
+        icon.addEventListener("click", function () {
             const input = icon.previousElementSibling;
             if (input.type === "password") {
                 input.type = "text";
@@ -122,18 +148,13 @@
         });
     });
 
-    //  아이디 중복확인
-    let lastIdChecked = "";      // 마지막으로 중복확인한 아이디
-    let isIdAvailable = false;   // 사용 가능 여부
+    // 아이디 중복확인
+    var lastIdChecked = "";
+    var isIdAvailable = false;
 
-    idCheckBtn.addEventListener("click", () => {
-        const userId = userIdInput.value.trim();
-            if (userId === "") {
-                userIdError.textContent = "아이디를 입력해 주세요.";
-                return;
-            }
+    idCheckBtn.addEventListener("click", function () {
+        var userId = userIdInput.value.trim();
 
-        // 메시지 초기화
         userIdError.textContent = "";
         userIdError.classList.remove("ok-msg");
 
@@ -142,118 +163,166 @@
             return;
         }
 
-        const idPattern = /^[A-Za-z0-9]{3,15}$/;
+        var idPattern = /^[A-Za-z0-9]{3,15}$/;
         if (!idPattern.test(userId)) {
             userIdError.textContent = "아이디 형식이 올바르지 않습니다. (3~15자 영대소문자, 숫자)";
             return;
         }
 
-        // idCheck.jsp가 "true" / "false" 텍스트를 반환한다고 가정
-        fetch("<%=ctx%>/idCheck.jsp?userId=" + encodeURIComponent(userId))
-            .then(res => res.text())
-            .then(result => {
-                const available = result.trim() === "true";
-
+        fetch(API_BASE + "/api/v1/auth/check-id?userid=" + encodeURIComponent(userId))
+            .then(function (res) {
+                if (!res.ok) {
+                    throw new Error("중복확인 요청이 거절되었습니다. (status: " + res.status + ")");
+                }
+                return res.json();
+            })
+            .then(function (data) {
+                var available = data.available;
                 if (available) {
-                    userIdError.textContent = "사용할 수 있는 아이디예요.";
-                    userIdError.classList.add("ok-msg");  // 초록색 (CSS에 정의)
+                    userIdError.textContent = "사용 가능한 아이디예요.";
+                    userIdError.classList.add("ok-msg");
                     isIdAvailable = true;
                     lastIdChecked = userId;
                 } else {
-                    userIdError.textContent = "사용할 수 없는 아이디예요.";
-                    userIdError.classList.remove("ok-msg");
+                    userIdError.textContent = "이미 사용 중인 아이디예요.";
                     isIdAvailable = false;
                     lastIdChecked = "";
                 }
             })
-            .catch(err => {
+            .catch(function (err) {
                 console.error(err);
-                userIdError.textContent = "아이디 확인 중 오류가 발생했어요. 잠시 후 다시 시도해 주세요.";
+                userIdError.textContent = "아이디 중복확인 중 오류가 발생했습니다.";
             });
     });
 
-    // ================== 입력 시 에러메시지 즉시 제거 ==================
-    userIdInput.addEventListener("input", () => {
+    // 아이디 입력 변화 시 상태 초기화 + 버튼 활성/비활성
+    userIdInput.addEventListener("input", function () {
         userIdError.textContent = "";
         userIdError.classList.remove("ok-msg");
+
         if (userIdInput.value.trim() !== lastIdChecked) {
-            isIdAvailable = false;  // 아이디 바꾸면 다시 중복확인 필요
+            isIdAvailable = false;
         }
-    });
 
-    // 아이디 길이에 따라 중복확인 버튼 활성/비활성
-    userIdInput.addEventListener("input", () => {
-        const val = userIdInput.value.trim();
-        const validLength = val.length >= 3 && val.length <= 15;
+        var val = userIdInput.value.trim();
+        var validLength = val.length >= 3 && val.length <= 15;
 
+        idCheckBtn.disabled = !validLength;
         if (validLength) {
             idCheckBtn.classList.add("active");
-            idCheckBtn.disabled = false;
         } else {
             idCheckBtn.classList.remove("active");
-            idCheckBtn.disabled = true;
         }
     });
 
-
-    nicknameInput.addEventListener("input", () => {
+    nicknameInput.addEventListener("input", function () {
         nicknameError.textContent = "";
     });
-
-    passwordInput.addEventListener("input", () => {
+    passwordInput.addEventListener("input", function () {
         passwordError.textContent = "";
     });
-
-    passwordCheckInput.addEventListener("input", () => {
+    passwordCheckInput.addEventListener("input", function () {
         passwordCheckError.textContent = "";
     });
 
-    // ================== 폼 최종 검증 ==================
-    form.addEventListener("submit", (e) => {
-        let ok = true;
+    form.addEventListener("submit", function (e) {
+        e.preventDefault();
 
-        const userId = userIdInput.value.trim();
-        const nickname = nicknameInput.value.trim();
-        const pw = passwordInput.value.trim();
-        const pw2 = passwordCheckInput.value.trim();
+        var ok = true;
 
-        // 에러 초기화
+        var userId   = userIdInput.value.trim();
+        var nickname = nicknameInput.value.trim();
+        var pw       = passwordInput.value.trim();
+        var pw2      = passwordCheckInput.value.trim();
+
         userIdError.textContent        = "";
-        userIdError.classList.remove("ok-msg");
         nicknameError.textContent      = "";
         passwordError.textContent      = "";
         passwordCheckError.textContent = "";
 
-        if (userId === "") {
+        if (!userId) {
             userIdError.textContent = "아이디를 입력해 주세요.";
             ok = false;
         } else if (!isIdAvailable || userId !== lastIdChecked) {
-            userIdError.textContent = "아이디 중복확인을 완료해 주세요.";
+            userIdError.textContent = "아이디 중복확인을 해주세요.";
             ok = false;
         }
 
-        if (nickname === "") {
+        if (!nickname) {
             nicknameError.textContent = "닉네임을 입력해 주세요.";
             ok = false;
         }
-        if (pw === "") {
+
+        if (!pw) {
             passwordError.textContent = "비밀번호를 입력해 주세요.";
             ok = false;
         }
-        if (pw2 === "") {
+
+        if (!pw2) {
             passwordCheckError.textContent = "비밀번호 확인을 입력해 주세요.";
             ok = false;
         }
-        if (pw !== "" && pw2 !== "" && pw !== pw2) {
+
+        if (pw && pw2 && pw !== pw2) {
             passwordCheckError.textContent = "비밀번호가 일치하지 않습니다.";
             ok = false;
         }
 
-        if (!ok) {
-            e.preventDefault();
+        // 군 정보가 JSP에서 제대로 들어왔는지 확인
+        if (!serviceTypeFromJsp || !divisionFromJsp || !unitFromJsp || !enlistDateFromJsp) {
+            alert("군 복무 정보가 누락되었습니다. 다시 시도해주세요.");
+            return;
         }
+
+        if (!ok) return;
+
+        // 약관 동의 (checkbox)
+        const serviceAgreeEl  = document.getElementById("serviceAgreed");
+        const locationAgreeEl = document.getElementById("locationAgreed");
+
+        const serviceAgreed  = serviceAgreeEl?.checked  ? "Y" : "N";
+        const locationAgreed = locationAgreeEl?.checked ? "Y" : "N";
+
+        // JSON payload 생성
+        const payload = {
+            userId: userId,
+            password: pw,
+            nickname: nickname,
+            serviceType: serviceTypeFromJsp,
+            division: divisionFromJsp,
+            unit: unitFromJsp,
+            enlistDate: enlistDateFromJsp,
+            imgUrl: "default",
+            serviceAgreed: serviceAgreed,
+            locationAgreed: locationAgreed
+        };
+
+        console.log("최종 회원가입 payload:", payload);
+
+        fetch(API_BASE + "/api/v1/auth/signup", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(payload)
+        })
+            .then(async (res) => {
+                const data = await res.json().catch(() => ({}));
+
+                if (!res.ok) {
+                    throw new Error(data.message || "회원가입에 실패했습니다.");
+                }
+                return data;
+            })
+            .then(() => {
+                alert("회원가입이 완료되었습니다!");
+                window.location.href = "<%=ctx%>/login.jsp";
+            })
+            .catch((err) => {
+                console.error("회원가입 에러:", err);
+                alert(err.message || "서버 통신 중 오류가 발생했습니다.");
+            });
     });
 </script>
-
 </body>
 </html>
