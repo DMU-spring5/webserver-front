@@ -239,11 +239,27 @@
         updateSubmitButtonState();
     });
     passwordInput.addEventListener("input", function () {
+        const pw = passwordInput.value.trim();
+
         passwordError.textContent = "";
+
+        if (pw.length > 0 && (pw.length < 8 || pw.length > 16)) {
+            passwordError.textContent = "비밀번호는 8~16자여야 합니다";
+        }
         updateSubmitButtonState();
     });
     passwordCheckInput.addEventListener("input", function () {
+        const pw  = passwordInput.value.trim();
+        const pw2 = passwordCheckInput.value.trim();
+
         passwordCheckError.textContent = "";
+
+        if (pw2.length > 0 && (pw2.length < 8 || pw2.length > 16)) {
+            passwordCheckError.textContent = "비밀번호는 8~16자여야 합니다";
+        }
+        else if (pw && pw2 && pw !== pw2) {
+            passwordCheckError.textContent = "비밀번호가 일치하지 않습니다";
+        }
         updateSubmitButtonState();
     });
 
@@ -366,13 +382,16 @@
         const pw       = passwordInput.value.trim();
         const pw2      = passwordCheckInput.value.trim();
 
-        // 아이디 중복확인을 통과했고, 입력이 다 채워지고, 비밀번호가 같은지 체크
         const isValid =
             userId &&
             nickname &&
             pw &&
             pw2 &&
             pw === pw2 &&
+            pw.length >= 8 &&
+            pw.length <= 16 &&
+            pw2.length >= 8 &&
+            pw2.length <= 16 &&
             isIdAvailable &&
             userId === lastIdChecked;
 
