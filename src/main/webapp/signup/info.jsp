@@ -110,12 +110,22 @@
 
     const idCheckBtn         = document.getElementById("idCheckBtn");
     const form               = document.getElementById("infoForm");
+    const submitBtn          = document.querySelector(".submit-btn");
 
     // 군 정보: JSP에서 받아온 값 JS로 넘기기
     const serviceTypeFromJsp = "<%=serviceType%>";
     const divisionFromJsp    = "<%=division%>";
     const unitFromJsp        = "<%=unit%>";
     const enlistDateFromJsp  = "<%=enlistDate%>";
+
+    function mapServiceTypeForApi(raw) {
+        switch (raw) {
+            case "army":     return "ARMY";
+            case "navy":     return "NAVY";
+            case "airforce": return "AIRFORCE";
+            default:         return raw;
+        }
+    }
 
     console.log("군 정보 from JSP:", {
         serviceTypeFromJsp,
@@ -149,11 +159,11 @@
     });
 
     // 아이디 중복확인
-    var lastIdChecked = "";
-    var isIdAvailable = false;
+    let lastIdChecked = "";
+    let isIdAvailable = false;
 
     idCheckBtn.addEventListener("click", function () {
-        var userId = userIdInput.value.trim();
+        const userId = userIdInput.value.trim();
 
         userIdError.textContent = "";
         userIdError.classList.remove("ok-msg");
@@ -163,35 +173,43 @@
             return;
         }
 
-        var idPattern = /^[A-Za-z0-9]{3,15}$/;
+        const idPattern = /^[A-Za-z0-9]{3,15}$/;
         if (!idPattern.test(userId)) {
             userIdError.textContent = "아이디 형식이 올바르지 않습니다. (3~15자 영대소문자, 숫자)";
             return;
         }
 
-        fetch(API_BASE + "/api/v1/auth/check-id?userid=" + encodeURIComponent(userId))
-            .then(function (res) {
-                if (!res.ok) {
-                    throw new Error("중복확인 요청이 거절되었습니다. (status: " + res.status + ")");
-                }
-                return res.json();
-            })
-            .then(function (data) {
-                var available = data.available;
-                if (available) {
+        const url = API_BASE + "/api/v1/auth/check-id?userId=" + encodeURIComponent(userId);
+        console.log("check-id 요청:", url);
+
+        fetch(url, { method: "GET" })
+            .then(async (res) => {
+                const text = await res.text();
+                console.log("check-id 응답:", res.status, text);
+
+                if (res.status === 200) {
                     userIdError.textContent = "사용 가능한 아이디예요.";
                     userIdError.classList.add("ok-msg");
                     isIdAvailable = true;
                     lastIdChecked = userId;
-                } else {
-                    userIdError.textContent = "이미 사용 중인 아이디예요.";
+
+                    updateSubmitButtonState();
+                }
+                else if (res.status === 409) {
+                    userIdError.textContent = text || "이미 사용 중인 아이디예요.";
+                    userIdError.classList.remove("ok-msg");
                     isIdAvailable = false;
                     lastIdChecked = "";
                 }
+                else {
+                    throw new Error("중복확인 요청이 거절되었습니다. (status: " + res.status + ")");
+                }
             })
-            .catch(function (err) {
-                console.error(err);
-                userIdError.textContent = "아이디 중복확인 중 오류가 발생했습니다.";
+            .catch((err) => {
+                console.error("check-id 에러:", err);
+                if (!userIdError.textContent) {
+                    userIdError.textContent = "아이디 중복확인 중 오류가 발생했습니다.";
+                }
             });
     });
 
@@ -213,16 +231,20 @@
         } else {
             idCheckBtn.classList.remove("active");
         }
+        updateSubmitButtonState();
     });
 
     nicknameInput.addEventListener("input", function () {
         nicknameError.textContent = "";
+        updateSubmitButtonState();
     });
     passwordInput.addEventListener("input", function () {
         passwordError.textContent = "";
+        updateSubmitButtonState();
     });
     passwordCheckInput.addEventListener("input", function () {
         passwordCheckError.textContent = "";
+        updateSubmitButtonState();
     });
 
     form.addEventListener("submit", function (e) {
@@ -307,11 +329,25 @@
             body: JSON.stringify(payload)
         })
             .then(async (res) => {
-                const data = await res.json().catch(() => ({}));
+                const text = await res.text();
+                console.log("signup 응답 status:", res.status, "body:", text);
+
+                let data = {};
+                try {
+                    data = text ? JSON.parse(text) : {};
+                } catch (e) {
+                    // JSON이 아니면 무시
+                }
 
                 if (!res.ok) {
-                    throw new Error(data.message || "회원가입에 실패했습니다.");
+                    const msg =
+                        data.message ||
+                        (res.status === 500
+                            ? "서버 내부 오류가 발생했습니다."
+                            : "회원가입에 실패했습니다. (status: " + res.status + ")");
+                    throw new Error(msg);
                 }
+
                 return data;
             })
             .then(() => {
@@ -323,6 +359,31 @@
                 alert(err.message || "서버 통신 중 오류가 발생했습니다.");
             });
     });
+
+    function updateSubmitButtonState() {
+        const userId   = userIdInput.value.trim();
+        const nickname = nicknameInput.value.trim();
+        const pw       = passwordInput.value.trim();
+        const pw2      = passwordCheckInput.value.trim();
+
+        // 아이디 중복확인을 통과했고, 입력이 다 채워지고, 비밀번호가 같은지 체크
+        const isValid =
+            userId &&
+            nickname &&
+            pw &&
+            pw2 &&
+            pw === pw2 &&
+            isIdAvailable &&
+            userId === lastIdChecked;
+
+        if (isValid) {
+            submitBtn.disabled = false;
+            submitBtn.classList.add("active");
+        } else {
+            submitBtn.disabled = true;
+            submitBtn.classList.remove("active");
+        }
+    }
 </script>
 </body>
 </html>

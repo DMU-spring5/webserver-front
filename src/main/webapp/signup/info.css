@@ -162,20 +162,28 @@ input:focus {
     outline: none;
 }
 
-/* 회원가입 버튼 */
+/* 기본: 비활성 상태 */
 .submit-btn {
     width: 100%;
     padding: 14px;
     margin-top: 10px;
-    background: #9aa2ab;
+    background: #cfd3d8;
     border: none;
     border-radius: 8px;
     color: #fff;
     font-size: 15px;
     font-weight: 600;
-    cursor: pointer;
+    cursor: default;
 }
 
-.submit-btn:hover {
-    background: #7f8891;
+/* 비활성 */
+.submit-btn:disabled {
+    background: #cfd3d8;
+    cursor: default;
+}
+
+/* 활성 */
+.submit-btn.active {
+    background: #78866B;
+    cursor: pointer;
 }
