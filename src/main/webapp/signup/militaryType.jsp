@@ -1,4 +1,14 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
+<%
+    // 이전 페이지에서 넘어온 회원 기본 정보 (없을 수도 있으니 널 체크)
+    String userId   = request.getParameter("userId");
+    String password = request.getParameter("password");
+    String nickname = request.getParameter("nickname");
+
+    if (userId == null)   userId = "";
+    if (password == null) password = "";
+    if (nickname == null) nickname = "";
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,27 +22,34 @@
          alt="MILLI ROAD 로고" class="main-logo">
 </div>
 
+<!-- 다음 페이지(militaryInfo.jsp)로 값 넘기기 -->
 <form id="serviceTypeForm" action="militaryInfo.jsp" method="post" class="type-form">
+
+    <!-- 이전 단계에서 받은 값들을 숨겨서 함께 전달 -->
+    <input type="hidden" name="userId"   value="<%=userId%>">
+    <input type="hidden" name="password" value="<%=password%>">
+    <input type="hidden" name="nickname" value="<%=nickname%>">
 
     <h3 class="form-title">복무 타입</h3>
     <hr>
     <div class="type-select-box">
 
         <!-- 육군 -->
-        <label class="type-option" data-type="ARMY">
-            <input type="radio" name="serviceType" value="ARMY" hidden>
+        <label class="type-option" data-type="army">
+            <!-- API가 기대하는 값에 맞게 소문자로 저장 -->
+            <input type="radio" name="serviceType" value="army" hidden>
             <div class="type-btn">육군</div>
         </label>
 
         <!-- 해군 -->
-        <label class="type-option" data-type="NAVY">
-            <input type="radio" name="serviceType" value="NAVY" hidden>
+        <label class="type-option" data-type="navy">
+            <input type="radio" name="serviceType" value="navy" hidden>
             <div class="type-btn">해군</div>
         </label>
 
         <!-- 공군 -->
-        <label class="type-option" data-type="AIRFORCE">
-            <input type="radio" name="serviceType" value="AIRFORCE" hidden>
+        <label class="type-option" data-type="airforce">
+            <input type="radio" name="serviceType" value="airforce" hidden>
             <div class="type-btn">공군</div>
         </label>
 
@@ -41,33 +58,27 @@
     <button type="submit" id="nextBtn" disabled>다음</button>
 </form>
 
-
 <script>
     const options = document.querySelectorAll(".type-option");
     const nextBtn = document.getElementById("nextBtn");
+    const form = document.getElementById("serviceTypeForm");
 
+    // 복무 타입 클릭하면 선택 표시 + 버튼 활성화
     options.forEach(option => {
         option.addEventListener("click", () => {
-
-            // 기존 선택 제거
             options.forEach(o => o.classList.remove("selected"));
-
-            // 현재 선택 표시
             option.classList.add("selected");
-
-            // 라디오 버튼 체크
             option.querySelector("input[type='radio']").checked = true;
-
-            // 다음 버튼 활성화
             nextBtn.disabled = false;
         });
     });
 
-    // 제출 시 선택했는지 체크
-    document.getElementById("serviceTypeForm").addEventListener("submit", function (e) {
+    // 복무 타입을 안 골랐으면 넘어가지 않게
+    form.addEventListener("submit", function (e) {
         const selected = document.querySelector('input[name="serviceType"]:checked');
         if (!selected) {
             e.preventDefault();
+            alert("복무 타입을 선택해 주세요.");
         }
     });
 </script>
