@@ -1,7 +1,13 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%
-    String userid = (String) request.getAttribute("userid");
-    String nickname = (String) request.getAttribute("nickname");
+    request.setCharacterEncoding("UTF-8");
+
+    // 🔹 쿼리스트링으로 넘어온 값은 getParameter 로 받기
+    String userid   = request.getParameter("userid");
+    String nickname = request.getParameter("nickname");
+
+    if (userid == null)   userid = "";
+    if (nickname == null) nickname = "";
 %>
 <!DOCTYPE html>
 <html>
@@ -20,8 +26,9 @@
 
 <form id="resetPwForm" action="new_pw_ok.jsp" method="post">
 
-    <!-- userid hidden 전송 -->
-    <input type="hidden" name="userid" value="<%= userid %>">
+    <!-- 🔸 앞 화면(find_pw_ok.jsp)에서 넘어온 userid / nickname 을 hidden 으로 그대로 전송 -->
+    <input type="hidden" name="userid"   value="<%= userid %>">
+    <input type="hidden" name="nickname" value="<%= nickname %>">
 
     <!-- 새 비밀번호 -->
     <div class="pw-box">
@@ -45,7 +52,7 @@
         <p id="confirmPwError" class="error-msg"></p>
     </div>
 
-    <!-- 로그인하기 버튼 -->
+    <!-- 변경하기 버튼 -->
     <button type="submit" id="findIdPwBtn">변경하기</button>
 </form>
 
@@ -91,7 +98,6 @@
         const newPwVal     = newPassword.value.trim();
         const confirmPwVal = confirmPassword.value.trim();
 
-        // 두 칸 다 채워져 있고, 값이 서로 같을 때만 활성화
         if (newPwVal !== "" && confirmPwVal !== "" && newPwVal === confirmPwVal) {
             resetBtn.classList.add("active");
             resetBtn.disabled = false;
@@ -101,7 +107,6 @@
         }
     }
 
-    // 입력할 때마다 에러 지우고 버튼 상태 갱신
     newPassword.addEventListener("input", () => {
         newPwError.textContent = "";
         updateResetBtnState();
@@ -134,7 +139,7 @@
         }
 
         if (!valid) {
-            e.preventDefault(); // 잘못되면 전송 막기
+            e.preventDefault();
         }
     });
 
