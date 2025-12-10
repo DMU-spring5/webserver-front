@@ -36,6 +36,8 @@ body > img {
 /* 입력창 라벨 공통 여백 추가 */
 .nickname-box label,
 .pw-box label {
+    font-size: 14px;
+    font-weight: bold;
     margin-bottom: 6px;
     display: inline-block;
 }

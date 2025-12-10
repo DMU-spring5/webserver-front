@@ -31,7 +31,7 @@
 
         <p id="pwError" class="error-msg"></p>
     </div>
-    <button type="submit" id="findIdBtn" class="active">로그인하기</button>
+    <button type="submit" id="findIdBtn" class="active">아이디 찾기</button>
 </form>
 
 <script>
