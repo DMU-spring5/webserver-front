@@ -4,33 +4,14 @@
 <%
     request.setCharacterEncoding("UTF-8");
 
+    // 로그인 폼에서 넘어온 값
     String userId = request.getParameter("userid");
     String userPw = request.getParameter("userpw");
 
-    if (userId == null || userPw == null ||
-            userId.trim().isEmpty() || userPw.trim().isEmpty()) {
-%>
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <title>잘못된 접근</title>
-</head>
-<body>
-<script>
-    alert("로그인 정보가 없습니다.\n로그인 화면에서 다시 시도해 주세요.");
-    location.href = "login.jsp";
-</script>
-</body>
-</html>
-<%
-        return;
-    }
+    if (userId == null) userId = "";
+    if (userPw == null) userPw = "";
 
     String apiUrl = "https://webserver-backend.onrender.com/api/v1/auth/login";
-
-    boolean success = false;
-    String errorMsg = "아이디 또는 비밀번호가 올바르지 않습니다.";
 
     try {
         String jsonInput =
@@ -39,13 +20,14 @@
                         + "\"password\":\"" + userPw + "\""
                         + "}";
 
+        System.out.println("[login_ok] request JSON = " + jsonInput);
+
         URL url = new URL(apiUrl);
         HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
 
         conn.setRequestMethod("POST");
         conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
         conn.setDoOutput(true);
-
         conn.setConnectTimeout(5000);
         conn.setReadTimeout(5000);
 
@@ -55,48 +37,57 @@
         }
 
         int responseCode = conn.getResponseCode();
+        StringBuilder sb = new StringBuilder();
 
-        if (responseCode == 200) {
-            session.setAttribute("userId", userId);
+        InputStream is = (conn.getErrorStream() != null)
+                ? conn.getErrorStream()
+                : conn.getInputStream();
 
-            success = true;
-        } else {
-            StringBuilder sb = new StringBuilder();
+        if (is != null) {
             try (BufferedReader br = new BufferedReader(
-                    new InputStreamReader(
-                            conn.getErrorStream() != null ? conn.getErrorStream() : conn.getInputStream(),
-                            "UTF-8"
-                    ))) {
+                    new InputStreamReader(is, "UTF-8")
+            )) {
                 String line;
                 while ((line = br.readLine()) != null) sb.append(line);
-            } catch (Exception ignore) {}
-
-            if (sb.length() > 0) {
-                errorMsg = sb.toString();
             }
+        }
+        String body = sb.toString();
+
+        System.out.println("[login_ok] responseCode = " + responseCode);
+        System.out.println("[login_ok] body         = " + body);
+
+        if (responseCode == 200) {
+            String accessToken = null;
+            String key = "\"accessToken\"";
+            int idx = body.indexOf(key);
+            if (idx != -1) {
+                int start = body.indexOf("\"", idx + key.length());
+                if (start != -1) {
+                    start++;
+                    int end = body.indexOf("\"", start);
+                    if (end != -1) {
+                        accessToken = body.substring(start, end);
+                    }
+                }
+            }
+            System.out.println("[login_ok] parsed accessToken = " + accessToken);
+
+            // 세션 저장
+            session.setAttribute("userId", userId);
+            if (accessToken != null && !accessToken.trim().isEmpty()) {
+                session.setAttribute("accessToken", accessToken);
+            }
+
+            // 로그인 성공 → 메인 페이지로 이동
+            response.sendRedirect("../main/mainpage.jsp");
+
+        } else {
+            // 로그인 실패
+            response.sendRedirect("login.jsp?idError=아이디 또는 비밀번호가 올바르지 않습니다.");
         }
 
     } catch (Exception e) {
         e.printStackTrace();
-        errorMsg = "로그인 서버와 통신 중 오류가 발생했습니다.\n잠시 후 다시 시도해 주세요.";
+        response.sendRedirect("login.jsp?idError=서버 오류가 발생했습니다.");
     }
 %>
-
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <title>로그인 처리</title>
-</head>
-<body>
-<script>
-    <% if (success) { %>
-    alert("로그인에 성공했습니다.");
-    location.href = "../main/mainpage.jsp";
-    <% } else { %>
-    alert("<%=errorMsg.replace("\n", "\\n").replace("\"", "\\\"")%>");
-    location.href = "login.jsp";
-    <% } %>
-</script>
-</body>
-</html>
