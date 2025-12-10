@@ -45,7 +45,7 @@
         </div>
 
         <div class="profile-text">
-            <p class="profile-name" id="profileName"><strong>...</strong>&nbsp &nbsp님</p>
+            <p class="profile-name" id="profileName"><strong>...</strong>&nbsp;&nbsp;님</p>
             <p id="division">사단 : ...</p>
             <p id="unit">부대명 : ...</p>
             <p id="rank">계급 : ...</p>
@@ -77,11 +77,11 @@
     <!-- 마이페이지 메뉴 -->
     <section class="mypage-menu">
         <div class="menu-column">
-            <a href="#" class="menu-item">
+            <a href="myinfo.jsp" class="menu-item">
                 <span>내 정보</span>
                 <span class="arrow">&gt;</span>
             </a>
-            <a href="#" class="menu-item">
+            <a href="change_pw.jsp" class="menu-item">
                 <span>비밀번호 변경</span>
                 <span class="arrow">&gt;</span>
             </a>
@@ -92,9 +92,8 @@
                 <span>게시판 관리</span>
                 <span class="arrow">&gt;</span>
             </a>
-            <a href="#" class="menu-item">
+            <a class="menu-item" id="openWithdrawModal" style="cursor:pointer;">
                 <span>회원탈퇴</span>
-                <span class="arrow">&gt;</span>
             </a>
         </div>
     </section>
@@ -103,16 +102,17 @@
 <script>
     // 프로필 이미지 미리보기 함수
     function previewImage() {
-        const file = document.getElementById('profileInput').files[0];
-        const reader = new FileReader();
+        const fileInput = document.getElementById('profileInput');
+        if (!fileInput) return;
 
+        const file = fileInput.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
         reader.onloadend = function () {
             document.getElementById('previewImg').src = reader.result;
-        }
-
-        if (file) {
-            reader.readAsDataURL(file);
-        }
+        };
+        reader.readAsDataURL(file);
     }
 </script>
 
@@ -121,9 +121,8 @@
 
     // fetch()를 사용하여 API에서 데이터 가져오기
     fetch(apiUrl)
-        .then(response => response.json()) // JSON 형식으로 응답 받기
+        .then(response => response.json())
         .then(data => {
-            // 가져온 데이터로 HTML 요소 업데이트
             document.getElementById('profileName').innerHTML = `<strong>${data.name}</strong> 님`;
             document.getElementById('division').textContent = `사단 : ${data.division}`;
             document.getElementById('unit').textContent = `부대명 : ${data.unit}`;
@@ -137,6 +136,110 @@
             document.getElementById('unit').textContent = '부대명 : 알 수 없음';
             document.getElementById('rank').textContent = '계급 : 알 수 없음';
         });
+</script>
+
+<div id="withdrawModal" class="modal-overlay">
+    <div class="modal-box">
+        <h2 class="modal-title">Milli Road를 탈퇴하시겠습니까?</h2>
+
+        <p class="modal-desc">
+            탈퇴 후에는 계정을 복구할 수 없으며,<br>
+            더 이상 서비스를 이용할 수 없습니다.
+        </p>
+
+        <!-- 비밀번호 입력 + 눈 아이콘 -->
+        <div class="pw-wrap">
+            <input
+                    type="password"
+                    id="withdrawPw"
+                    class="modal-input"
+                    placeholder="비밀번호를 입력해 주세요."
+            >
+            <img src="<%=request.getContextPath()%>/img/eye.png" id="togglePw" class="pw-eye" alt="비밀번호 보기">
+        </div>
+        <!-- 오류 메시지 -->
+        <p id="withdrawError" class="modal-error"></p>
+
+        <div class="modal-buttons">
+            <button id="cancelWithdraw" class="btn-cancel" type="button">취소</button>
+            <button id="confirmWithdraw" class="btn-withdraw" type="button">탈퇴하기</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const openWithdrawModal = document.getElementById("openWithdrawModal");
+    const withdrawModal = document.getElementById("withdrawModal");
+    const cancelWithdraw = document.getElementById("cancelWithdraw");
+    const confirmWithdraw = document.getElementById("confirmWithdraw");
+    const withdrawPw = document.getElementById("withdrawPw");
+    const withdrawError = document.getElementById("withdrawError");
+    const togglePw = document.getElementById("togglePw");
+
+    // 세션에 저장된 실제 비밀번호 (예시)
+    <%
+        String realPw = (String) session.getAttribute("password");
+        if (realPw == null) realPw = "";
+    %>
+    const realPassword = "<%= realPw %>";
+
+    // 모달 열기
+    openWithdrawModal.addEventListener("click", function(e) {
+        e.preventDefault();
+        withdrawModal.style.display = "flex";
+        withdrawPw.value = "";
+        withdrawError.textContent = "";
+        withdrawPw.type = "password";
+        togglePw.src = "../img/eye.png";
+    });
+
+    // 모달 닫기
+    cancelWithdraw.addEventListener("click", function() {
+        withdrawModal.style.display = "none";
+    });
+
+    // 모달 바깥 클릭 시 닫기
+    withdrawModal.addEventListener("click", function(e) {
+        if (e.target === withdrawModal) {
+            withdrawModal.style.display = "none";
+        }
+    });
+
+    // ESC로 닫기
+    document.addEventListener("keydown", function(e) {
+        if (e.key === "Escape") {
+            withdrawModal.style.display = "none";
+        }
+    });
+
+    // 눈 아이콘 클릭 시 비밀번호 보기/숨기기
+    togglePw.addEventListener("click", function() {
+        if (withdrawPw.type === "password") {
+            withdrawPw.type = "text";
+            togglePw.src = "<%=request.getContextPath()%>/img/eyeoff.png";
+        } else {
+            withdrawPw.type = "password";
+            togglePw.src = "<%=request.getContextPath()%>/img/eye.png";
+        }
+    });
+
+    // 탈퇴 버튼 클릭
+    confirmWithdraw.addEventListener("click", function() {
+        const inputPw = withdrawPw.value.trim();
+
+        if (inputPw === "") {
+            withdrawError.textContent = "비밀번호를 입력해 주세요.";
+            return;
+        }
+
+        if (inputPw !== realPassword) {
+            withdrawError.textContent = "비밀번호가 일치하지 않습니다.";
+            return;
+        }
+
+        alert("탈퇴가 완료되었습니다.");
+        window.location.href = "index.jsp";
+    });
 </script>
 </body>
 </html>
