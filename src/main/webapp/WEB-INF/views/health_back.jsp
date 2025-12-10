@@ -18,7 +18,16 @@
             display:flex;align-items:center;justify-content:space-between;
         }
         .header-left{display:flex;align-items:center;gap:14px;}
-        .header-logo-box{width:34px;height:34px;border-radius:4px;background:#fff;}
+
+        /* 로고 이미지를 표시하도록 스타일 이름은 유지 */
+        .header-logo-box{
+            width:34px;
+            height:34px;
+            border-radius:4px;
+            object-fit:cover; /* 이미지 표시를 위해 추가 */
+            /* 기존 background:#fff;는 이미지로 대체되므로 제거하거나 유지할 수 있습니다. */
+        }
+
         .header-title{font-size:22px;font-weight:700;letter-spacing:.10em;}
         .header-nav{display:flex;align-items:center;gap:26px;font-size:15px;}
         .header-nav a{color:#fff;text-decoration:none;}
@@ -95,7 +104,9 @@
 
 <header>
     <div class="header-left">
-        <div class="header-logo-box"></div>
+        <img class="header-logo-box"
+             src="${pageContext.request.contextPath}/img/WebServerLogo2.png"
+             alt="MILLI ROAD Logo">
         <div class="header-title">MILLI ROAD</div>
     </div>
     <nav class="header-nav">
@@ -127,7 +138,6 @@
 
     <div class="section-title">등</div>
 
-    <!-- 기구 버튼들: data-type 으로 구분 -->
     <div class="filter-row">
         <button class="filter-btn filter-btn-active" data-type="ALL">전체</button>
         <button class="filter-btn" data-type="DB">덤벨</button>
@@ -137,7 +147,6 @@
         <button class="filter-btn" data-type="BALL">볼</button>
     </div>
 
-    <!-- 운동 리스트는 JS가 채움 -->
     <div id="workoutList" class="workout-list"></div>
 
 </div>
