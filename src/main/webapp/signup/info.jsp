@@ -368,7 +368,7 @@
             })
             .then(() => {
                 alert("회원가입이 완료되었습니다!");
-                window.location.href = "<%=ctx%>/login.jsp";
+                window.location.href = "../login/login.jsp";
             })
             .catch((err) => {
                 console.error("회원가입 에러:", err);
