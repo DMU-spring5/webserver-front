@@ -1,18 +1,20 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
+<%
+    String userId = request.getParameter("userId");
+    String password = request.getParameter("password");
+    String nickname = request.getParameter("nickname");
+    String serviceType = request.getParameter("serviceType");
+
+    if (userId == null) userId = "";
+    if (password == null) password = "";
+    if (nickname == null) nickname = "";
+    if (serviceType == null) serviceType = "";
+%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
     <title>회원 가입</title>
-    <style>
-        /* 입력 필드가 비어있지 않을 때 강제로 색상을 표시 */
-        input#joinDateText:not(:placeholder-shown) {
-            color: #000000 !important;
-            opacity: 1 !important;
-            -webkit-text-fill-color: #000000 !important;
-            background-color: #ffffff !important;
-        }
-    </style>
     <link rel="stylesheet" type="text/css" href="militaryInfo.css">
 </head>
 <body>
@@ -22,7 +24,17 @@
          alt="MILLI ROAD 로고" width="200">
 </div>
 
-<form id="militaryInfoForm" action="info.jsp" method="post" class="info-form" autocomplete="off">
+<form id="militaryInfoForm"
+      class="info-form"
+      autocomplete="off"
+      action="info.jsp"
+      method="post">
+
+    <!-- 이전 화면에서 받은 값들을 그대로 다음 화면으로 넘기기 -->
+    <input type="hidden" name="userId" value="<%=userId%>">
+    <input type="hidden" name="password" value="<%=password%>">
+    <input type="hidden" name="nickname" value="<%=nickname%>">
+    <input type="hidden" name="serviceType" value="<%=serviceType%>">
 
     <div class="form-box">
         <label for="division">사단</label><br>
@@ -57,7 +69,7 @@
     <button type="submit" id="nextBtn">다음</button>
 </form>
 
-<div id="dateModal" style="display:none;">
+<div id="dateModal">
     <div class="date-modal-inner">
         <div class="date-modal-body">
             <div class="date-col">
@@ -81,7 +93,6 @@
 </div>
 
 <script>
-    // 전역 변수 초기화
     let selectedYear = null;
     let selectedMonth = null;
     let selectedDay = null;
@@ -159,7 +170,6 @@
         function openDateModal() {
             dateModal.style.display = "flex";
 
-            // 기존 값 파싱 시도
             const currentDate = joinDateHidden.value;
             if (currentDate && currentDate.indexOf('-') > -1) {
                 const parts = currentDate.split('-');
@@ -175,11 +185,10 @@
             buildYearMonthList();
             updateDayList();
 
-            // UI 하이라이트와 스크롤을 DOM 갱신 후 실행 (필수)
             setTimeout(() => {
-                if(selectedYear) highlightAndScroll(yearList, selectedYear);
-                if(selectedMonth) highlightAndScroll(monthList, selectedMonth);
-                if(selectedDay) highlightAndScroll(dayList, selectedDay);
+                if (selectedYear) highlightAndScroll(yearList, selectedYear);
+                if (selectedMonth) highlightAndScroll(monthList, selectedMonth);
+                if (selectedDay) highlightAndScroll(dayList, selectedDay);
             }, 0);
         }
 
@@ -187,7 +196,6 @@
             dateModal.style.display = "none";
         }
 
-        // --- 수정된 부분: 하이라이트 및 스크롤 로직 추가 ---
         function highlightAndScroll(listElement, value) {
             let targetElement = null;
             listElement.querySelectorAll("p").forEach(p => {
@@ -201,14 +209,11 @@
                     p.style.fontWeight = "normal";
                 }
             });
-            // 선택된 요소가 있으면 그 위치로 스크롤 이동 (중앙 정렬)
             if (targetElement) {
                 targetElement.scrollIntoView({ block: "center", behavior: "auto" });
             }
         }
-        // --- 수정된 부분 끝 ---
 
-        // 연, 월 리스트 생성
         function buildYearMonthList() {
             yearList.innerHTML = "";
             monthList.innerHTML = "";
@@ -249,17 +254,14 @@
             dayList.innerHTML = "";
             if (!selectedYear || !selectedMonth) return;
 
-            // 해당 연/월의 마지막 날짜 계산
             let lastDay = new Date(selectedYear, selectedMonth, 0).getDate();
 
-            // 미래 날짜 제한 로직
             if (selectedYear === THIS_YEAR && selectedMonth === THIS_MONTH) {
                 lastDay = THIS_DAY;
             }
             if (selectedYear > THIS_YEAR || (selectedYear === THIS_YEAR && selectedMonth > THIS_MONTH)) {
                 lastDay = 0;
             }
-
             for (let d = 1; d <= lastDay; d++) {
                 const p = document.createElement("p");
                 p.textContent = d;
@@ -278,33 +280,27 @@
             highlightAndScroll(dayList, d);
         }
 
-        // 확인 버튼
         okBtn.addEventListener("click", () => {
             if (!selectedYear || !selectedMonth || !selectedDay) {
                 alert("연, 월, 일을 모두 선택해 주세요.");
                 return;
             }
 
-            // 2. 날짜 문자열 조합
             const year = parseInt(selectedYear, 10);
             const mm = String(selectedMonth).padStart(2, "0");
             const dd = String(selectedDay).padStart(2, "0");
             const dateStr = year + "-" + mm + "-" + dd;
 
-            // 3. 값 대입
             joinDateText.value = dateStr;
             joinDateHidden.value = dateStr;
 
-            // setAttribute로 HTML 속성 자체도 변경 (화면 갱신 유도)
             joinDateText.setAttribute('value', dateStr);
 
-            // 4. CSS 및 스타일 강제 적용
             joinDateText.removeAttribute('placeholder');
             joinDateText.style.color = "black";
             joinDateText.style.visibility = "visible";
             joinDateText.style.opacity = "1";
 
-            // 5. 정리
             clearError(joinDateText);
             closeDateModal();
             checkInputs();
@@ -320,9 +316,11 @@
             }
         });
 
+        //검증만 하고 form submit → info.jsp
         form.addEventListener("submit", (e) => {
-            let valid = true;
+            e.preventDefault();
 
+            let valid = true;
             if (divisionInput.value.trim() === "") {
                 divisionError.textContent = "사단 정보를 입력해 주세요.";
                 valid = false;
@@ -335,10 +333,10 @@
                 joinDateError.textContent = "입대 날짜를 선택해 주세요.";
                 valid = false;
             }
-
             if (!valid) {
-                e.preventDefault();
+                return;
             }
+            form.submit();
         });
 
         checkInputs();

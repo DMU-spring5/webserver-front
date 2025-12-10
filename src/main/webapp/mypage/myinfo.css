@@ -4,6 +4,7 @@ body {
     background: #f3f3f3;
 }
 
+/* 헤더 스타일 */
 .header {
     height: 137px;
     background-color: #788665;
@@ -16,7 +17,7 @@ body {
     align-items: center;
     padding: 20px 0;
     display: flex;
-    align-items: center;
+    justify-content: space-between;
 }
 
 .logo img {
@@ -41,6 +42,7 @@ body {
 .nav {
     display: flex;
     align-items: center;
+    margin-bottom: 10px;
     gap: 6px;
 }
 
@@ -81,26 +83,44 @@ body {
     pointer-events: none;
 }
 
-/* 프로필 카드 */
-.profile-card {
-    display: flex;
-    justify-content: center;
-    margin: 40px;
-    box-sizing: border-box;
-    position: relative;
+.user-info{
+    text-align: right;
+    color: #FFFFFF;
+    font-weight: bold;
 }
 
+.logout-btn{
+    margin-top: 5px;
+    margin-bottom: 13px;
+    background: #EBF1E6;
+    border: none;
+    width: 85px;
+    height: 33px;
+    font-size: 16px;
+}
+
+/* 회원가입 폼과 프로필 이미지를 포함하는 상자 */
+.signup-wrap {
+    width: 100%;
+    max-width: 600px;
+    margin: 40px auto;
+    background: #ffffff;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+    border: 1px solid #ddd; /* 테두리 추가 */
+}
+
+/* 프로필 이미지 */
 .profile-img {
+    width: 15%;
+    height: 100%;
     position: relative;
-    width: 40px;
-    height: 40px;
-    margin: 0 auto;
+    margin: 0 auto 30px;
     border-radius: 50%;
-    border: 1px solid #ddd;
-    background-color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    border: 2px solid #dddddd;
+    box-sizing: border-box;
+    background: #f5f5f5;
 }
 
 .profile-img .profile {
@@ -114,8 +134,8 @@ body {
     position: absolute;
     right: -4px;
     bottom: -4px;
-    width: 24px;
-    height: 24px;
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
     background: #ffffff;
     box-shadow: 0 0 0 1px #ddd;
@@ -123,52 +143,136 @@ body {
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    z-index: 10;
 }
 
 .profile-img .camera img {
-    width: 14px;
-    height: 14px;
+    width: 18px;
+    height: 18px;
 }
 
-/* GNB */
-.gnb {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    gap: 12px;
-    font-size: 15px;
+/* 폼 입력 */
+.form-box {
+    margin-bottom: 18px;
 }
 
-.gnb a {
-    color: #ffffff;
-    text-decoration: none;
-}
-
-.gnb .divider {
-    opacity: 0.6;
-}
-
-/* 헤더 오른쪽 */
-.header-right {
-    margin-left: auto;
-    display: flex;
-    align-items: center;
-    gap: 12px;
+label {
     font-size: 14px;
 }
 
-.btn-logout {
-    padding: 6px 16px;
-    border: 1px solid #ffffff;
-    background: #ffffff;
-    color: #333333;
-    border-radius: 4px;
+/* 공통 인풋 */
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    height: 48px;
+    padding: 0 14px;
+    margin-top: 8px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.height-48 {
+    height: 48px !important;
+}
+
+.id-input-wrap {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.id-input-wrap input {
+    width: 100%;
+    height: 48px;
+    padding: 0 90px 0 14px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    box-sizing: border-box;
+}
+
+.id-check-btn {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 34px;
+    padding: 0 12px;
+    background: #A1A49D;
+    border: none;
+    align-items: center;
+    justify-content: center;
+    margin-top: 3px;
+    border-radius: 6px;
+    font-size: 13px;
+    color: #fff;
+    transition: 0.2s;
+}
+
+.id-check-btn.active {
+    background: #DFCEB3;
     cursor: pointer;
 }
 
-/* 마이페이지 */
+.id-check-btn:disabled {
+    background: #E6E6E6;
+}
+
+/* 비밀번호 칸 */
+.pw-area {
+    position: relative;
+}
+
+.togglePw {
+    width: 22px;
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    margin-top: 3px;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+/* 에러 메시지 */
+.error-msg {
+    color: red;
+    font-size: 12px;
+    margin-top: 6px;
+}
+
+.ok-msg {
+    color: #2e7d32;
+}
+
+/* 포커스 시 테두리 */
+input:focus {
+    border-color: #78866B;
+    border-width: 2px;
+    outline: none;
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 14px;
+    margin-top: 10px;
+    background: #9aa2ab;
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: not-allowed;
+}
+
+.submit-btn:enabled {
+    cursor: pointer;
+    background: #9aa2ab;
+}
+
+
+/* 프로필 수정 폼 */
 .mypage-wrap {
     max-width: 1100px;
     margin: 40px auto 60px;
@@ -181,7 +285,6 @@ body {
     background: #dddddd;
 }
 
-/* 프로필 영역 */
 .profile-left {
     display: flex;
     align-items: center;
@@ -193,16 +296,6 @@ body {
     position: relative;
     width: 110px;
     height: 110px;
-}
-
-.profile-img {
-    width: 15%;
-    height: 100%;
-    border-radius: 50%;
-    margin-right: 23px;
-    border: 2px solid #dddddd;
-    box-sizing: border-box;
-    background: #f5f5f5;
 }
 
 .profile-camera {
@@ -248,8 +341,8 @@ body {
 
 .progress-row {
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+    flex-direction: column; /* 텍스트와 진행바를 세로로 배치 */
+    align-items: flex-start; /* 왼쪽 정렬 */
     width: 100%;
     align-items: flex-end;
 }
@@ -293,7 +386,7 @@ body {
 
 /* 메뉴 아이템 */
 .menu-item {
-    padding: 20px;
+    padding: 20px 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -307,145 +400,62 @@ body {
     background-color: #E9E9E2;
     color: #555555;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.18);
-    padding: 20px;
 }
 
+/* 화살표 기본 색상 */
 .arrow {
     font-size: 16px;
     transition: color 0.3s ease;
 }
 
-/* 화면 전체를 덮는 어두운 배경 */
-.modal-overlay {
+/* 입력 필드가 비어있지 않을 때 강제로 색상을 표시 */
+input#joinDateText:not(:placeholder-shown) {
+    color: #000000 !important;
+    opacity: 1 !important;
+    -webkit-text-fill-color: #000000 !important;
+    background-color: #ffffff !important;
+}
+
+/* 날짜 선택 모달 */
+#dateModal {
+    display: none;
     position: fixed;
-    inset: 0; /* top:0; right:0; bottom:0; left:0; 와 동일 */
-    background: rgba(0, 0, 0, 0.45);
-    display: none;            /* 기본은 숨김 */
-    justify-content: center;  /* 중앙 정렬 */
-    align-items: center;      /* 중앙 정렬 */
-    z-index: 9999;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
 }
 
-/* 중앙 흰색 박스 */
-.modal-box {
-    width: 420px;
-    max-width: calc(100% - 40px);
-    background: #ffffff;
+.date-modal-inner {
+    background: #fff;
+    padding: 20px;
     border-radius: 12px;
-    padding: 26px 28px;
-    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.25);
-    box-sizing: border-box;
-    text-align: center;
+    width: 400px;
 }
 
-.modal-title {
-    font-size: 20px;
-    font-weight: 700;
-    margin: 0 0 10px 0;
-    color: #222;
-}
-
-.modal-desc {
-    font-size: 14px;
-    color: #555;
-    line-height: 1.6;
+.date-col {
     margin-bottom: 20px;
 }
 
-/* 버튼 영역 */
-.modal-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-top: 8px;
-}
-
-/* 공통 버튼 스타일 */
-.modal-buttons .btn-cancel,
-.modal-buttons .btn-withdraw {
-    min-width: 110px;
-    padding: 10px 18px;
-    font-size: 14px;
-    border-radius: 8px;
-    cursor: pointer;
-    border: none;
-}
-
-.modal-input {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 14px;
-    box-sizing: border-box;
-}
-
-.modal-error {
-    color: red;
-    font-size: 13px;
-    height: 18px;
+.date-col strong {
+    display: block;
     margin-bottom: 10px;
+    font-weight: 600;
 }
 
-/* 취소 버튼 */
-.btn-cancel {
-    background: #f2f2f2;
-    color: #333;
-    border: 1px solid #d0d0d0;
-}
-
-/* 탈퇴 버튼 */
-.btn-withdraw {
-    background: #c8b086;  /* 살짝 베이지 톤 */
-    color: #fff;
-    border: 1px solid rgba(0,0,0,0.1);
-}
-
-/* 비밀번호 입력 전체 박스 */
-.pw-wrap {
-    position: relative;
-    width: 100%;
-    border: 1.5px solid #dcdcdc;
-    border-radius: 12px;
-    background: #fff;
-    height: 48px;
+.date-modal-footer {
     display: flex;
-    align-items: center;
-    padding: 0 14px;
-    box-sizing: border-box;
+    justify-content: space-between;
 }
 
-/* 입력창 스타일 */
-.modal-input {
-    flex: 1;
+.date-modal-footer button {
+    padding: 10px 20px;
+    border-radius: 8px;
+    background-color: #788665;
+    color: white;
     border: none;
-    outline: none;
-    font-size: 15px;
-    background: transparent;
-}
-
-.pw-eye {
-    width: 22px;
-    height: 22px;
     cursor: pointer;
-    opacity: 0.7;
-}
-
-.pw-eye:hover {
-    opacity: 1;
-}
-
-/* 반응형 */
-@media (max-width: 480px) {
-    .modal-box {
-        width: 90%;
-        padding: 20px;
-    }
-    .modal-buttons {
-        flex-direction: column;
-    }
-    .modal-buttons .btn-cancel,
-    .modal-buttons .btn-withdraw {
-        width: 100%;
-    }
 }
