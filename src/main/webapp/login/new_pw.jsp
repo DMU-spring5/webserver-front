@@ -46,7 +46,7 @@
     </div>
 
     <!-- 로그인하기 버튼 -->
-    <button type="submit" id="findIdPwBtn">로그인하기</button>
+    <button type="submit" id="findIdPwBtn">변경하기</button>
 </form>
 
 <script>
