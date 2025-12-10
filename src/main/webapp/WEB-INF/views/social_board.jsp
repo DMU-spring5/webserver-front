@@ -3,25 +3,19 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>소셜 커뮤니티</title>
+    <title>소셜 커뮤니티 | 부대별 평가</title>
 
     <style>
-        * { box-sizing:border-box; margin:0; padding:0; }
-        body {
-            font-family:"Noto Sans KR",-apple-system,BlinkMacSystemFont,
-            "Segoe UI",system-ui,sans-serif;
-            background:#f5f5f5;
-            color:#333;
+        *{box-sizing:border-box;margin:0;padding:0;}
+        body{
+            font-family:"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
+            background:#f5f5f5;color:#333;
         }
 
         header{
-            height:64px;
-            background:#78866B;
-            color:#fff;
+            height:64px;background:#78866B;color:#fff;
             padding:0 40px;
-            display:flex;
-            align-items:center;
-            justify-content:space-between;
+            display:flex;align-items:center;justify-content:space-between;
         }
         .header-left{display:flex;align-items:center;gap:14px;}
         .header-logo-box{
@@ -33,97 +27,86 @@
         .header-nav{display:flex;align-items:center;gap:26px;font-size:15px;}
         .header-nav a{color:#fff;text-decoration:none;}
         .header-nav a:hover{text-decoration:underline;}
-        .header-nav a.active{font-weight:700;text-decoration:underline;}
+        .header-nav a.active{text-decoration:underline;font-weight:700;}
         .header-right{display:flex;align-items:center;gap:16px;font-size:14px;}
-        .btn-logout{
+        .logout-button{
             padding:6px 16px;border-radius:4px;border:none;
             background:#fff;color:#78866B;font-weight:600;cursor:pointer;
         }
 
         .page-wrap{
-            max-width:1200px;
-            margin:40px auto 80px;
-            padding:0 40px;
+            max-width:1100px;
+            margin:42px auto 60px;
+            padding:0 24px;
         }
 
-        .title{
-            font-size:22px;
-            font-weight:700;
-            margin-bottom:12px;
-        }
+        .page-title{font-size:24px;font-weight:700;margin-bottom:6px;}
+        .page-subtitle{font-size:13px;color:#777;margin-bottom:24px;}
 
         .tab-row{
-            font-size:15px;
-            margin-bottom:18px;
+            display:flex;
+            align-items:center;
+            gap:10px;
+            font-size:18px;
+            margin-bottom:24px;
         }
-        .tab-row strong{font-weight:700;}
-        .tab-row span{
-            margin-left:8px;
-            color:#b3b3b3;
-        }
-        .tab-row a{
-            color:#b3b3b3;
+        .tab-row .tab{
             text-decoration:none;
+            color:#b6b6b6;
         }
-        .tab-row a:hover{text-decoration:underline;}
-
-        .table-wrap{
-            background:#fff;
-            border-radius:4px;
-            border:1px solid #d7d7cf;
+        .tab-row .tab.active{
+            color:#000;
+            font-weight:700;
         }
 
         .board-header{
-            padding:10px 16px;
-            border-bottom:1px solid #e1e1e1;
-            display:flex;
-            justify-content:flex-end;
+            display:flex;justify-content:flex-end;margin-bottom:10px;
         }
-        .btn-write{
-            padding:6px 16px;
-            border-radius:4px;
-            border:none;
-            background:#78866B;
-            color:#fff;
-            font-size:13px;
+        .write-button{
+            padding:8px 18px;border-radius:4px;border:none;
+            background:#78866B;color:#fff;font-size:14px;font-weight:600;
+            cursor:pointer;text-decoration:none;
+        }
+
+        table.board-table{
+            width:100%;border-collapse:collapse;background:#fff;
+            border-radius:8px;overflow:hidden;
+            box-shadow:0 1px 3px rgba(0,0,0,0.08);
+        }
+        .board-table thead{background:#f3f3f3;}
+        .board-table th,
+        .board-table td{
+            padding:10px 14px;
+            font-size:14px;
+            border-bottom:1px solid #e5e5e5;
+            text-align:left;
+        }
+        .board-table th{font-weight:600;}
+        .board-table tbody tr:hover{
+            background:#fafafa;
             cursor:pointer;
         }
-
-        table.board{
-            width:100%;
-            border-collapse:collapse;
-            font-size:13px;
-        }
-        table.board th,
-        table.board td{
-            padding:9px 10px;
-            border-top:1px solid #f0f0f0;
-        }
-        table.board th{
-            background:#f7f7f7;
-            font-weight:600;
-        }
-        table.board td.num,
-        table.board td.cnt{
-            text-align:center;
-            white-space:nowrap;
-        }
+        .board-table td.title{font-weight:500;}
 
         .pagination{
-            margin-top:14px;
-            display:flex;
-            justify-content:center;
-            gap:6px;
-            font-size:12px;
+            display:flex;justify-content:center;gap:6px;
+            margin-top:18px;font-size:13px;
         }
+        .pagination span,
         .pagination a{
+            display:inline-block;min-width:24px;
+            padding:4px 8px;border-radius:4px;
+            border:1px solid #c4c4c4;
+            text-align:center;
             text-decoration:none;
             color:#555;
-            min-width:18px;
-            text-align:center;
         }
-        .pagination a.active{
-            font-weight:700;
+        .pagination .active{
+            background:#78866B;border-color:#78866B;
+            color:#fff;font-weight:600;
+        }
+        .pagination a:hover:not(.active){
+            background:#e4e4e4;
         }
     </style>
 </head>
@@ -135,71 +118,87 @@
         <div class="header-title">MILLI ROAD</div>
     </div>
     <nav class="header-nav">
-        <a href="${pageContext.request.contextPath}/main">뉴스</a>
+        <a href="#">뉴스</a>
         <span>|</span>
         <a href="${pageContext.request.contextPath}/social/board" class="active">소셜</a>
         <span>|</span>
         <a href="${pageContext.request.contextPath}/health">건강</a>
         <span>|</span>
-        <a href="${pageContext.request.contextPath}/map">지도</a>
+        <a href="${pageContext.request.contextPath}/main">지도</a>
     </nav>
     <div class="header-right">
-        니인내조 님
-        <button class="btn-logout">로그아웃</button>
+        <span>니인내조 님</span>
+        <button class="logout-button">로그아웃</button>
     </div>
 </header>
 
 <div class="page-wrap">
+    <h2 class="page-title">소셜 커뮤니티 | 부대별 평가</h2>
+    <p class="page-subtitle">
+        군부대, 훈련소, 자대 생활 등에 대한 솔직한 후기를 공유해 주세요.
+    </p>
 
-    <div class="title">소셜 커뮤니티</div>
-
+    <!-- 상단 탭 -->
     <div class="tab-row">
-        <strong>소셜 커뮤니티</strong>
+        <a href="${pageContext.request.contextPath}/social/board"
+           class="tab active">
+            소셜 커뮤니티
+        </a>
         <span>|</span>
-        <a href="${pageContext.request.contextPath}/social_unit">부대 별 평가</a>
+        <a href="${pageContext.request.contextPath}/social_unit"
+           class="tab">
+            부대 별 평가
+        </a>
     </div>
 
-    <div class="table-wrap">
-        <div class="board-header">
-            <button class="btn-write" type="button"
-                    onclick="location.href='${pageContext.request.contextPath}/social/write'">
-                글쓰기
-            </button>
-        </div>
-
-        <table class="board">
-            <thead>
-            <tr>
-                <th style="width:80px;">번호</th>
-                <th>제목</th>
-                <th style="width:120px;">글쓴이</th>
-                <th style="width:120px;">작성일</th>
-                <th style="width:80px;">조회</th>
-                <th style="width:80px;">추천</th>
-            </tr>
-            </thead>
-            <tbody>
-            <!-- 예시 데이터: 진짜에선 JSTL forEach 로 채우면 됨 -->
-            <tr>
-                <td class="num">설문</td>
-                <td>공개연애가 득보다 실한 것 같은 스타는?</td>
-                <td>운영자</td>
-                <td>2025.10.06</td>
-                <td class="cnt">-</td>
-                <td class="cnt">-</td>
-            </tr>
-            </tbody>
-        </table>
+    <div class="board-header">
+        <a href="${pageContext.request.contextPath}/social/write" class="write-button">글쓰기</a>
     </div>
+
+    <table class="board-table">
+        <thead>
+        <tr>
+            <th style="width:80px;">번호</th>
+            <th>제목</th>
+            <th style="width:120px;">글쓴이</th>
+            <th style="width:130px;">작성일</th>
+            <th style="width:80px;">조회</th>
+            <th style="width:80px;">추천</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr onclick="location.href='${pageContext.request.contextPath}/social/detail?id=1'">
+            <td>1</td>
+            <td class="title">훈련소 생활 괜찮았어요</td>
+            <td>이병 홍길동</td>
+            <td>2025-11-25</td>
+            <td>12</td>
+            <td>3</td>
+        </tr>
+        <tr onclick="location.href='${pageContext.request.contextPath}/social/detail?id=2'">
+            <td>2</td>
+            <td class="title">PX 시설이 너무 좋아요</td>
+            <td>상병 김훈련</td>
+            <td>2025-11-24</td>
+            <td>8</td>
+            <td>1</td>
+        </tr>
+        <tr onclick="location.href='${pageContext.request.contextPath}/social/detail?id=3'">
+            <td>3</td>
+            <td class="title">식단은 조금 아쉬웠습니다</td>
+            <td>일병 박자취</td>
+            <td>2025-11-23</td>
+            <td>5</td>
+            <td>0</td>
+        </tr>
+        </tbody>
+    </table>
 
     <div class="pagination">
-        <a href="#" class="active">1</a>
-        <a href="#">2</a>
-        <a href="#">3</a>
-        <a href="#">&gt;</a>
+        <span class="active">1</span>
     </div>
-
 </div>
 
 </body>
 </html>
+

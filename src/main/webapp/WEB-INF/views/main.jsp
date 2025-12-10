@@ -3,7 +3,10 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>MILLI ROAD - 메인(로그인 전)</title>
+    <title>MILLI ROAD - 지도 메인</title>
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
 
     <style>
         * { box-sizing:border-box; margin:0; padding:0; }
@@ -12,118 +15,84 @@
             "Segoe UI",system-ui,sans-serif;
             background:#f5f5f5;
             color:#333;
+            height:100vh;
+            display:flex;
+            flex-direction:column;
         }
 
-        /* ===== 상단 공통 헤더 ===== */
         header{
-            height:64px;
-            background:#78866B;
-            color:#fff;
+            height:64px;background:#78866B;color:#fff;
             padding:0 40px;
-            display:flex;
-            align-items:center;
-            justify-content:space-between;
+            display:flex;align-items:center;justify-content:space-between;
+            flex-shrink:0;
         }
         .header-left{display:flex;align-items:center;gap:14px;}
         .header-logo-box{
-            width:80px;height:34px;
-            background:url('${pageContext.request.contextPath}/img/WebServerLogo2.png')
-            left center / contain no-repeat;
+            width:34px;height:34px;border-radius:4px;
+            background:url('${pageContext.request.contextPath}/img/KakaoTalk_20251204_101657760.png')
+            center / contain no-repeat;
         }
-        .header-title{font-size:0;}
-        .header-nav{
-            display:flex;align-items:center;gap:26px;font-size:15px;
-        }
+        .header-title{font-size:22px;font-weight:700;letter-spacing:.10em;}
+        .header-nav{display:flex;align-items:center;gap:26px;font-size:15px;}
         .header-nav a{color:#fff;text-decoration:none;}
         .header-nav a:hover{text-decoration:underline;}
-        .header-nav a.active{font-weight:700;text-decoration:underline;}
-        .header-right{
-            display:flex;align-items:center;gap:16px;font-size:14px;
-        }
-        .btn-login{
+        .header-nav a.active{text-decoration:underline;font-weight:700;}
+        .header-right{display:flex;align-items:center;gap:16px;font-size:14px;}
+        .btn-logout{
             padding:6px 16px;border-radius:4px;border:none;
             background:#fff;color:#78866B;font-weight:600;cursor:pointer;
         }
 
-        /* ===== 상단 검색창 ===== */
-        .top-search-wrap{
-            max-width:1200px;
-            margin:16px auto 0;
-            padding:0 40px;
-        }
-        .top-search-inner{
-            width:100%;height:40px;border-radius:4px;background:#fff;
-            border:1px solid #d0d0c8;display:flex;align-items:center;padding:0 12px;
-        }
-        .top-search-input{
-            flex:1;border:none;outline:none;font-size:13px;color:#555;
-        }
-        .top-search-icon{
-            width:18px;height:18px;
-            background:url('${pageContext.request.contextPath}/img/search.png')
-            center / 14px no-repeat;
-        }
-
-        /* ===== 메인 레이아웃 ===== */
         .page-wrap{
-            max-width:1200px;
-            margin:12px auto 60px;
-            padding:0 40px;
-            display:grid;
-            grid-template-columns:260px minmax(0,1fr) 260px;
-            gap:20px;
+            flex:1;
+            display:flex;
+            min-height:0;
+            background:#f5f5f5;
         }
+        .sidebar{
+            width:380px;
+            background:#f5f5f5;
+            padding:40px 32px;
+        }
+        .page-title{
+            font-size:20px;
+            font-weight:700;
+            margin-bottom:18px;
+        }
+        .search-box{margin-top:4px;}
+        .search-bar{
+            width:100%;height:44px;border-radius:4px;
+            border:1px solid #d7d7cf;background:#fff;
+            display:flex;align-items:center;padding:0 14px;
+        }
+        .search-input{
+            flex:1;border:none;outline:none;background:transparent;
+            font-size:13px;color:#555;
+        }
+        .search-btn{
+            width:30px;height:30px;border:none;background:transparent;cursor:pointer;
+        }
+        .search-btn i{font-size:14px;color:#555;}
+        .search-desc{margin-top:10px;font-size:13px;color:#777;}
 
-        /* 왼쪽: 로그인 안내 */
-        .left-card{
-            background:#f3f0e5;
-            border-radius:6px;
-            padding:18px 14px;
-            text-align:center;
-            font-size:13px;
+        .map-area{
+            flex:1;position:relative;background:#f3f3f3;
         }
-        .login-avatar{
-            width:76px;height:76px;border-radius:50%;
-            background:#d8d8d8;margin:0 auto 10px;
+        #map{width:100%;height:100%;}
+        .map-pin-btn{
+            position:absolute;top:20px;right:32px;width:44px;height:44px;
+            border-radius:50%;border:none;background:#fff;
+            box-shadow:0 2px 6px rgba(0,0,0,0.18);
+            cursor:pointer;display:flex;align-items:center;justify-content:center;
         }
-        .btn-login-large{
-            width:100%;height:32px;border-radius:4px;border:none;
-            background:#78866B;color:#fff;font-size:14px;cursor:pointer;
+        .map-pin-btn i{color:#ff4b6a;font-size:18px;}
+        .map-zoom{
+            position:absolute;right:32px;bottom:32px;
+            display:flex;flex-direction:column;gap:4px;
         }
-        .login-links{
-            margin-top:8px;font-size:11px;color:#777;
-        }
-
-        /* 가운데: 뉴스 영역 (예시) */
-        .center-col{
-            background:#fff;
-            border-radius:6px;
-            padding:16px 18px 18px;
-        }
-        .news-date-title{
-            font-size:18px;font-weight:700;margin-bottom:10px;
-        }
-        .news-item{
-            padding:8px 0;
-            border-bottom:1px solid #f0f0f0;
-            font-size:13px;
-        }
-        .news-meta{
-            font-size:11px;color:#777;margin-bottom:3px;
-        }
-        .news-title{
-            font-weight:700;margin-bottom:3px;
-        }
-        .news-snippet{
-            font-size:12px;color:#555;
-        }
-
-        /* 오른쪽: 안내 */
-        .right-col{
-            background:#fff;
-            border-radius:6px;
-            padding:10px 12px;
-            font-size:12px;
+        .map-zoom button{
+            width:30px;height:30px;border-radius:4px;
+            border:1px solid #d0d0d0;background:#fff;font-size:16px;cursor:pointer;
         }
     </style>
 </head>
@@ -135,64 +104,44 @@
         <div class="header-title">MILLI ROAD</div>
     </div>
     <nav class="header-nav">
-        <a href="${pageContext.request.contextPath}/main" class="active">뉴스</a>
+        <a href="#">뉴스</a>
         <span>|</span>
         <a href="${pageContext.request.contextPath}/social/board">소셜</a>
         <span>|</span>
         <a href="${pageContext.request.contextPath}/health">건강</a>
         <span>|</span>
-        <a href="${pageContext.request.contextPath}/map">지도</a>
+        <a href="${pageContext.request.contextPath}/main" class="active">지도</a>
     </nav>
     <div class="header-right">
-        로그인 전
-        <button class="btn-login"
-                onclick="location.href='${pageContext.request.contextPath}/login/login.jsp'">
-            로그인
-        </button>
+        니인내조 님
+        <button class="btn-logout">로그아웃</button>
     </div>
 </header>
 
-<div class="top-search-wrap">
-    <div class="top-search-inner">
-        <input type="text" class="top-search-input" placeholder="검색어를 입력해 주세요">
-        <span class="top-search-icon"></span>
-    </div>
-</div>
-
 <div class="page-wrap">
-
-    <!-- 왼쪽: 로그인 안내 -->
-    <div class="left-card">
-        <div class="login-avatar"></div>
-        <div>로그인 후 사용 가능합니다.</div>
-        <button class="btn-login-large"
-                onclick="location.href='${pageContext.request.contextPath}/login/login.jsp'">
-            로그인
-        </button>
-        <div class="login-links">아이디/비밀번호 찾기 | 회원가입</div>
-    </div>
-
-    <!-- 가운데: 뉴스 예시 -->
-    <div class="center-col">
-        <div class="news-date-title">9월 28일</div>
-
-        <div class="news-item">
-            <div class="news-meta">SBS · 34분 전</div>
-            <div class="news-title">
-                “우리 애 어떡하죠”…군대인가, 유치원인가? 간부들 한숨
+    <aside class="sidebar">
+        <div class="page-title">대중교통 위치/시간표 - 첫 화면</div>
+        <div class="search-box">
+            <div class="search-bar">
+                <input class="search-input" type="text" placeholder="장소, 주소, 정류장 검색">
+                <button class="search-btn" type="button">
+                    <i class="fas fa-search"></i>
+                </button>
             </div>
-            <div class="news-snippet">
-                실제로 요즘 초급 간부들은 부대 관련 업무를 하면서 부모들의 민원에
-                시달리는 것으로 전해졌습니다...
-            </div>
+            <p class="search-desc">장소, 주소, 정류장을 검색해 주세요.</p>
         </div>
-    </div>
+    </aside>
 
-    <!-- 오른쪽: 안내 -->
-    <div class="right-col">
-        로그인 후 맞춤 뉴스 / 날씨 정보가 이 영역에 표시됩니다.
-    </div>
-
+    <section class="map-area">
+        <div id="map"></div>
+        <button class="map-pin-btn" type="button">
+            <i class="fas fa-map-marker-alt"></i>
+        </button>
+        <div class="map-zoom">
+            <button type="button">+</button>
+            <button type="button">-</button>
+        </div>
+    </section>
 </div>
 
 </body>

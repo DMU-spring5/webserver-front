@@ -12,12 +12,9 @@ repositories {
 
 dependencies {
 
-    // JSP에서 JSTL 태그(c:forEach, c:if 등) 사용
+    // JSTL (c:forEach, c:if 등)
     implementation 'javax.servlet:jstl:1.2'
-
-    // 서블릿 API는 톰캣에 이미 있으므로, 컴파일할 때만 필요
-    compileOnly 'javax.servlet:javax.servlet-api:4.0.1'
-
+    implementation 'javax.servlet:javax.servlet-api:4.0.1'  //Servlet API 추가
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
