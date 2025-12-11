@@ -1,22 +1,25 @@
 package com.webSever;
 
+import java.io.IOException;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
-@WebServlet("/main")   // /main 으로 들어오면 main.jsp 로 forward
 public class MainServlet extends HttpServlet {
+    private static final long serialVersionUID = 1L;
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        // 기존 mainPage 기능
+        request.getRequestDispatcher("/WEB-INF/views/mainPage.jsp").forward(request, response);
+    }
 
-        // main.jsp 는 /WEB-INF/views 아래에 있으니까 forward 로만 접근
-        req.getRequestDispatcher("/WEB-INF/views/main.jsp")
-                .forward(req, resp);
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        // 기존 다른 기능 처리 (필요 시)
+        doGet(request, response); // 간단히 GET으로 포워딩
     }
 }
-

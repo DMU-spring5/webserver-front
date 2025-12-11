@@ -5,9 +5,10 @@
                              http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
 
-    <!-- ===== 건강 영역 ===== -->
+    <!-- =======================
+         건강 영역 (health)
+         ======================= -->
 
-    <!-- 건강 첫 화면 -->
     <servlet>
         <servlet-name>healthPage</servlet-name>
         <jsp-file>/WEB-INF/views/health.jsp</jsp-file>
@@ -17,7 +18,6 @@
         <url-pattern>/health</url-pattern>
     </servlet-mapping>
 
-    <!-- 운동 칼로리 검색 메인 -->
     <servlet>
         <servlet-name>healthMainPage</servlet-name>
         <jsp-file>/WEB-INF/views/health_main.jsp</jsp-file>
@@ -27,7 +27,6 @@
         <url-pattern>/health_main</url-pattern>
     </servlet-mapping>
 
-    <!-- 어깨 & 팔 -->
     <servlet>
         <servlet-name>healthShoulderPage</servlet-name>
         <jsp-file>/WEB-INF/views/health_shoulder.jsp</jsp-file>
@@ -37,7 +36,6 @@
         <url-pattern>/health_shoulder</url-pattern>
     </servlet-mapping>
 
-    <!-- 가슴 -->
     <servlet>
         <servlet-name>healthChestPage</servlet-name>
         <jsp-file>/WEB-INF/views/health_chest.jsp</jsp-file>
@@ -47,7 +45,6 @@
         <url-pattern>/health_chest</url-pattern>
     </servlet-mapping>
 
-    <!-- 등 -->
     <servlet>
         <servlet-name>healthBackPage</servlet-name>
         <jsp-file>/WEB-INF/views/health_back.jsp</jsp-file>
@@ -57,7 +54,6 @@
         <url-pattern>/health_back</url-pattern>
     </servlet-mapping>
 
-    <!-- 하체 -->
     <servlet>
         <servlet-name>healthLegPage</servlet-name>
         <jsp-file>/WEB-INF/views/health_leg.jsp</jsp-file>
@@ -67,7 +63,6 @@
         <url-pattern>/health_leg</url-pattern>
     </servlet-mapping>
 
-    <!-- 유산소 -->
     <servlet>
         <servlet-name>healthCtPage</servlet-name>
         <jsp-file>/WEB-INF/views/health_ct.jsp</jsp-file>
@@ -77,7 +72,6 @@
         <url-pattern>/health_ct</url-pattern>
     </servlet-mapping>
 
-    <!-- 스포츠 -->
     <servlet>
         <servlet-name>healthSportsPage</servlet-name>
         <jsp-file>/WEB-INF/views/health_sports.jsp</jsp-file>
@@ -87,7 +81,6 @@
         <url-pattern>/health_sports</url-pattern>
     </servlet-mapping>
 
-    <!-- 운동 상세 -->
     <servlet>
         <servlet-name>healthExerciseDetailPage</servlet-name>
         <jsp-file>/WEB-INF/views/health_exercise_detail.jsp</jsp-file>
@@ -97,7 +90,6 @@
         <url-pattern>/health_exercise_detail</url-pattern>
     </servlet-mapping>
 
-    <!-- 칼로리 계산기 1/2/3 -->
     <servlet>
         <servlet-name>healthCalculatorPage</servlet-name>
         <jsp-file>/WEB-INF/views/health_calculator.jsp</jsp-file>
@@ -108,26 +100,27 @@
     </servlet-mapping>
 
     <servlet>
-        <servlet-name>healthCalculatorStep2</servlet-name>
+        <servlet-name>healthCalculator2Page</servlet-name>
         <jsp-file>/WEB-INF/views/health_calculator2.jsp</jsp-file>
     </servlet>
     <servlet-mapping>
-        <servlet-name>healthCalculatorStep2</servlet-name>
+        <servlet-name>healthCalculator2Page</servlet-name>
         <url-pattern>/health_calculator2</url-pattern>
     </servlet-mapping>
 
     <servlet>
-        <servlet-name>healthCalculatorStep3</servlet-name>
+        <servlet-name>healthCalculator3Page</servlet-name>
         <jsp-file>/WEB-INF/views/health_calculator3.jsp</jsp-file>
     </servlet>
     <servlet-mapping>
-        <servlet-name>healthCalculatorStep3</servlet-name>
+        <servlet-name>healthCalculator3Page</servlet-name>
         <url-pattern>/health_calculator3</url-pattern>
     </servlet-mapping>
 
-    <!-- ===== 소셜 영역 ===== -->
+    <!-- =======================
+         소셜 영역 (social)
+         ======================= -->
 
-    <!-- 소셜 커뮤니티 목록 -->
     <servlet>
         <servlet-name>socialBoardPage</servlet-name>
         <jsp-file>/WEB-INF/views/social_board.jsp</jsp-file>
@@ -137,7 +130,6 @@
         <url-pattern>/social/board</url-pattern>
     </servlet-mapping>
 
-    <!-- 소셜 상세 -->
     <servlet>
         <servlet-name>socialDetailPage</servlet-name>
         <jsp-file>/WEB-INF/views/social_detail.jsp</jsp-file>
@@ -147,7 +139,6 @@
         <url-pattern>/social/detail</url-pattern>
     </servlet-mapping>
 
-    <!-- 소셜 글쓰기 -->
     <servlet>
         <servlet-name>socialWritePage</servlet-name>
         <jsp-file>/WEB-INF/views/social_write.jsp</jsp-file>
@@ -157,7 +148,6 @@
         <url-pattern>/social/write</url-pattern>
     </servlet-mapping>
 
-    <!-- 부대 별 평가 첫 화면 -->
     <servlet>
         <servlet-name>socialUnitPage</servlet-name>
         <jsp-file>/WEB-INF/views/social_unit.jsp</jsp-file>
@@ -167,7 +157,6 @@
         <url-pattern>/social_unit</url-pattern>
     </servlet-mapping>
 
-    <!-- 부대 별 평가 리스트 -->
     <servlet>
         <servlet-name>socialUnitListPage</servlet-name>
         <jsp-file>/WEB-INF/views/social_unit_list.jsp</jsp-file>
@@ -177,10 +166,91 @@
         <url-pattern>/social_unit_list</url-pattern>
     </servlet-mapping>
 
-    <!-- ===== 지도 메인 (MainServlet @WebServlet("/main")) ===== -->
-    <!-- /main 은 MainServlet 이 처리하므로 web.xml 매핑 X -->
+    <servlet>
+        <servlet-name>socialUnitWritePage</servlet-name>
+        <jsp-file>/WEB-INF/views/social_unit_write.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>socialUnitWritePage</servlet-name>
+        <url-pattern>/social_unit_write</url-pattern>
+    </servlet-mapping>
 
+    <!-- =======================
+         지도 영역 (map)
+         ======================= -->
+
+    <servlet>
+        <servlet-name>mapPage</servlet-name>
+        <jsp-file>/WEB-INF/views/map.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>mapPage</servlet-name>
+        <url-pattern>/map</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>mapWalkPage</servlet-name>
+        <jsp-file>/WEB-INF/views/map_walk.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>mapWalkPage</servlet-name>
+        <url-pattern>/map_walk</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>mapBusPage</servlet-name>
+        <jsp-file>/WEB-INF/views/map_bus.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>mapBusPage</servlet-name>
+        <url-pattern>/map_bus</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>mapSubwayPage</servlet-name>
+        <jsp-file>/WEB-INF/views/map_subway.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>mapSubwayPage</servlet-name>
+        <url-pattern>/map_subway</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>mapPinPage</servlet-name>
+        <jsp-file>/WEB-INF/views/map_pin.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>mapPinPage</servlet-name>
+        <url-pattern>/map_pin</url-pattern>
+    </servlet-mapping>
+
+    <!-- =======================
+         메인 영역
+         ======================= -->
+
+    <servlet>
+        <servlet-name>mainPage</servlet-name>
+        <jsp-file>/WEB-INF/views/main.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>mainPage</servlet-name>
+        <url-pattern>/main</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>mainPageLogin</servlet-name>
+        <jsp-file>/main/mainpage_login.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>mainPageLogin</servlet-name>
+        <url-pattern>/mainpage_login</url-pattern>
+    </servlet-mapping>
+
+    <!-- =======================
+         루트 접속 welcome-file
+         ======================= -->
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
+
 </web-app>

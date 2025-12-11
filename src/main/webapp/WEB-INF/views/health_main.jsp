@@ -24,7 +24,17 @@
             justify-content:space-between;
         }
         .header-left{display:flex;align-items:center;gap:14px;}
-        .header-logo-box{width:34px;height:34px;border-radius:4px;background:#fff;}
+
+        /* 로고 이미지 스타일 */
+        .header-logo-img{
+            width:34px;
+            height:34px;
+            border-radius:4px;
+            object-fit:cover;
+            /* 이미지 자체가 투명하지 않다면 background:#fff;는 제거하거나 유지할 수 있습니다. */
+            /* background:#fff; */
+        }
+
         .header-title{font-size:22px;font-weight:700;letter-spacing:.10em;}
         .header-nav{display:flex;align-items:center;gap:26px;font-size:15px;}
         .header-nav a{color:#fff;text-decoration:none;}
@@ -149,9 +159,13 @@
 
 <header>
     <div class="header-left">
-        <div class="header-logo-box"></div>
+        <img class="header-logo-img"
+             src="${pageContext.request.contextPath}/img/WebServerLogo2.png"
+             alt="MILLI ROAD Logo">
+
         <div class="header-title">MILLI ROAD</div>
     </div>
+
     <nav class="header-nav">
         <a href="#">뉴스</a>
         <span>|</span>
@@ -161,6 +175,7 @@
         <span>|</span>
         <a href="${pageContext.request.contextPath}/main">지도</a>
     </nav>
+
     <div class="header-right">
         니인내조 님
         <button class="btn-logout">로그아웃</button>
@@ -170,7 +185,6 @@
 <div class="page-wrap">
     <div class="inner-box">
 
-        <!-- 탭: 운동 칼로리 검색이 진하게 -->
         <div class="top-tabs">
             <a class="tab-link"
                href="${pageContext.request.contextPath}/health_main">
@@ -183,7 +197,6 @@
             </a>
         </div>
 
-        <!-- 상단 검색 -->
         <div class="title-row">
             <div class="search-bar">
                 <input id="healthSearchInput" class="search-input"
@@ -195,7 +208,6 @@
             </div>
         </div>
 
-        <!-- 카테고리 선택 -->
         <div class="category-wrap">
             <div class="category-title">카테고리 선택</div>
 
@@ -247,6 +259,8 @@
                 input.focus();
                 return;
             }
+            // 검색어에 해당하는 경로를 찾을 때 대소문자나 띄어쓰기를 처리하지 않으므로,
+            // 정확히 맵에 있는 키와 일치해야 합니다. (예: '유산소'만 가능, '유산소 운동' 불가)
             const url = routeMap[q];
             if (!url) {
                 alert('어깨, 팔, 가슴, 등, 하체, 유산소, 스포츠 중 하나를 정확히 입력해 주세요.');
