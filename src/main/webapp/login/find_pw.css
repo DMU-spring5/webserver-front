@@ -37,6 +37,8 @@ body > img {
 /* 입력창 라벨 공통 여백 추가 */
 .nickname-box label,
 .pw-box label {
+    font-size: 14px;
+    font-weight: bold;
     margin-bottom: 6px;
     display: inline-block;
 }
@@ -105,8 +107,8 @@ button {
     cursor: pointer;
 }
 
-/* 기본 로그인 버튼 (비활성: 회색) */
-#findIdBtn {
+#findIdBtn,
+#findPwBtn {
     width: 100%;
     max-width: 600px;
     height: 60px;
@@ -120,8 +122,9 @@ button {
     margin-top: 20px;
 }
 
-/* 활성화된 버튼 (초록색) */
-#findIdBtn.active {
+/* 활성화된 버튼 */
+#findIdBtn.active,
+#findPwBtn.active {
     background-color: #78866B;
     cursor: pointer;
 }

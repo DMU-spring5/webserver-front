@@ -35,9 +35,11 @@
 
         .header-left{display:flex;align-items:center;gap:14px;}
         .header-logo-box{
-            width:34px;height:34px;
+            width:34px;
+            height:34px;
             border-radius:4px;
-            background:#fff;
+            background:url('${pageContext.request.contextPath}/img/KakaoTalk_20251204_101657760.png')
+            center / contain no-repeat;
         }
         .header-title{
             font-size:22px;
@@ -246,6 +248,7 @@
                 loading="lazy"
                 referrerpolicy="no-referrer-when-downgrade">
         </iframe>
+        <div id="map"></div>
 
         <button class="map-pin-btn" type="button">
             <i class="fas fa-map-marker-alt"></i>

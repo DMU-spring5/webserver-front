@@ -1,62 +1,93 @@
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ page import="java.sql.*" %>
-<%@ page import="java.net.URLEncoder" %>
+<%@ page contentType="text/html; charset=UTF-8" %>
+<%@ page import="java.io.*, java.net.*, javax.net.ssl.HttpsURLConnection" %>
 
 <%
     request.setCharacterEncoding("UTF-8");
 
-    //로그인에서 넘어온 값
-    String id = request.getParameter("userid");
-    String pw = request.getParameter("userpw");
-    String autoLogin = request.getParameter("autoLogin");  // 체크 시 "Y"
+    // 로그인 폼에서 넘어온 값
+    String userId = request.getParameter("userid");
+    String userPw = request.getParameter("userpw");
 
-    //JDBC 준비
-    String jdbcUrl = "jdbc:mysql://localhost:3306/yourDB?characterEncoding=UTF-8&serverTimezone=UTC"; //DB 이름
-    String dbUser  = "yourUser";  //DB 계정
-    String dbPass  = "yourPass";  //DB 비밀번호
+    if (userId == null) userId = "";
+    if (userPw == null) userPw = "";
 
-    boolean loginSuccess = false;
+    String apiUrl = "https://webserver-backend.onrender.com/api/v1/auth/login";
 
     try {
-        Class.forName("com.mysql.cj.jdbc.Driver");
+        String jsonInput =
+                "{"
+                        + "\"userId\":\"" + userId + "\","
+                        + "\"password\":\"" + userPw + "\""
+                        + "}";
 
-        try (Connection conn = DriverManager.getConnection(jdbcUrl, dbUser, dbPass);
-             PreparedStatement pstmt = conn.prepareStatement(
-                     "SELECT id FROM users WHERE id = ? AND password = ?")) {  //테이블/컬럼명 맞게 수정
-            pstmt.setString(1, id);
-            pstmt.setString(2, pw);
+        System.out.println("[login_ok] request JSON = " + jsonInput);
 
-            try (ResultSet rs = pstmt.executeQuery()) {
-                if (rs.next()) {
-                    loginSuccess = true;
-                }
+        URL url = new URL(apiUrl);
+        HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
+
+        conn.setRequestMethod("POST");
+        conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+        conn.setDoOutput(true);
+        conn.setConnectTimeout(5000);
+        conn.setReadTimeout(5000);
+
+        // JSON 전송
+        try (OutputStream os = conn.getOutputStream()) {
+            os.write(jsonInput.getBytes("UTF-8"));
+        }
+
+        int responseCode = conn.getResponseCode();
+        StringBuilder sb = new StringBuilder();
+
+        InputStream is = (conn.getErrorStream() != null)
+                ? conn.getErrorStream()
+                : conn.getInputStream();
+
+        if (is != null) {
+            try (BufferedReader br = new BufferedReader(
+                    new InputStreamReader(is, "UTF-8")
+            )) {
+                String line;
+                while ((line = br.readLine()) != null) sb.append(line);
             }
         }
+        String body = sb.toString();
+
+        System.out.println("[login_ok] responseCode = " + responseCode);
+        System.out.println("[login_ok] body         = " + body);
+
+        if (responseCode == 200) {
+            String accessToken = null;
+            String key = "\"accessToken\"";
+            int idx = body.indexOf(key);
+            if (idx != -1) {
+                int start = body.indexOf("\"", idx + key.length());
+                if (start != -1) {
+                    start++;
+                    int end = body.indexOf("\"", start);
+                    if (end != -1) {
+                        accessToken = body.substring(start, end);
+                    }
+                }
+            }
+            System.out.println("[login_ok] parsed accessToken = " + accessToken);
+
+            // 세션 저장
+            session.setAttribute("userId", userId);
+            if (accessToken != null && !accessToken.trim().isEmpty()) {
+                session.setAttribute("accessToken", accessToken);
+            }
+
+            // 로그인 성공 → 메인 페이지로 이동
+            response.sendRedirect("../main/mainpage.jsp");
+
+        } else {
+            // 로그인 실패
+            response.sendRedirect("login.jsp?idError=아이디 또는 비밀번호가 올바르지 않습니다.");
+        }
+
     } catch (Exception e) {
         e.printStackTrace();
+        response.sendRedirect("login.jsp?idError=서버 오류가 발생했습니다.");
     }
 %>
-
-<%
-    if (loginSuccess) {  //로그인 성공 -> 세션 저장
-    session.setAttribute("userid", id);
-
-    // 자동 로그인 체크 -> 쿠키 설정
-    if ("Y".equals(autoLogin)) {
-        javax.servlet.http.Cookie cookie =
-                new javax.servlet.http.Cookie("userid", URLEncoder.encode(id, "UTF-8"));
-        cookie.setMaxAge(60 * 60 * 24 * 7); // 7일
-        cookie.setPath("/");
-        response.addCookie(cookie);
-    }
-%>
-<script>
-    alert('로그인 성공');
-    location.href = 'index.jsp';
-</script>
-<% } else { %>
-<script>
-    alert('아이디 또는 비밀번호가 틀렸습니다.');
-    history.back();
-</script>
-<% } %>
