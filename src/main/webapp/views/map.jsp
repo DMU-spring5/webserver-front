@@ -32,6 +32,7 @@
             justify-content:space-between;
             flex-shrink:0;
         }
+
         .header-left{display:flex;align-items:center;gap:14px;}
         .header-logo-box{
             width:34px;
@@ -45,6 +46,7 @@
             font-weight:700;
             letter-spacing:.10em;
         }
+
         .header-nav{
             display:flex;
             align-items:center;
@@ -60,12 +62,14 @@
             font-weight:700;
             text-decoration:underline;
         }
+
         .header-right{
             display:flex;
             align-items:center;
             gap:16px;
             font-size:14px;
         }
+
         .btn-logout{
             padding:6px 16px;
             border-radius:4px;
@@ -76,7 +80,7 @@
             cursor:pointer;
         }
 
-        /* ===== 본문 : 왼쪽 패널 + 오른쪽 지도 ===== */
+        /* ===== 본문 ===== */
         .page-wrap{
             flex:1;
             display:flex;
@@ -90,15 +94,15 @@
             background:#f5f5f5;
             padding:40px 32px;
         }
+
         .page-title{
             font-size:20px;
             font-weight:700;
             margin-bottom:18px;
         }
 
-        .search-box{
-            margin-top:4px;
-        }
+        .search-box{ margin-top:4px; }
+
         .search-bar{
             width:100%;
             height:44px;
@@ -109,6 +113,7 @@
             align-items:center;
             padding:0 14px;
         }
+
         .search-input{
             flex:1;
             border:none;
@@ -117,30 +122,36 @@
             font-size:13px;
             color:#555;
         }
+
         .search-btn{
             width:30px;height:30px;
             border:none;background:transparent;
             cursor:pointer;
         }
+
         .search-btn i{
             font-size:14px;
             color:#555;
         }
+
         .search-desc{
             margin-top:10px;
             font-size:13px;
             color:#777;
         }
 
-        /* 오른쪽 지도 영역 */
+        /* ===== 오른쪽 지도 영역 ===== */
         .map-area{
             flex:1;
             position:relative;
+            padding:30px 30px;
             background:#f3f3f3;
         }
-        #map{
+
+        iframe#map {
             width:100%;
             height:100%;
+            border:0;
         }
 
         .map-pin-btn{
@@ -157,7 +168,9 @@
             display:flex;
             align-items:center;
             justify-content:center;
+            z-index:20;
         }
+
         .map-pin-btn i{
             color:#ff4b6a;
             font-size:18px;
@@ -170,7 +183,9 @@
             display:flex;
             flex-direction:column;
             gap:4px;
+            z-index:20;
         }
+
         .map-zoom button{
             width:30px;
             height:30px;
@@ -180,7 +195,9 @@
             font-size:16px;
             cursor:pointer;
         }
+
     </style>
+
 </head>
 <body>
 
@@ -214,18 +231,23 @@
 
         <div class="search-box">
             <div class="search-bar">
-                <input class="search-input" type="text"
-                       placeholder="장소, 주소, 정류장 검색">
-                <button class="search-btn" type="button">
-                    <i class="fas fa-search"></i>
-                </button>
+                <input class="search-input" type="text" placeholder="장소, 주소, 정류장 검색">
+                <button class="search-btn" type="button"><i class="fas fa-search"></i></button>
             </div>
             <p class="search-desc">장소, 주소, 정류장을 검색해 주세요.</p>
         </div>
     </aside>
 
-    <!-- 오른쪽: 지도 영역 -->
+    <!-- 오른쪽: 지도 -->
     <section class="map-area">
+
+        <!-- ⭐ 여기가 전체 지도가 표시되는 부분 -->
+        <iframe
+                id="map"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3165.3127207503935!2d126.86509597572132!3d37.50054187205584!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x357c9de1fee16d79%3A0x1ab4872c13dbfeaf!2z64-Z7JaR66-4656Y64yA7ZWZ6rWQ!5e0!3m2!1sko!2skr!4v1765389529436!5m2!1sko!2skr"
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
         <div id="map"></div>
 
         <button class="map-pin-btn" type="button">
@@ -236,6 +258,7 @@
             <button type="button">+</button>
             <button type="button">-</button>
         </div>
+
     </section>
 
 </div>
