@@ -19,7 +19,7 @@
         <div class="header-center">
             <!-- 메뉴 -->
             <nav class="nav">
-                <a href="index.jsp" class="active">뉴스</a>
+                <a href="index.jsp">뉴스</a>
                 <span class="divider">|</span>
                 <a href="#">소셜</a>
                 <span class="divider">|</span>
