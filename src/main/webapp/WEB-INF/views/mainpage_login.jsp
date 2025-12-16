@@ -1,242 +1,245 @@
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>MILLI ROAD - 메인(로그인 후)</title>
-
-    <style>
-        * { box-sizing:border-box; margin:0; padding:0; }
-        body {
-            font-family:"Noto Sans KR",-apple-system,BlinkMacSystemFont,
-            "Segoe UI",system-ui,sans-serif;
-            background:#f5f5f5;
-            color:#333;
-        }
-
-        header{
-            height:64px;
-            background:#78866B;
-            color:#fff;
-            padding:0 40px;
-            display:flex;
-            align-items:center;
-            justify-content:space-between;
-        }
-        .header-left{display:flex;align-items:center;gap:14px;}
-        .header-logo-box{
-            width:80px;height:34px;
-            background:url('${pageContext.request.contextPath}/img/WebServerLogo2.png')
-            left center / contain no-repeat;
-        }
-        .header-title{font-size:0;}
-        .header-nav{
-            display:flex;align-items:center;gap:26px;font-size:15px;
-        }
-        .header-nav a{color:#fff;text-decoration:none;}
-        .header-nav a:hover{text-decoration:underline;}
-        .header-nav a.active{font-weight:700;text-decoration:underline;}
-        .header-right{
-            display:flex;align-items:center;gap:16px;font-size:14px;
-        }
-        .btn-logout{
-            padding:6px 16px;border-radius:4px;border:none;
-            background:#fff;color:#78866B;font-weight:600;cursor:pointer;
-        }
-
-        .top-search-wrap{
-            max-width:1200px;
-            margin:16px auto 0;
-            padding:0 40px;
-        }
-        .top-search-inner{
-            width:100%;height:40px;border-radius:4px;background:#fff;
-            border:1px solid #d0d0c8;display:flex;align-items:center;padding:0 12px;
-        }
-        .top-search-input{
-            flex:1;border:none;outline:none;font-size:13px;color:#555;
-        }
-        .top-search-icon{
-            width:18px;height:18px;
-            background:url('${pageContext.request.contextPath}/img/search.png')
-            center / 14px no-repeat;
-        }
-
-        .page-wrap{
-            max-width:1200px;
-            margin:12px auto 60px;
-            padding:0 40px;
-            display:grid;
-            grid-template-columns:260px minmax(0,1fr) 260px;
-            gap:20px;
-        }
-
-        /* 왼쪽: 프로필 */
-        .profile-card{
-            background:#fff;
-            border-radius:6px;
-            padding:14px 12px 14px;
-            border:1px solid #ddd;
-            font-size:12px;
-        }
-        .profile-top{margin-bottom:8px;}
-        .profile-top div{line-height:1.4;}
-        .profile-top strong{font-weight:700;}
-
-        .bar-wrap{margin-top:4px;}
-        .bar-label{margin-bottom:2px;font-size:11px;}
-        .bar-bg{
-            width:100%;height:6px;background:#eee;
-            border-radius:3px;overflow:hidden;
-        }
-        .bar-fill{
-            height:100%;background:#c7a674;
-        }
-        .profile-dday{
-            margin-top:10px;
-            font-size:12px;
-        }
-
-        /* 가운데: 뉴스 예시 */
-        .center-col{
-            background:#fff;
-            border-radius:6px;
-            padding:16px 18px 18px;
-        }
-        .news-date-title{font-size:18px;font-weight:700;margin-bottom:10px;}
-        .news-item{padding:8px 0;border-bottom:1px solid #f0f0f0;font-size:13px;}
-        .news-meta{font-size:11px;color:#777;margin-bottom:3px;}
-        .news-title{font-weight:700;margin-bottom:3px;}
-        .news-snippet{font-size:12px;color:#555;}
-
-        /* 오른쪽: 기타 카드 */
-        .right-col{
-            display:flex;
-            flex-direction:column;
-            gap:16px;
-        }
-        .card{
-            background:#fff;
-            border-radius:6px;
-            padding:10px 12px;
-            font-size:12px;
-        }
-        .card-title{
-            font-size:13px;
-            font-weight:700;
-            margin-bottom:6px;
-        }
-    </style>
+    <title>MyPage</title>
+    <link rel="stylesheet" type="text/css" href="mypage.css">
 </head>
 <body>
+<!-- 상단 헤더 -->
+<header class="header">
+    <div class="header-inner">
+        <!-- 로고 -->
+        <div class="logo">
+            <img src="../img/WebServerLogo2.png" alt="MILLI ROAD 로고">
+        </div>
 
-<c:set var="info" value="${mainInfo}" />
-
-<header>
-    <div class="header-left">
-        <div class="header-logo-box"></div>
-        <div class="header-title">MILLI ROAD</div>
-    </div>
-    <nav class="header-nav">
-        <a href="${pageContext.request.contextPath}/mainpage_login" class="active">뉴스</a>
-        <span>|</span>
-        <a href="${pageContext.request.contextPath}/social/board">소셜</a>
-        <span>|</span>
-        <a href="${pageContext.request.contextPath}/health">건강</a>
-        <span>|</span>
-        <a href="${pageContext.request.contextPath}/map">지도</a>
-    </nav>
-    <div class="header-right">
-        <c:choose>
-            <c:when test="${info ne null}">
-                ${info.nickname} 님
-            </c:when>
-            <c:otherwise>
-                사용자 님
-            </c:otherwise>
-        </c:choose>
-        <button class="btn-logout"
-                onclick="location.href='${pageContext.request.contextPath}/login/logout.jsp'">
-            로그아웃
-        </button>
+        <!-- 검색 + 메뉴 영역 -->
+        <div class="header-center">
+            <!-- 메뉴 -->
+            <nav class="nav">
+                <a href="index.jsp" class="active">뉴스</a>
+                <a href="index.jsp">뉴스</a>
+                <span class="divider">|</span>
+                <a href="#">소셜</a>
+                <span class="divider">|</span>
+                <a href="health/health.jsp">건강</a>
+                <span class="divider">|</span>
+                <a href="#">지도</a>
+            </nav>
+        </div>
     </div>
 </header>
 
-<div class="top-search-wrap">
-    <div class="top-search-inner">
-        <input type="text" class="top-search-input" placeholder="검색어를 입력해 주세요">
-        <span class="top-search-icon"></span>
+<!-- 메인 영역 -->
+<main class="mypage-wrap">
+
+    <!-- 상단 구분선 -->
+    <div class="top-line"></div>
+
+    <!-- 프로필 카드 -->
+    <section class="profile-card">
+        <!-- 프로필 영역 -->
+        <div class="profile-img">
+            <img src="../img/profile.png" id="previewImg" class="profile" alt="Profile Image">
+        </div>
+
+        <div class="profile-text">
+            <p class="profile-name" id="profileName"><strong>...</strong>&nbsp;&nbsp;님</p>
+            <p id="division">사단 : ...</p>
+            <p id="unit">부대명 : ...</p>
+            <p id="rank">계급 : ...</p>
+        </div>
+
+        <!-- 오른쪽: D-day + 진행바 -->
+        <div class="profile-right">
+            <div class="d-day">D - 433</div>
+
+            <div class="progress-row">
+                <span class="progress-label">상병까지 34.3%</span>
+                <div class="progress-bar">
+                    <div class="progress-fill fill-green" style="width:34.3%;"></div>
+                </div>
+            </div>
+            <br />
+            <div class="progress-row">
+                <span class="progress-label">전역까지 89.1%</span>
+                <div class="progress-bar">
+                    <div class="progress-fill fill-gray" style="width:89.1%;"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 중간 구분선 -->
+    <div class="middle-line"></div>
+
+    <!-- 마이페이지 메뉴 -->
+    <section class="mypage-menu">
+        <div class="menu-column">
+            <a href="myinfo.jsp" class="menu-item">
+                <span>내 정보</span>
+                <span class="arrow">&gt;</span>
+            </a>
+            <a href="change_pw.jsp" class="menu-item">
+                <span>비밀번호 변경</span>
+                <span class="arrow">&gt;</span>
+            </a>
+        </div>
+
+        <div class="menu-column">
+            <a href="#" class="menu-item">
+                <span>게시판 관리</span>
+                <span class="arrow">&gt;</span>
+            </a>
+            <a class="menu-item" id="openWithdrawModal" style="cursor:pointer;">
+                <span>회원탈퇴</span>
+            </a>
+        </div>
+    </section>
+</main>
+
+<script>
+    // 프로필 이미지 미리보기 함수
+    function previewImage() {
+        const fileInput = document.getElementById('profileInput');
+        if (!fileInput) return;
+
+        const file = fileInput.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onloadend = function () {
+            document.getElementById('previewImg').src = reader.result;
+        };
+        reader.readAsDataURL(file);
+    }
+</script>
+
+<script>
+    const apiUrl = 'https://example.com/api/user'; // API 주소
+
+    // fetch()를 사용하여 API에서 데이터 가져오기
+    fetch(apiUrl)
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('profileName').innerHTML = `<strong>${data.name}</strong> 님`;
+            document.getElementById('division').textContent = `사단 : ${data.division}`;
+            document.getElementById('unit').textContent = `부대명 : ${data.unit}`;
+            document.getElementById('rank').textContent = `계급 : ${data.rank}`;
+        })
+        .catch(error => {
+            console.error('API 요청 중 오류 발생:', error);
+            // 오류가 발생하면 기본값을 표시
+            document.getElementById('profileName').innerHTML = `<strong>알 수 없음</strong> 님`;
+            document.getElementById('division').textContent = '사단 : 알 수 없음';
+            document.getElementById('unit').textContent = '부대명 : 알 수 없음';
+            document.getElementById('rank').textContent = '계급 : 알 수 없음';
+        });
+</script>
+
+<div id="withdrawModal" class="modal-overlay">
+    <div class="modal-box">
+        <h2 class="modal-title">Milli Road를 탈퇴하시겠습니까?</h2>
+
+        <p class="modal-desc">
+            탈퇴 후에는 계정을 복구할 수 없으며,<br>
+            더 이상 서비스를 이용할 수 없습니다.
+        </p>
+
+        <!-- 비밀번호 입력 + 눈 아이콘 -->
+        <div class="pw-wrap">
+            <input
+                    type="password"
+                    id="withdrawPw"
+                    class="modal-input"
+                    placeholder="비밀번호를 입력해 주세요."
+            >
+            <img src="<%=request.getContextPath()%>/img/eye.png" id="togglePw" class="pw-eye" alt="비밀번호 보기">
+        </div>
+        <!-- 오류 메시지 -->
+        <p id="withdrawError" class="modal-error"></p>
+
+        <div class="modal-buttons">
+            <button id="cancelWithdraw" class="btn-cancel" type="button">취소</button>
+            <button id="confirmWithdraw" class="btn-withdraw" type="button">탈퇴하기</button>
+        </div>
     </div>
 </div>
 
-<div class="page-wrap">
+<script>
+    const openWithdrawModal = document.getElementById("openWithdrawModal");
+    const withdrawModal = document.getElementById("withdrawModal");
+    const cancelWithdraw = document.getElementById("cancelWithdraw");
+    const confirmWithdraw = document.getElementById("confirmWithdraw");
+    const withdrawPw = document.getElementById("withdrawPw");
+    const withdrawError = document.getElementById("withdrawError");
+    const togglePw = document.getElementById("togglePw");
 
-    <!-- 왼쪽: 프로필 / 전역 정보 -->
-    <div class="profile-card">
-        <c:choose>
-            <c:when test="${info ne null}">
-                <div class="profile-top">
-                    <div>사단 : ${info.division}</div>
-                    <div>부대명 : ${info.unit}</div>
-                    <div>이름 : <strong>${info.nickname}</strong></div>
-                    <div>계급 : ${info.militaryProgress.nowRank}</div>
-                </div>
+    // 세션에 저장된 실제 비밀번호 (예시)
+    <%
+        String realPw = (String) session.getAttribute("password");
+        if (realPw == null) realPw = "";
+    %>
+    const realPassword = "<%= realPw %>";
 
-                <div class="bar-wrap">
-                    <div class="bar-label">
-                        전역까지 ${info.militaryProgress.dischargeProgress}%
-                    </div>
-                    <div class="bar-bg">
-                        <div class="bar-fill"
-                             style="width:${info.militaryProgress.dischargeProgress}%;"></div>
-                    </div>
-                </div>
+    // 모달 열기
+    openWithdrawModal.addEventListener("click", function(e) {
+        e.preventDefault();
+        withdrawModal.style.display = "flex";
+        withdrawPw.value = "";
+        withdrawError.textContent = "";
+        withdrawPw.type = "password";
+        togglePw.src = "../img/eye.png";
+    });
 
-                <div class="profile-dday">
-                    D - ${info.militaryProgress.daysToDischarge}
-                </div>
+    // 모달 닫기
+    cancelWithdraw.addEventListener("click", function() {
+        withdrawModal.style.display = "none";
+    });
 
-                <c:if test="${not empty enlistDateStr}">
-                    <div style="margin-top:4px;font-size:11px;">
-                        입대일 : ${enlistDateStr}
-                    </div>
-                </c:if>
-            </c:when>
-            <c:otherwise>
-                메인페이지 API 정보를 불러오지 못했습니다.
-            </c:otherwise>
-        </c:choose>
-    </div>
+    // 모달 바깥 클릭 시 닫기
+    withdrawModal.addEventListener("click", function(e) {
+        if (e.target === withdrawModal) {
+            withdrawModal.style.display = "none";
+        }
+    });
 
-    <!-- 가운데: 뉴스 예시 -->
-    <div class="center-col">
-        <div class="news-date-title">9월 28일</div>
-        <div class="news-item">
-            <div class="news-meta">SBS · 34분 전</div>
-            <div class="news-title">
-                “우리 애 어떡하죠”…군대인가, 유치원인가? 간부들 한숨
-            </div>
-            <div class="news-snippet">
-                실제로 요즘 초급 간부들은 부대 관련 업무를 하면서 부모들의 민원에
-                시달리는 것으로 전해졌습니다...
-            </div>
-        </div>
-    </div>
+    // ESC로 닫기
+    document.addEventListener("keydown", function(e) {
+        if (e.key === "Escape") {
+            withdrawModal.style.display = "none";
+        }
+    });
 
-    <!-- 오른쪽: 맞춤 뉴스 / 날씨 자리 -->
-    <div class="right-col">
-        <div class="card">
-            <div class="card-title">[ 맞춤 뉴스 ]</div>
-            <div>사용자 정보 기반 맞춤 뉴스 영역입니다.</div>
-        </div>
-        <div class="card">
-            <div class="card-title">[ 오늘 날씨 ]</div>
-            <div>날씨 API 연동 시 이 영역에 날씨 정보를 표시하면 됩니다.</div>
-        </div>
-    </div>
+    // 눈 아이콘 클릭 시 비밀번호 보기/숨기기
+    togglePw.addEventListener("click", function() {
+        if (withdrawPw.type === "password") {
+            withdrawPw.type = "text";
+            togglePw.src = "<%=request.getContextPath()%>/img/eyeoff.png";
+        } else {
+            withdrawPw.type = "password";
+            togglePw.src = "<%=request.getContextPath()%>/img/eye.png";
+        }
+    });
 
-</div>
+    // 탈퇴 버튼 클릭
+    confirmWithdraw.addEventListener("click", function() {
+        const inputPw = withdrawPw.value.trim();
 
+        if (inputPw === "") {
+            withdrawError.textContent = "비밀번호를 입력해 주세요.";
+            return;
+        }
+
+        if (inputPw !== realPassword) {
+            withdrawError.textContent = "비밀번호가 일치하지 않습니다.";
+            return;
+        }
+
+        alert("탈퇴가 완료되었습니다.");
+        window.location.href = "index.jsp";
+    });
+</script>
 </body>
-</html>
