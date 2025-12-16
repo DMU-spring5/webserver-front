@@ -5,10 +5,7 @@
                              http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
 
-    <!-- =======================
-         건강 영역 (health)
-         ======================= -->
-
+    <!-- ===== 건강 영역 ===== -->
     <servlet>
         <servlet-name>healthPage</servlet-name>
         <jsp-file>/WEB-INF/views/health.jsp</jsp-file>
@@ -27,6 +24,7 @@
         <url-pattern>/health_main</url-pattern>
     </servlet-mapping>
 
+    <!-- 각 부위별 건강 페이지 -->
     <servlet>
         <servlet-name>healthShoulderPage</servlet-name>
         <jsp-file>/WEB-INF/views/health_shoulder.jsp</jsp-file>
@@ -117,10 +115,7 @@
         <url-pattern>/health_calculator3</url-pattern>
     </servlet-mapping>
 
-    <!-- =======================
-         소셜 영역 (social)
-         ======================= -->
-
+    <!-- ===== 소셜 영역 ===== -->
     <servlet>
         <servlet-name>socialBoardPage</servlet-name>
         <jsp-file>/WEB-INF/views/social_board.jsp</jsp-file>
@@ -131,21 +126,21 @@
     </servlet-mapping>
 
     <servlet>
-        <servlet-name>socialDetailPage</servlet-name>
-        <jsp-file>/WEB-INF/views/social_detail.jsp</jsp-file>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>socialDetailPage</servlet-name>
-        <url-pattern>/social/detail</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
         <servlet-name>socialWritePage</servlet-name>
         <jsp-file>/WEB-INF/views/social_write.jsp</jsp-file>
     </servlet>
     <servlet-mapping>
         <servlet-name>socialWritePage</servlet-name>
         <url-pattern>/social/write</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>socialDetailPage</servlet-name>
+        <jsp-file>/WEB-INF/views/social_detail.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>socialDetailPage</servlet-name>
+        <url-pattern>/social/detail</url-pattern>
     </servlet-mapping>
 
     <servlet>
@@ -175,10 +170,7 @@
         <url-pattern>/social_unit_write</url-pattern>
     </servlet-mapping>
 
-    <!-- =======================
-         지도 영역 (map)
-         ======================= -->
-
+    <!-- ===== 지도 영역 ===== -->
     <servlet>
         <servlet-name>mapPage</servlet-name>
         <jsp-file>/WEB-INF/views/map.jsp</jsp-file>
@@ -224,10 +216,7 @@
         <url-pattern>/map_pin</url-pattern>
     </servlet-mapping>
 
-    <!-- =======================
-         메인 영역
-         ======================= -->
-
+    <!-- ===== 메인 ===== -->
     <servlet>
         <servlet-name>mainPage</servlet-name>
         <jsp-file>/WEB-INF/views/main.jsp</jsp-file>
@@ -239,16 +228,13 @@
 
     <servlet>
         <servlet-name>mainPageLogin</servlet-name>
-        <jsp-file>/main/mainpage_login.jsp</jsp-file>
+        <jsp-file>/WEB-INF/views/mainpage_login.jsp</jsp-file>
     </servlet>
     <servlet-mapping>
         <servlet-name>mainPageLogin</servlet-name>
         <url-pattern>/mainpage_login</url-pattern>
     </servlet-mapping>
 
-    <!-- =======================
-         루트 접속 welcome-file
-         ======================= -->
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
