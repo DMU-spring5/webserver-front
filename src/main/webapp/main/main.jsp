@@ -68,7 +68,7 @@
                 D - <%= session.getAttribute("dDay") != null ? session.getAttribute("dDay") : "-" %>
             </div>
             <!-- .jsp 붙이기 -->
-            <button class="logout-btn" onclick="location.href='${pageContext.request.contextPath}/login/login.jsp'">
+            <button class="logout-btn" onclick="location.href='../login/login.jsp'">
                 로그아웃
             </button>
         </div>

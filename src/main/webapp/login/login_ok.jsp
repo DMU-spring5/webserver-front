@@ -1,8 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" %>
 <%@ page import="java.io.*, java.net.*, javax.net.ssl.HttpsURLConnection" %>
+<%@ page contentType="text/html; charset=UTF-8" language="java" %>
+<%@ page import="java.io.*" %>
+<%@ page import="java.net.*" %>
 
 <%
     request.setCharacterEncoding("UTF-8");
+    String ctx = request.getContextPath();
 
     // 1. 현재 컨텍스트 경로 가져오기 (예: /MyProject)
     String ctx = request.getContextPath();
@@ -15,10 +19,21 @@
     if (userPw == null) userPw = "";
 
     String redirectUrl = null;
+    String userId = request.getParameter("userid");
+    String userPw = request.getParameter("userpw");
+    if (userId == null) userId = "";
+    if (userPw == null) userPw = "";
+
+    String redirectUrl = ctx + "/login/login.jsp?msg=" + URLEncoder.encode("로그인에 실패했습니다.", "UTF-8");
 
     // 3. 유효성 검사 (아이디/비번 비어있으면 돌려보냄)
     if (userId.trim().isEmpty() || userPw.trim().isEmpty()) {
         redirectUrl = ctx + "/login/login.jsp?idError=" + URLEncoder.encode("아이디를 입력해주세요.", "UTF-8");
+        response.sendRedirect(redirectUrl);
+        return;
+    }
+    if (userId.trim().isEmpty() || userPw.trim().isEmpty()) {
+        redirectUrl = ctx + "/login/login.jsp?msg=" + URLEncoder.encode("아이디/비밀번호를 입력해주세요.", "UTF-8");
         response.sendRedirect(redirectUrl);
         return;
     }
@@ -54,18 +69,60 @@
             conn.setDoOutput(true);
             conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
             conn.setRequestProperty("Accept", "application/json");
+    String baseUrl = "https://webserver-backend.onrender.com";
+    String apiUrl  = baseUrl + "/api/v1/auth/login";
+
+    String safeId = userId.replace("\\", "\\\\").replace("\"", "\\\"");
+    String safePw = userPw.replace("\\", "\\\\").replace("\"", "\\\"");
+
+    // 백엔드 스펙 불일치(400) 잡기 위해 여러 포맷 재시도
+    String[] bodies = new String[] {
+            "{"+ "\"userid\":\"" + safeId + "\"," + "\"userpw\":\"" + safePw + "\""+ "}",
+            "{"+ "\"userId\":\"" + safeId + "\"," + "\"userPw\":\"" + safePw + "\""+ "}",
+            "{"+ "\"userId\":\"" + safeId + "\"," + "\"password\":\"" + safePw + "\""+ "}"
+    };
+
+    int status = -1;
+    String json = "";
+    String accessToken = null;
+
+    for (int i = 0; i < bodies.length; i++) {
+        HttpURLConnection conn = null;
+        try {
+            URL url = new URL(apiUrl);
+            conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setConnectTimeout(10000);
+            conn.setReadTimeout(10000);
+            conn.setDoOutput(true);
+            conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+            conn.setRequestProperty("Accept", "application/json");
 
             // 전송
             try (OutputStream os = conn.getOutputStream()) {
                 os.write(bodies[i].getBytes("UTF-8"));
             }
+            try (OutputStream os = conn.getOutputStream()) {
+                os.write(bodies[i].getBytes("UTF-8"));
+            }
 
+            status = conn.getResponseCode();
+            InputStream is = (status >= 200 && status < 300) ? conn.getInputStream() : conn.getErrorStream();
             // 응답 코드 확인
             status = conn.getResponseCode();
             InputStream is = (status >= 200 && status < 300) ? conn.getInputStream() : conn.getErrorStream();
 
             // 응답 본문 읽기
             StringBuilder sb = new StringBuilder();
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(is, "UTF-8"))) {
+                String line;
+                while ((line = br.readLine()) != null) sb.append(line);
+            }
+            json = sb.toString();
+
+            System.out.println("=== [login_ok] TRY#" + (i+1) + " STATUS=" + status);
+            System.out.println("=== [login_ok] TRY#" + (i+1) + " BODY=" + bodies[i]);
+            System.out.println("=== [login_ok] TRY#" + (i+1) + " RESP=" + json);
             try (BufferedReader br = new BufferedReader(new InputStreamReader(is, "UTF-8"))) {
                 String line;
                 while ((line = br.readLine()) != null) sb.append(line);
@@ -97,10 +154,28 @@
                     }
                 }
 
+            if (status >= 200 && status < 300) {
+                // accessToken 파싱(단순 문자열 탐색)
+                int idx = json.indexOf("\"accessToken\"");
+                if (idx >= 0) {
+                    int colon = json.indexOf(":", idx);
+                    int q1 = json.indexOf("\"", colon + 1);
+                    int q2 = json.indexOf("\"", q1 + 1);
+                    if (q1 >= 0 && q2 > q1) accessToken = json.substring(q1 + 1, q2);
+                }
                 // 토큰을 찾았으면 반복문 종료
                 if (accessToken != null) break;
             }
 
+                if (accessToken == null) {
+                    idx = json.indexOf("\"token\"");
+                    if (idx >= 0) {
+                        int colon = json.indexOf(":", idx);
+                        int q1 = json.indexOf("\"", colon + 1);
+                        int q2 = json.indexOf("\"", q1 + 1);
+                        if (q1 >= 0 && q2 > q1) accessToken = json.substring(q1 + 1, q2);
+                    }
+                }
         } catch (Exception e) {
             System.out.println("=== [login_ok] EXCEPTION: " + e.getMessage());
             status = 500;
@@ -128,8 +203,26 @@
             // (컨트롤러에서 return "main"; 해주면 main.jsp가 열립니다)
             redirectUrl = ctx + "/main";
 
+                break; // 성공이면 루프 종료
+            }
+
+        } catch (Exception e) {
+            System.out.println("=== [login_ok] EXCEPTION: " + e.getMessage());
+            json = "";
+            status = 500;
+        } finally {
+            if (conn != null) conn.disconnect();
+        }
+    }
+
+    if (status >= 200 && status < 300) {
+        if (accessToken != null && !accessToken.trim().isEmpty()) {
+            session.setAttribute("accessToken", accessToken);
+            session.setMaxInactiveInterval(60 * 60);
+            redirectUrl = ctx + "/main/main.jsp";
         } else {
             // 성공은 했으나 토큰이 없는 경우
+            redirectUrl = ctx + "/login/login.jsp?msg=" + URLEncoder.encode("토큰을 받지 못했습니다.", "UTF-8");
             redirectUrl = ctx + "/login/login.jsp?msg=" + URLEncoder.encode("토큰을 받지 못했습니다.", "UTF-8");
         }
 
@@ -142,8 +235,13 @@
             failMsg = "서버 오류가 발생했습니다. (잠시 후 다시 시도해주세요)";
         }
         redirectUrl = ctx + "/login/login.jsp?idError=" + URLEncoder.encode(failMsg, "UTF-8");
+    } else {
+        // 400이면 스펙 불일치 가능성이 매우 큼. 일단 status는 그대로 보여줌
+        redirectUrl = ctx + "/login/login.jsp?msg=" + URLEncoder.encode("로그인 실패(" + status + ")", "UTF-8");
     }
 
     // 7. 페이지 이동
+    response.sendRedirect(redirectUrl);
+
     response.sendRedirect(redirectUrl);
 %>

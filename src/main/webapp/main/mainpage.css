@@ -161,6 +161,7 @@ body {
     height: 150px;
     overflow: hidden;
     background: #eee;
+    margin-bottom: 10px;
 }
 
 .profile-image img {

@@ -102,10 +102,7 @@
 
         <button id="btnGo" class="goto-route">길찾기 화면으로 이동</button>
 
-        <div class="help">
-            - 여기서 검색한 값은 저장했다가 도보/버스/지하철 화면에 넘김<br/>
-            - 지도는 임시로 OSM(키 없음) 사용 중
-        </div>
+
     </div>
 
     <div id="map">
