@@ -23,7 +23,7 @@
         <div class="header-center">
             <!-- 메뉴 -->
             <nav class="nav">
-                <a href="index.jsp">뉴스</a>
+                <a href="../main/mainpage.jsp">뉴스</a>
                 <span class="divider">|</span>
                 <a href="../views/social_board.jsp">소셜</a>
                 <span class="divider">|</span>
