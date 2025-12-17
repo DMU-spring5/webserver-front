@@ -54,6 +54,9 @@
 
                 <div class="profile-dday" id="dday">D -</div>
 
+                <button class="my-btn" onclick="location.href='../mypage/mypage.jsp'">
+                    마이페이지
+                </button>
                 <button class="logout-btn" onclick="location.href='../logout/logout.jsp'">
                     로그아웃
                 </button>
@@ -115,7 +118,6 @@
 <script>
     document.addEventListener("DOMContentLoaded", () => {
 
-        // ✅ (수정) 버튼 요소를 변수로 잡아줘야 onclick에서 에러 안 남
         const prevMonth = document.getElementById("prevMonth");
         const nextMonth = document.getElementById("nextMonth");
 
@@ -199,7 +201,6 @@
     const BASE_URL = "https://webserver-backend.onrender.com";
     const accessToken = "<%= accessToken %>";
 
-    // ✅ (수정) 공백 토큰도 로그인으로 보내기
     if (!accessToken || accessToken.trim().length === 0) {
         location.replace("../login/login.jsp");
     }
@@ -215,12 +216,10 @@
         headers: { "Authorization": "Bearer " + accessToken }
     })
         .then(res => {
-            // ✅ (수정) 401/403이면 토큰 문제 → 로그인으로
             if (res.status === 401 || res.status === 403) {
                 location.replace("../login/login.jsp");
                 return Promise.reject("Unauthorized");
             }
-            // ✅ (수정) 그 외 서버 오류도 콘솔에 찍기
             if (!res.ok) {
                 return res.text().then(t => Promise.reject("Mainpage API error: " + res.status + " / " + t));
             }

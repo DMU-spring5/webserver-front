@@ -183,16 +183,27 @@ body {
 }
 
 .profile-dday {
-    font-size: 18px;
+    font-size: 20px;
     font-weight: bold;
     margin-top: 10px;
+}
+
+.my-btn {
+    width: 100%;
+    padding: 10px;
+    margin-top: 22px;
+    background: #fafaf6;
+    border: none;
+    color: #828282;
+    cursor: pointer;
+    font-size: 18px;
 }
 
 .logout-btn {
     width: 100%;
     padding: 10px;
-    margin-top: 22px;
-    background: #E9E9E2;
+    margin-top: 15px;
+    background: #fafaf6;
     border: none;
     color: #828282;
     cursor: pointer;
