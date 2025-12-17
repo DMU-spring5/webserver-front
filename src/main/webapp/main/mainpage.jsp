@@ -54,7 +54,7 @@
 
                 <div class="profile-dday" id="dday">D -</div>
 
-                <button class="logout-btn" onclick="location.href='../login/login.jsp'">
+                <button class="logout-btn" onclick="location.href='../logout/logout.jsp'">
                     로그아웃
                 </button>
             </div>
@@ -254,7 +254,7 @@
         });
 </script>
 
-<!-- 뉴스 (기존 그대로 + 이미지 기본경로만 안전하게) -->
+<!-- 뉴스  -->
 <script>
     fetch("https://newsapi.org/v2/top-headlines?country=kr&pageSize=10&apiKey=YOUR_NEWS_API_KEY")
         .then(res => res.json())
