@@ -1,4 +1,8 @@
-<%@ page contentType="text/html; charset=UTF-8" language="java" %>
+<%@ page contentType="text/html; charset=UTF-8" language="java" isELIgnored="true" %>
+<%
+    String accessToken = (String) session.getAttribute("accessToken");
+    if (accessToken == null) accessToken = "";
+%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -116,25 +120,80 @@
     }
 </script>
 
+<!-- ✅ (수정) 메인페이지와 동일 API로 프로필 정보 채우기 -->
 <script>
-    const apiUrl = 'https://example.com/api/user'; // API 주소
+    const BASE_URL = "https://webserver-backend.onrender.com";
+    const accessToken = "<%= accessToken %>";
 
-    // fetch()를 사용하여 API에서 데이터 가져오기
-    fetch(apiUrl)
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById('profileName').innerHTML = `<strong>${data.name}</strong> 님`;
-            document.getElementById('division').textContent = `사단 : ${data.division}`;
-            document.getElementById('unit').textContent = `부대명 : ${data.unit}`;
-            document.getElementById('rank').textContent = `계급 : ${data.rank}`;
+    // 토큰 없으면 로그인으로
+    if (!accessToken || accessToken.trim().length === 0) {
+        location.replace("../login/login.jsp");
+    }
+
+    function getRank(type, days) {
+        if (type === "army") return days < 100 ? "이병" : days < 270 ? "일병" : days < 450 ? "상병" : "병장";
+        if (type === "navy") return days < 120 ? "이병" : days < 300 ? "일병" : days < 500 ? "상병" : "병장";
+        if (type === "airforce") return days < 140 ? "이병" : days < 320 ? "일병" : days < 520 ? "상병" : "병장";
+        return "-";
+    }
+
+    fetch(BASE_URL + "/api/v1/mainpage", {
+        headers: { "Authorization": "Bearer " + accessToken }
+    })
+        .then(res => {
+            if (res.status === 401 || res.status === 403) {
+                location.replace("../login/login.jsp");
+                return Promise.reject("Unauthorized");
+            }
+            if (!res.ok) {
+                return res.text().then(t => Promise.reject("Mypage API error: " + res.status + " / " + t));
+            }
+            return res.json();
         })
-        .catch(error => {
-            console.error('API 요청 중 오류 발생:', error);
-            // 오류가 발생하면 기본값을 표시
-            document.getElementById('profileName').innerHTML = `<strong>알 수 없음</strong> 님`;
-            document.getElementById('division').textContent = '사단 : 알 수 없음';
-            document.getElementById('unit').textContent = '부대명 : 알 수 없음';
-            document.getElementById('rank').textContent = '계급 : 알 수 없음';
+        .then(data => {
+            // 이름(닉네임) -> profileName
+            const name = data.nickname ?? "-";
+            document.getElementById('profileName').innerHTML = `<strong>${name}</strong>&nbsp;&nbsp;님`;
+
+            // 사단/부대명
+            document.getElementById("division").textContent =
+                "사단 : " + (data.division ? data.division : "-");
+
+            document.getElementById("unit").textContent =
+                "부대명 : " + (data.unit ? data.unit : "-");
+
+
+            // 계급 + D-day 계산 (메인페이지와 동일)
+            if (data.enlistDate && data.serviceType) {
+                const enlist = new Date(data.enlistDate);
+                const today = new Date();
+
+                const passed = Math.floor((today - enlist) / (1000 * 60 * 60 * 24));
+
+                const months = { army:18, navy:20, airforce:21 };
+                const discharge = new Date(enlist);
+                discharge.setMonth(discharge.getMonth() + (months[data.serviceType] || 0));
+                discharge.setDate(discharge.getDate() - 1);
+
+                const dday = Math.ceil((discharge - today) / (1000 * 60 * 60 * 24));
+                const rankText = getRank(data.serviceType, passed);
+
+                document.getElementById("rank").textContent = `계급 : ${rankText}`;
+
+                const ddayEl = document.querySelector(".d-day");
+                if (ddayEl) ddayEl.textContent = "D - " + dday;
+            } else {
+                document.getElementById("rank").textContent = "계급 : -";
+            }
+        })
+        .catch(err => {
+            console.error(err);
+
+            // 실패 시 기본값
+            document.getElementById('profileName').innerHTML = `<strong>알 수 없음</strong>&nbsp;&nbsp;님`;
+            document.getElementById("division").textContent = "사단 : 알 수 없음";
+            document.getElementById("unit").textContent = "부대명 : 알 수 없음";
+            document.getElementById("rank").textContent = "계급 : 알 수 없음";
         });
 </script>
 
