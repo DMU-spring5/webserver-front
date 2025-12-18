@@ -1,4 +1,74 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="java.io.*,java.net.*" %>
+
+<%!
+    static class ApiResp {
+        int code; String body;
+        ApiResp(int c, String b){ code=c; body=b; }
+    }
+    static String readAll(InputStream is) throws Exception {
+        if(is==null) return "";
+        BufferedReader br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+        StringBuilder sb = new StringBuilder();
+        String line;
+        while((line=br.readLine())!=null) sb.append(line);
+        return sb.toString();
+    }
+    static ApiResp http(String method, String urlStr, String token, String bodyJson) throws Exception {
+        URL url = new URL(urlStr);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod(method);
+        conn.setConnectTimeout(7000);
+        conn.setReadTimeout(7000);
+        conn.setRequestProperty("Accept", "application/json");
+        if(token!=null && token.trim().length()>0){
+            conn.setRequestProperty("Authorization", "Bearer " + token.trim());
+        }
+        if(bodyJson!=null){
+            conn.setDoOutput(true);
+            conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+            try(OutputStream os = conn.getOutputStream()){
+                os.write(bodyJson.getBytes("UTF-8"));
+            }
+        }
+        int code = conn.getResponseCode();
+        String resp = readAll(code>=200 && code<400 ? conn.getInputStream() : conn.getErrorStream());
+        return new ApiResp(code, resp);
+    }
+    static String escJs(String s){
+        if(s==null) return "";
+        return s.replace("\\","\\\\")
+                .replace("'","\\'")
+                .replace("\r","\\r")
+                .replace("\n","\\n")
+                .replace("</script>","<\\/script>");
+    }
+%>
+
+<%
+    String contextPath = request.getContextPath();
+
+    String token = null;
+    Object t1 = session.getAttribute("accessToken");
+    Object t2 = session.getAttribute("token");
+    if(t1!=null) token = String.valueOf(t1);
+    else if(t2!=null) token = String.valueOf(t2);
+
+    String postsJson = "[]";
+    String postsErr = null;
+
+    try{
+        ApiResp r = http("GET", "https://webserver-backend.onrender.com/api/v1/community", token, null);
+        if(r.code>=200 && r.code<300 && r.body!=null && r.body.trim().length()>0){
+            postsJson = r.body.trim();
+        }else{
+            postsErr = "목록 조회 실패 ("+r.code+")";
+        }
+    }catch(Exception e){
+        postsErr = "목록 조회 예외: " + e.getMessage();
+    }
+%>
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -178,7 +248,7 @@
                 <th style="width:80px;">추천</th>
             </tr>
             </thead>
-            <tbody>
+            <tbody id="postTbody">
             <!-- 예시 데이터: 진짜에선 JSTL forEach 로 채우면 됨 -->
             <tr>
                 <td class="num">설문</td>
@@ -200,6 +270,77 @@
     </div>
 
 </div>
+
+<script>
+    (function(){
+        const tbody = document.getElementById('postTbody');
+
+        const raw = '<%=escJs(postsJson)%>';
+        const err = '<%=escJs(postsErr)%>';
+
+        function td(cls, text){
+            const el = document.createElement('td');
+            if(cls) el.className = cls;
+            el.textContent = text;
+            return el;
+        }
+
+        function renderEmpty(msg){
+            tbody.innerHTML = '';
+            const tr = document.createElement('tr');
+            const td1 = document.createElement('td');
+            td1.colSpan = 6;
+            td1.style.textAlign = 'center';
+            td1.style.padding = '16px';
+            td1.textContent = msg;
+            tr.appendChild(td1);
+            tbody.appendChild(tr);
+        }
+
+        if(err && err !== 'null' && err.trim().length>0){
+            renderEmpty(err);
+            return;
+        }
+
+        let posts = [];
+        try{
+            posts = JSON.parse(raw || '[]');
+        }catch(e){
+            renderEmpty('JSON 파싱 실패');
+            return;
+        }
+
+        if(!Array.isArray(posts) || posts.length === 0){
+            renderEmpty('게시글이 없습니다.');
+            return;
+        }
+
+        tbody.innerHTML = '';
+        posts.forEach(p=>{
+            const tr = document.createElement('tr');
+
+            const postId = (p && (p.post_id ?? p.postId)) + '';
+            const userId = (p && (p.user_id ?? p.userId)) + '';
+            const title  = (p && (p.title ?? '')) + '';
+
+            tr.appendChild(td('num', postId));
+            const titleTd = document.createElement('td');
+            titleTd.style.cursor = 'pointer';
+            titleTd.textContent = title;
+            titleTd.onclick = function(){
+                location.href = '<%=contextPath%>/social/detail?postId=' + encodeURIComponent(postId);
+            };
+            tr.appendChild(titleTd);
+
+            tr.appendChild(td('', userId));
+            tr.appendChild(td('', '-'));
+            tr.appendChild(td('cnt', '-'));
+            tr.appendChild(td('cnt', '-'));
+
+            tbody.appendChild(tr);
+        });
+    })();
+</script>
 
 </body>
 </html>

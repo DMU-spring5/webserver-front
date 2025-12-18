@@ -1,5 +1,140 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page import="java.io.*,java.net.*" %>
+
+<%!
+    static class ApiResp {
+        int code; String body;
+        ApiResp(int c, String b){ code=c; body=b; }
+    }
+    static String readAll(InputStream is) throws Exception {
+        if(is==null) return "";
+        BufferedReader br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+        StringBuilder sb = new StringBuilder();
+        String line;
+        while((line=br.readLine())!=null) sb.append(line);
+        return sb.toString();
+    }
+    static ApiResp http(String method, String urlStr, String token, String bodyJson) throws Exception {
+        URL url = new URL(urlStr);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod(method);
+        conn.setConnectTimeout(7000);
+        conn.setReadTimeout(7000);
+        conn.setRequestProperty("Accept", "application/json");
+        if(token!=null && token.trim().length()>0){
+            conn.setRequestProperty("Authorization", "Bearer " + token.trim());
+        }
+        if(bodyJson!=null){
+            conn.setDoOutput(true);
+            conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+            try(OutputStream os = conn.getOutputStream()){
+                os.write(bodyJson.getBytes("UTF-8"));
+            }
+        }
+        int code = conn.getResponseCode();
+        String resp = readAll(code>=200 && code<400 ? conn.getInputStream() : conn.getErrorStream());
+        return new ApiResp(code, resp);
+    }
+    static String escJs(String s){
+        if(s==null) return "";
+        return s.replace("\\","\\\\")
+                .replace("'","\\'")
+                .replace("\r","\\r")
+                .replace("\n","\\n")
+                .replace("</script>","<\\/script>");
+    }
+    static String escJson(String s){
+        if(s==null) return "";
+        return s.replace("\\","\\\\").replace("\"","\\\"").replace("\r","\\r").replace("\n","\\n");
+    }
+%>
+
+<%
+    String contextPath = request.getContextPath();
+
+    String token = null;
+    Object t1 = session.getAttribute("accessToken");
+    Object t2 = session.getAttribute("token");
+    if(t1!=null) token = String.valueOf(t1);
+    else if(t2!=null) token = String.valueOf(t2);
+
+    Integer sessionUserId = null;
+    try{
+        Object u1 = session.getAttribute("userId");
+        Object u2 = session.getAttribute("userid");
+        if(u1!=null) sessionUserId = Integer.parseInt(String.valueOf(u1));
+        else if(u2!=null) sessionUserId = Integer.parseInt(String.valueOf(u2));
+    }catch(Exception ignore){}
+
+    // POST(평가 등록) 처리
+    if("POST".equalsIgnoreCase(request.getMethod())){
+        request.setCharacterEncoding("UTF-8");
+        String unitName = request.getParameter("unitName");
+        String rating   = request.getParameter("rating");
+        String workLevel = request.getParameter("workLevel");
+        String workContent = request.getParameter("workContent");
+        String advantage = request.getParameter("advantage");
+        String disadvantage = request.getParameter("disadvantage");
+        String hope = request.getParameter("hope");
+
+        if(unitName==null) unitName="";
+        if(rating==null) rating="0";
+        if(workLevel==null) workLevel="";
+        if(workContent==null) workContent="";
+        if(advantage==null) advantage="";
+        if(disadvantage==null) disadvantage="";
+        if(hope==null) hope="";
+
+        int uid = (sessionUserId!=null? sessionUserId : 0);
+
+        // unitId는 서버가 생성할 가능성이 높아서 0으로 보냄(예시 payload 형태 맞춤)
+        String bodyJson =
+                "{"
+                        + "\"userId\":" + uid + ","
+                        + "\"unitId\":0,"
+                        + "\"star\":\"" + escJson(rating) + "\","
+                        + "\"title\":\"" + escJson(unitName) + "\","
+                        + "\"hard\":\"" + escJson(workLevel) + "\","
+                        + "\"working\":\"" + escJson(workContent) + "\","
+                        + "\"good\":\"" + escJson(advantage) + "\","
+                        + "\"bad\":\"" + escJson(disadvantage) + "\","
+                        + "\"hope\":\"" + escJson(hope) + "\""
+                        + "}";
+
+        try{
+            ApiResp r = http("POST", "https://webserver-backend.onrender.com/api/v1/unit/create", token, bodyJson);
+            // 성공/실패 상관없이 목록으로 이동(화면 깨짐 방지)
+            response.sendRedirect(contextPath + "/social_unit_list?unitName=" + URLEncoder.encode(unitName, "UTF-8"));
+            return;
+        }catch(Exception e){
+            response.sendRedirect(contextPath + "/social_unit_list?unitName=" + URLEncoder.encode(unitName, "UTF-8"));
+            return;
+        }
+    }
+
+    // GET(목록 조회)
+    String unitName = request.getParameter("unitName");
+    if(unitName==null) unitName="";
+
+    String evalJson = "[]";
+    String evalErr = null;
+
+    try{
+        String url = "https://webserver-backend.onrender.com/api/v1/unit/search?keyword=" + URLEncoder.encode(unitName, "UTF-8");
+        ApiResp r = http("GET", url, token, null);
+        if(r.code>=200 && r.code<300 && r.body!=null && r.body.trim().length()>0){
+            evalJson = r.body.trim();
+        }else{
+            evalErr = "조회 실패(" + r.code + ")";
+        }
+    }catch(Exception e){
+        evalErr = "예외: " + e.getMessage();
+    }
+
+    request.setAttribute("unitName", unitName);
+%>
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -153,7 +288,7 @@
                 <th style="width:120px;">작성일</th>
             </tr>
             </thead>
-            <tbody>
+            <tbody id="evalTbody">
             <c:forEach var="row" items="${evalList}">
                 <tr>
                     <td class="td-no">${row.no}</td>
@@ -168,6 +303,68 @@
     </div>
 
 </div>
+
+<script>
+    (function(){
+        const tbody = document.getElementById('evalTbody');
+        const raw = '<%=escJs(evalJson)%>';
+        const err = '<%=escJs(evalErr)%>';
+
+        function renderEmpty(msg){
+            tbody.innerHTML = '';
+            const tr = document.createElement('tr');
+            const td = document.createElement('td');
+            td.colSpan = 5;
+            td.style.textAlign = 'center';
+            td.style.padding = '16px';
+            td.textContent = msg;
+            tr.appendChild(td);
+            tbody.appendChild(tr);
+        }
+
+        if(err && err !== 'null' && err.trim().length>0){
+            renderEmpty(err);
+            return;
+        }
+
+        let list = [];
+        try{ list = JSON.parse(raw || '[]'); }catch(e){
+            renderEmpty('JSON 파싱 실패');
+            return;
+        }
+
+        if(!Array.isArray(list) || list.length===0){
+            renderEmpty('평가 글이 없습니다.');
+            return;
+        }
+
+        tbody.innerHTML = '';
+        list.forEach((x, idx)=>{
+            const tr = document.createElement('tr');
+
+            const no = (x.unitId ?? x.unit_id ?? (idx+1)) + '';
+            const title = (x.title ?? '') + '';
+            const hard = (x.hard ?? '') + '';
+            const summary = title ? title : (hard ? hard : '-');
+            const writer = (x.userId ?? x.user_id ?? '-') + '';
+            const score = (x.star ?? '-') + '';
+
+            function td(cls, txt){
+                const td = document.createElement('td');
+                if(cls) td.className = cls;
+                td.textContent = txt;
+                return td;
+            }
+
+            tr.appendChild(td('td-no', no));
+            tr.appendChild(td('', summary));
+            tr.appendChild(td('td-writer', writer));
+            tr.appendChild(td('td-score', score));
+            tr.appendChild(td('td-date', '-'));
+            tbody.appendChild(tr);
+        });
+    })();
+</script>
 
 </body>
 </html>
