@@ -55,12 +55,11 @@
             String safeTitle = title.replace("\\", "\\\\").replace("\"", "\\\"");
             String safeContent = content.replace("\\", "\\\\").replace("\"", "\\\"");
 
-            String body =
-                    "{"
-                            + "\"user_id\":\"" + safeWriter + "\","
-                            + "\"title\":\"" + safeTitle + "\","
-                            + "\"content\":\"" + safeContent + "\""
-                            + "}";
+            String body = "{"
+                    + "\"user_id\":\"" + safeWriter + "\","
+                    + "\"title\":\"" + safeTitle + "\","
+                    + "\"content\":\"" + safeContent + "\""
+                    + "}";
 
             OutputStream os = conn.getOutputStream();
             os.write(body.getBytes("UTF-8"));
@@ -101,10 +100,150 @@
 <head>
     <meta charset="UTF-8">
     <title>새 게시글 작성</title>
-    <link rel="stylesheet" type="text/css" href="<%=ctx%>/css/social.css">
-</head>
-<body>
 
+    <!-- 네가 원래 쓰던 링크(유지) -->
+    <link rel="stylesheet" type="text/css" href="<%=ctx%>/css/social.css">
+
+    <!-- social.css가 없어도 화면 안 깨지게 CSS를 “포함” (기능/URL/흐름은 건드리지 않음) -->
+    <style>
+        * { box-sizing: border-box; margin:0; padding:0; }
+        body {
+            font-family: "Noto Sans KR", system-ui, -apple-system, "Segoe UI", sans-serif;
+            background: #f5f5f5;
+            color: #222;
+        }
+        a { color: inherit; text-decoration: none; }
+
+        .header{
+            height:64px;
+            background:#78866B;
+            color:#fff;
+            padding:0 40px;
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap:20px;
+        }
+        .header-left{ display:flex; align-items:center; gap:12px; }
+        .header-logo-box{
+            width:34px; height:34px;
+            border-radius:10px;
+            background:rgba(255,255,255,0.92);
+        }
+        .header-title{ font-weight:900; letter-spacing:0.4px; }
+
+        .header-nav{ display:flex; align-items:center; gap:16px; }
+        .header-nav a{
+            color:#fff;
+            opacity:0.9;
+            padding:8px 6px;
+            border-bottom:2px solid transparent;
+        }
+        .header-nav a:hover{ opacity:1; }
+        .header-nav a.active{
+            opacity:1;
+            border-bottom-color:#fff;
+            font-weight:800;
+        }
+
+        .header-right{ display:flex; align-items:center; gap:10px; white-space:nowrap; }
+        .header-right span{ font-size:14px; opacity:0.95; }
+        .header-right button{
+            border:1px solid rgba(255,255,255,0.45);
+            background:transparent;
+            color:#fff;
+            padding:8px 12px;
+            border-radius:12px;
+            cursor:pointer;
+        }
+        .header-right button:hover{ background:rgba(255,255,255,0.12); }
+
+        .container{
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 26px 20px 60px;
+        }
+        .write-wrap{
+            background:#fff;
+            border-radius:16px;
+            box-shadow:0 8px 20px rgba(0,0,0,0.08);
+            padding:28px;
+        }
+        .write-wrap h2{ font-size:22px; margin-bottom:8px; }
+        .sub{ color:#666; font-size:14px; margin-bottom:22px; }
+
+        .box{
+            border:1px solid #eee;
+            border-radius:14px;
+            background:#fafafa;
+            padding:18px;
+        }
+        .row{
+            display:flex;
+            gap:14px;
+            align-items:flex-start;
+            margin-bottom:14px;
+        }
+        .label{
+            width:90px;
+            font-weight:800;
+            color:#333;
+            padding-top:10px;
+        }
+        .field{ flex:1; }
+        input[type="radio"]{ accent-color:#78866B; }
+
+        .input, .textarea{
+            width:100%;
+            border:1px solid #ddd;
+            border-radius:12px;
+            padding:12px;
+            font-size:14px;
+            background:#fff;
+            outline:none;
+        }
+        .input:focus, .textarea:focus{
+            border-color:#78866B;
+            box-shadow:0 0 0 3px rgba(120,134,107,0.18);
+        }
+        .textarea{
+            min-height:180px;
+            resize:vertical;
+            line-height:1.55;
+        }
+
+        .btns{
+            display:flex;
+            justify-content:flex-end;
+            gap:10px;
+            margin-top:18px;
+        }
+        .btn{
+            padding:10px 14px;
+            border-radius:12px;
+            border:1px solid #d9d9d9;
+            background:#fff;
+            cursor:pointer;
+            font-weight:800;
+        }
+        .btn:hover{ background:#f3f3f3; }
+        .btn.primary{
+            border:none;
+            background:#78866B;
+            color:#fff;
+        }
+        .btn.primary:hover{ filter:brightness(0.96); }
+
+        @media (max-width:640px){
+            .header{ padding:0 16px; }
+            .row{ flex-direction:column; }
+            .label{ width:auto; padding-top:0; }
+            .write-wrap{ padding:18px; }
+        }
+    </style>
+</head>
+
+<body>
 <header class="header">
     <div class="header-left">
         <div class="header-logo-box"></div>
@@ -129,6 +268,7 @@
         <h2>새 게시글 작성</h2>
         <p class="sub">군 생활에 대한 솔직한 후기를 작성해 주세요.</p>
 
+        <!-- 네 action 그대로 유지 -->
         <form method="post" action="<%=ctx%>/views/social_write.jsp">
             <div class="box">
                 <div class="row">
@@ -160,8 +300,8 @@
                 </div>
             </div>
         </form>
+
     </div>
 </div>
-
 </body>
 </html>
