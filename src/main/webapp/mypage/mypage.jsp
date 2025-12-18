@@ -92,7 +92,7 @@
         </div>
 
         <div class="menu-column">
-            <a href="#" class="menu-item">
+            <a href="post.jsp" class="menu-item">
                 <span>게시판 관리</span>
                 <span class="arrow">&gt;</span>
             </a>
