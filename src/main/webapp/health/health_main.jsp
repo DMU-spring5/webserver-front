@@ -167,13 +167,13 @@
     </div>
 
     <nav class="header-nav">
-        <a href="#">뉴스</a>
+        <a href="${pageContext.request.contextPath}/main/mainpage.jsp">뉴스</a>
         <span>|</span>
         <a href="${pageContext.request.contextPath}/social/board">소셜</a>
         <span>|</span>
-        <a href="${pageContext.request.contextPath}/health" class="active">건강</a>
+        <a href="${pageContext.request.contextPath}/health/health.jsp" class="active">건강</a>
         <span>|</span>
-        <a href="${pageContext.request.contextPath}/main">지도</a>
+        <a href="${pageContext.request.contextPath}/map/map.jsp">지도</a>
     </nav>
 
     <div class="header-right">

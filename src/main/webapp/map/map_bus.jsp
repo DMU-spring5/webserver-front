@@ -55,7 +55,7 @@
         <div class="header-title">MILLI ROAD</div>
     </div>
     <nav class="header-nav">
-        <a href="#">뉴스</a><span>|</span>
+        <a href="/main/mainpage.jsp">뉴스</a><span>|</span>
         <a href="<%=ctx%>/social/board">소셜</a><span>|</span>
         <a href="<%=ctx%>/health">건강</a><span>|</span>
         <a href="<%=ctx%>/map" class="active">지도</a>

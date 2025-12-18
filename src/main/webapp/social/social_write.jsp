@@ -251,10 +251,13 @@
     </div>
 
     <nav class="header-nav">
-        <a href="<%=ctx%>/main/main.jsp">뉴스</a>
-        <a href="<%=ctx%>/social/board" class="active">소셜</a>
-        <a href="<%=ctx%>/health/health.jsp">건강</a>
-        <a href="#">지도</a>
+        <a href="${pageContext.request.contextPath}/main/mainpage.jsp">뉴스</a>
+        <span>|</span>
+        <a href="${pageContext.request.contextPath}/social/board" class="active">소셜</a>
+        <span>|</span>
+        <a href="${pageContext.request.contextPath}/health/health.jsp">건강</a>
+        <span>|</span>
+        <a href="${pageContext.request.contextPath}/map/map.jsp">지도</a>
     </nav>
 
     <div class="header-right">
