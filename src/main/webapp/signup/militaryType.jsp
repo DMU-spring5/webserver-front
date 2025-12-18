@@ -1,6 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%
-    // 이전 페이지에서 넘어온 회원 기본 정보 (없을 수도 있으니 널 체크)
     String userId   = request.getParameter("userId");
     String password = request.getParameter("password");
     String nickname = request.getParameter("nickname");
@@ -22,10 +21,9 @@
          alt="MILLI ROAD 로고" class="main-logo">
 </div>
 
-<!-- 다음 페이지(militaryInfo.jsp)로 값 넘기기 -->
+<!-- 다음 페이지로 값 넘기기 -->
 <form id="serviceTypeForm" action="militaryInfo.jsp" method="post" class="type-form">
 
-    <!-- 이전 단계에서 받은 값들을 숨겨서 함께 전달 -->
     <input type="hidden" name="userId"   value="<%=userId%>">
     <input type="hidden" name="password" value="<%=password%>">
     <input type="hidden" name="nickname" value="<%=nickname%>">

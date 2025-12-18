@@ -79,7 +79,6 @@
             updateFindBtnState();
         });
 
-        // 첫 로드시 초기 설정
         nickError.textContent = "";
         pwError.textContent   = "";
         updateFindBtnState();

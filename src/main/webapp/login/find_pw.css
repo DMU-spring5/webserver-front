@@ -15,9 +15,7 @@ body > img {
     width: 280px;
 }
 
-/* 전체 카드 */
 #findIdForm,
-/* 비밀번호 찾기 카드 */
 #findPwForm {
     width: min(90vw, 640px);
     background-color: #ffffff;
@@ -34,7 +32,6 @@ body > img {
     margin-bottom: 14px;
 }
 
-/* 입력창 라벨 공통 여백 추가 */
 .nickname-box label,
 .pw-box label {
     font-size: 14px;

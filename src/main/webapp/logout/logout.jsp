@@ -1,6 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%
-    // 뒤로가기 캐시 방지 (권장)
+    // 뒤로가기 캐시 방지
     response.setHeader("Cache-Control", "no-store, no-cache, must-revalidate");
     response.setHeader("Pragma", "no-cache");
 %>

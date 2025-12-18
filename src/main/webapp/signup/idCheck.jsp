@@ -15,14 +15,12 @@
     try {
         Class.forName("com.mysql.cj.jdbc.Driver");
 
-        // ⚠️ DB 정보 수정
         String url = "jdbc:mysql://localhost:3306/your_db_name?serverTimezone=Asia/Seoul&characterEncoding=UTF-8";
         String dbUser = "your_db_user";
         String dbPass = "your_db_password";
 
         conn = DriverManager.getConnection(url, dbUser, dbPass);
 
-        // ⚠️ 테이블 / 컬럼 이름 수정
         String sql = "INSERT INTO user (user_id, nickname, password) VALUES (?, ?, ?)";
         pstmt = conn.prepareStatement(sql);
 
@@ -54,7 +52,7 @@
 %>
 <script>
     alert("가입이 완료되었습니다.");
-    location.href = "login.jsp";   // ← 로그인 페이지로 이동
+    location.href = "login.jsp";
 </script>
 <%
 } else {

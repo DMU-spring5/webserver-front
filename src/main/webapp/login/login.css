@@ -35,7 +35,7 @@ body > img {
     margin-bottom: 14px;
 }
 
-/* 입력창 라벨 (아이디 찾기/비번 찾기와 동일 구조 적용) */
+/* 입력창 라벨 */
 .id-box label,
 .pw-box label {
     margin-bottom: 6px;
@@ -93,7 +93,7 @@ body > img {
 #pwError {
     color: #FF0000FF;
     font-size: 13px;
-    margin: 4px 0 0 2px;  /* 위로만 살짝, 아래는 0 */
+    margin: 4px 0 0 2px;
 }
 
 /* 자동 로그인 */
