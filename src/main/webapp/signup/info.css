@@ -23,13 +23,11 @@ body {
     margin-bottom: 25px;
 }
 
-/* 프로필 동그라미 전체 박스 */
 .profile-img {
     position: relative;
     width: 110px;
     height: 110px;
     margin: 0 auto;
-
     border-radius: 50%;
     border: 1px solid #ddd;
     background-color: #fff;
@@ -46,7 +44,6 @@ body {
     border-radius: 50%;
 }
 
-/* 카메라 동그라미 */
 .profile-img .camera {
     position: absolute;
     right: -4px;
@@ -103,7 +100,7 @@ input[type="password"] {
 .id-input-wrap input {
     width: 100%;
     height: 48px;
-    padding: 0 90px 0 14px; /* 버튼 들어갈 오른쪽 여백 확보 */
+    padding: 0 90px 0 14px;
     border-radius: 8px;
     border: 1px solid #ddd;
     box-sizing: border-box;
@@ -162,7 +159,7 @@ input:focus {
     outline: none;
 }
 
-/* 기본: 비활성 상태 */
+/* 비활성 상태 */
 .submit-btn {
     width: 100%;
     padding: 14px;

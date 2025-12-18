@@ -11,18 +11,18 @@
     userid = userid.trim();
     userpw = userpw.trim();
 
-// 최종 이동할 곳(여기만 바꾸면 됨)
+    // 최종 이동할 곳
     String redirectTo = contextPath + "/main/mainpage.jsp";
 
-// 로그인 실패시 이동
+    // 로그인 실패시 이동
     String failTo = contextPath + "/login/login.jsp?msg=fail";
 
-// 입력 체크
+    // 입력 체크
     if (userid.length() == 0 || userpw.length() == 0) {
         redirectTo = contextPath + "/login/login.jsp?msg=empty";
     } else {
 
-        // ✅ 백엔드 로그인 API (필요하면 여기만 수정)
+        // 백엔드 로그인 API
         final String LOGIN_URL = "https://webserver-backend.onrender.com/api/v1/auth/login";
 
         HttpURLConnection conn = null;
@@ -42,7 +42,6 @@
             String safeId = userid.replace("\\", "\\\\").replace("\"", "\\\"");
             String safePw = userpw.replace("\\", "\\\\").replace("\"", "\\\"");
 
-            // 백엔드 스펙: userId/password
             String body = "{"
                     + "\"userId\":\"" + safeId + "\","
                     + "\"password\":\"" + safePw + "\""
@@ -80,7 +79,7 @@
                     }
                 }
 
-                // nickname (optional)
+                // nickname
                 String nickname = null;
                 {
                     String key = "\"nickname\":\"";
@@ -92,7 +91,7 @@
                     }
                 }
 
-                // 숫자 PK(optional): "id":11 또는 "userId":11
+                // 숫자 PK
                 Integer userPk = null;
                 {
                     String[] keys = new String[] { "\"id\":", "\"userId\":" };
@@ -115,7 +114,7 @@
                 if (accessToken == null || accessToken.trim().length() == 0) {
                     redirectTo = failTo;
                 } else {
-                    // ✅ 세션 저장 (main.jsp는 accessToken을 보고 로그인 표시함)
+                    // 세션 저장
                     session.setAttribute("accessToken", accessToken);
                     session.setAttribute("userid", userid);
                     session.setAttribute("nickname", (nickname != null && nickname.trim().length() > 0) ? nickname : userid);
@@ -125,7 +124,6 @@
                         session.setAttribute("userId", userPk.intValue());
                     }
 
-                    // next 파라미터 있으면 그쪽으로(옵션)
                     String next = request.getParameter("next");
                     if (next != null && next.startsWith(contextPath)) {
                         redirectTo = next;
@@ -143,7 +141,6 @@
         }
     }
 
-// ✅ 여기서만 딱 한번 이동 (return 안 씀 → Unreachable 컴파일 에러 제거)
     try { out.clearBuffer(); } catch(Exception ignore) {}
     response.sendRedirect(redirectTo);
 %>

@@ -21,7 +21,7 @@
         <p id="nickError" class="error-msg" style="margin:4px 0 10px 2px;"></p>
     </div>
 
-    <!-- 아이디 (비밀번호칸과 동일 구조/클래스 사용) -->
+    <!-- 아이디 -->
     <div class="pw-box">
         <label for="userid">아이디</label><br>
         <div class="pw-input-wrap">

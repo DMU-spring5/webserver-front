@@ -114,7 +114,7 @@
     </main>
 </div>
 
-<!-- 기존 캘린더 스크립트 (필수 버그만 수정) -->
+<!-- 캘린더 스크립트 -->
 <script>
     document.addEventListener("DOMContentLoaded", () => {
 
@@ -285,7 +285,7 @@
         });
 </script>
 
-<!-- 날씨 (기존 그대로) -->
+<!-- 날씨 -->
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const API_KEY = "API_KEY";

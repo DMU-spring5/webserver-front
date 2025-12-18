@@ -4,10 +4,10 @@
     String ctx = request.getContextPath();
 
     // 앞 단계에서 넘어온 군 정보들
-    String serviceType = request.getParameter("serviceType"); // army / navy / airforce
+    String serviceType = request.getParameter("serviceType");
     String division    = request.getParameter("division");
     String unit        = request.getParameter("unit");
-    String enlistDate  = request.getParameter("joinDate");    // yyyy-MM-dd
+    String enlistDate  = request.getParameter("joinDate");
 
     if (serviceType == null) serviceType = "";
     if (division    == null) division    = "";
@@ -36,7 +36,6 @@
         <input type="file" id="profileInput" accept="image/*" style="display:none;">
     </div>
 
-    <!-- 폼 시작 -->
     <form id="infoForm" action="info_ok.jsp" method="post">
         <!-- 아이디 -->
         <div class="form-box">
@@ -112,7 +111,7 @@
     const form               = document.getElementById("infoForm");
     const submitBtn          = document.querySelector(".submit-btn");
 
-    // 군 정보: JSP에서 받아온 값 JS로 넘기기
+    // 군 정보
     const serviceTypeFromJsp = "<%=serviceType%>";
     const divisionFromJsp    = "<%=division%>";
     const unitFromJsp        = "<%=unit%>";
@@ -314,7 +313,7 @@
 
         if (!ok) return;
 
-        // 약관 동의 (checkbox)
+        // 약관 동의
         const serviceAgreeEl  = document.getElementById("serviceAgreed");
         const locationAgreeEl = document.getElementById("locationAgreed");
 

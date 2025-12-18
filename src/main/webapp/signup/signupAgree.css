@@ -115,8 +115,7 @@ h3 {
     cursor: pointer;
 }
 
-/* ---------- 날짜 선택 모달 ---------- */
-
+/* 날짜 선택 모달 */
 #dateModal {
     display: none;
     position: fixed;

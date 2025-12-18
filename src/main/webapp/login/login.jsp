@@ -9,7 +9,7 @@
 <body class="login-body">
 
 <!-- 로고 영역 -->
-<img src="${pageContext.request.contextPath}/img/WebServerLogo2.png" alt="Logo">
+<img src="${pageContext.request.contextPath}/img/WebServerLogo.png" alt="Logo">
 
 <!-- 로그인 폼 -->
 <form id="loginForm" action="${pageContext.request.contextPath}/login/login_ok.jsp" method="post">
@@ -24,7 +24,6 @@
         <div class="pw-input-wrap">
             <input type="password" id="userpw" name="userpw" placeholder="비밀번호를 입력하세요" required>
 
-            <!-- ✅ 파일명/경로 수정: eye_off.png -> eyeoff.png -->
             <img
                     id="togglePw"
                     src="${pageContext.request.contextPath}/img/eye.png"
@@ -70,7 +69,6 @@
     uid.addEventListener("keyup", checkInput);
     upw.addEventListener("keyup", checkInput);
 
-    // ✅ 비밀번호 보기/숨기기 토글 (eye.png <-> eyeoff.png)
     const togglePw = document.getElementById("togglePw");
     const CTX = "${pageContext.request.contextPath}";
 
