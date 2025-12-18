@@ -1,0 +1,404 @@
+@charset "UTF-8";
+
+/* ==========================================================================
+   [공통 & 메인 페이지 기본 스타일]
+   ========================================================================== */
+body {
+    margin: 0;
+    font-family: "Noto Sans KR", sans-serif;
+    background: #f3f3f3; /* 메인 페이지 배경색 */
+}
+
+/* ==========================================================================
+   [로그인 페이지 전용 스타일]
+   body 태그에 class="login-body"가 있을 때만 적용됨
+   ========================================================================== */
+body.login-body {
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f5f5f5; /* 로그인 페이지 배경색 */
+    justify-content: flex-start;
+    padding-bottom: 62px;
+}
+
+/* 로그인 로고 */
+body.login-body > img {
+    margin-top: 60px;
+    width: 200px;
+}
+
+/* 로그인 폼 카드 */
+#loginForm {
+    width: min(90vw, 640px);
+    background-color: #ffffff;
+    border: 1px solid #A1A49D;
+    border-radius: 12px;
+    padding: 32px 38px;
+    box-sizing: border-box;
+}
+
+.id-box, .pw-box {
+    width: 100%;
+    margin-bottom: 14px;
+}
+
+.id-box label, .pw-box label {
+    margin-bottom: 6px;
+    display: inline-block;
+}
+
+.id-box input, .pw-box input {
+    width: 100%;
+    max-width: 600px;
+    height: 55px;
+    padding-left: 15px;
+    padding-right: 40px;
+    font-size: 15px;
+    border-radius: 8px;
+    border: 1.5px solid #A1A49D;
+    box-sizing: border-box;
+    background-color: #fff;
+}
+
+.id-box input:focus, .pw-box input:focus {
+    border-color: #78866B;
+    border-width: 2px;
+    outline: none;
+}
+
+.pw-input-wrap { position: relative; }
+
+.pw-input-wrap .eyeoff {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    width: 22px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    opacity: 0.75;
+}
+
+.pw-input-wrap .eyeoff:hover { opacity: 1; }
+
+#errorMsg, #errorPw, .error-msg, #idError, #pwError {
+    color: #FF0000;
+    font-size: 13px;
+    margin: 4px 0 0 2px;
+}
+
+#loginForm label {
+    font-size: 14px;
+    margin-top: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+#loginBtn {
+    width: 100%;
+    max-width: 600px;
+    height: 60px;
+    border: none;
+    border-radius: 8px;
+    background-color: #A1A49D;
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: 500;
+    margin-top: 20px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+#loginBtn.active {
+    background-color: #78866B;
+    cursor: pointer;
+}
+
+.link-box {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 13px;
+    color: #8c8c8c;
+}
+
+.link-box a {
+    color: #A1A49D;
+    text-decoration: none;
+}
+
+.link-box a:hover { text-decoration: underline; }
+
+.logo-wrap { text-align: center; }
+.logo-wrap img { width: 200px; display: inline-block; }
+
+/* 로그인 반응형 */
+@media (max-width: 480px) {
+    #loginForm { padding: 24px 20px; }
+    .id-box input, .pw-box input { height: 52px; }
+    #loginBtn { height: 52px; font-size: 16px; }
+}
+
+
+/* ==========================================================================
+   [메인 페이지 스타일]
+   ========================================================================== */
+/* 상단 헤더 */
+header {
+    height: 137px;
+    background-color: #788665;
+    padding: 0 40px;
+    box-sizing: border-box;
+}
+
+.header-inner {
+    position: relative;
+    padding: 20px 0;
+    display: flex;
+    align-items: center;
+}
+
+.logo img {
+    height: 120px;
+    display: block;
+    margin-top: -10px;
+    margin-left: 42px;
+}
+
+.header-center {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    width: 60%;
+    max-width: 800px;
+}
+
+.search-box {
+    width: 100%;
+    max-width: 700px;
+    position: relative;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 10px 12px 10px 40px;
+    border-radius: 6px;
+    border: none;
+    font-size: 14px;
+}
+
+.search-icon {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
+    color: #999999;
+    pointer-events: none;
+}
+.search-icon img { width: 21px; height: 21px; margin-top: 5px; }
+
+nav { display: flex; align-items: center; gap: 6px; }
+
+nav a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 90px;
+    color: #CFCFCF;
+    text-decoration: none;
+    font-weight: 400;
+    font-size: 17px;
+    transition: color 0.2s ease, font-size 0.2s ease;
+}
+
+nav a.active {
+    color: #FFFFFF !important;
+    font-weight: 700;
+    font-size: 19px;
+}
+
+nav a:not(.active):hover { color: #FFFFFF; font-size: 18px; font-weight: 500; }
+nav a.active:hover { color: #FFFFFF; font-size: 19px; }
+
+nav .divider {
+    margin: 0 2px;
+    color: #CFCFCF;
+    font-size: 16px;
+    line-height: 1;
+    pointer-events: none;
+}
+
+/* 레이아웃 */
+.container {
+    width: 100%;
+    max-width: 2000px;
+    margin: 30px auto;
+    padding: 0 16px;
+    box-sizing: border-box;
+    display: grid;
+    grid-template-columns: 250px minmax(0, 1fr);
+    gap: 25px;
+}
+
+/* 왼쪽 사이드바 */
+.left-box {
+    display: flex;
+    width: 250px;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.profile-box {
+    width: 100%;
+    background: #DFCEB3;
+    padding: 20px;
+    border: 1px solid #ddd;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.profile-image {
+    width: 150px;
+    height: 150px;
+    overflow: hidden;
+    background: #eee;
+    margin-bottom: 10px;
+}
+
+.profile-image img { width: 100%; height: 100%; object-fit: cover; }
+
+.profile-text { font-size: 16px; font-weight: bold; color: #7B7B7B; }
+.profile-info-text p { margin: 3px 0 3px 0; font-size: 15px; }
+.profile-dday { font-size: 18px; font-weight: bold; margin-top: 10px; }
+
+.logout-btn {
+    width: 100%;
+    padding: 10px;
+    margin-top: 22px;
+    background: #E9E9E2;
+    border: none;
+    color: #828282;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.profile-links { margin-top: 10px; font-size: 13px; text-align: center; }
+
+/* 캘린더 */
+.calendar {
+    margin-top: 20px;
+    text-align: center;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.calendar-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 0px;
+}
+
+.calendar td, .calendar th {
+    border: 1px solid #e2e2e2;
+    padding: 5px;
+    height: 30px;
+    font-size: 12px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.calendar table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #dcdcdc;
+    table-layout: fixed;
+    margin-top: 0px;
+}
+
+.cal-nav {
+    border: none;
+    background: #e8dfd6;
+    padding: 3px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.calendar-month { font-size: 15px; font-weight: bold; margin-bottom: 19px; }
+.today-cell { background: #DFCEB3; color: black; font-weight: bold; }
+
+/* 메인 뉴스 영역 */
+.main-news {
+    background: #E9E9E2;
+    padding: 20px 18px;
+    border: 1px solid #ddd;
+    box-sizing: border-box;
+    display: grid;
+    grid-template-columns: 2.5fr 1fr; /* 2 5fr 오타 수정 */
+    column-gap: 20px;
+}
+
+.main-news-right { display: flex; flex-direction: column; gap: 20px; }
+.main-news-header { display: flex; align-items: center; margin-bottom: 14px; }
+.main-news-title { font-size: 20px; font-weight: 700; color: #555555; }
+
+.news-item {
+    display: grid;
+    grid-template-columns: 1fr 120px;
+    gap: 12px;
+    margin-bottom: 12px;
+    padding: 12px 14px;
+    background: #ffffff;
+    border-radius: 6px;
+    border: 1px solid #f1f1f1;
+}
+
+.news-item:last-child { margin-bottom: 0; }
+.news-img { width: 120px; height: 75px; object-fit: cover; }
+.news-date { margin-top: 0px; }
+
+/* 오른쪽 영역 */
+.right-box { display: flex; flex-direction: column; gap: 25px; }
+.side-section { background: white; padding: 15px; border: 1px solid #ddd; }
+.side-header { text-align: right; margin-bottom: 7px; display: block; }
+.side-news-item img { width: 100%; height: auto; display: block; margin: 8px 0; }
+
+/* 날씨 */
+.weather-box {
+    background: #6fb5ff;
+    border: none;
+    width: 100%;
+    padding: 15px;
+    box-sizing: border-box;
+}
+
+.weather-inner {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background: #6fb5ff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.weather-location { font-weight: bold; margin-bottom: 8px; color: #FFFFFF; }
+.weather-temp { font-size: 32px; font-weight: bold; margin-top: 6px; color: #FFFFFF; }
+.weather-desc { font-size: 15px; margin-top: 4px; color: #FFFFFF; }
+.weather-icon { font-size: 65px; color: #FFFFFF; }

@@ -1,125 +1,85 @@
-<%@ page contentType="text/html; charset=UTF-8" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
-    <title>로그인</title>
-    <link rel="stylesheet" type="text/css" href="login.css">
+    <meta charset="UTF-8">
+    <title>로그인 - MILLI ROAD</title>
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/index.css">
 </head>
-<%
-    String idErrorParam = request.getParameter("idError");
-    String pwErrorParam = request.getParameter("pwError");
-%>
-<body>
-<!-- 로고 영역 (아이디 찾기와 동일 구조로 div 감싸기) -->
-<div class="logo-wrap">
-    <img src="<%=request.getContextPath()%>/img/WebServerLogo.png" alt="MILLI ROAD 로고">
-</div>
+<body class="login-body">
 
-<form id="loginForm" action="login_ok.jsp" method="post">
-    <!-- 아이디 -->
+<!-- 로고 영역 -->
+<img src="${pageContext.request.contextPath}/img/WebServerLogo2.png" alt="Logo">
+
+<!-- 로그인 폼 -->
+<form id="loginForm" action="${pageContext.request.contextPath}/login/login_ok.jsp" method="post">
+
     <div class="id-box">
-        <input type="text" id="userid" name="userid" placeholder="아이디" autocomplete="off">
-        <p id="idError"><%= (idErrorParam != null ? idErrorParam : "") %></p>
+        <label for="userid">아이디</label>
+        <input type="text" id="userid" name="userid" placeholder="아이디를 입력하세요" required>
     </div>
 
-    <!-- 비밀번호 -->
     <div class="pw-box">
-        <div class="pw-input-wrap"><!-- 입력창 + 아이콘 래퍼 -->
-            <input type="password" id="userpw" name="userpw"
-                   placeholder="비밀번호" autocomplete="off">
-            <img class="eyeoff" id="togglePw" src="../img/eye.png">
+        <label for="userpw">비밀번호</label>
+        <div class="pw-input-wrap">
+            <input type="password" id="userpw" name="userpw" placeholder="비밀번호를 입력하세요" required>
+
+            <!-- ✅ 파일명/경로 수정: eye_off.png -> eyeoff.png -->
+            <img
+                    id="togglePw"
+                    src="${pageContext.request.contextPath}/img/eye.png"
+                    class="eyeoff"
+                    alt=""
+                    style="cursor:pointer;"
+            >
         </div>
-        <p id="pwError" class="error-msg">
-            <%= (pwErrorParam != null ? pwErrorParam : "") %>
-        </p>
     </div>
 
-    <!-- 자동 로그인 -->
-    <label>
-        <input type="checkbox" name="autoLogin" value="N">
-        자동 로그인
-    </label><br>
+    <% if(request.getParameter("msg") != null) { %>
+    <div id="errorMsg"><%= java.net.URLDecoder.decode(request.getParameter("msg"), "UTF-8") %></div>
+    <% } %>
 
-    <!-- 로그인 버튼 -->
+    <label>
+        <input type="checkbox" name="autoLogin"> 자동 로그인
+    </label>
+
     <button type="submit" id="loginBtn">로그인</button>
 
-    <!-- 링크 -->
     <div class="link-box">
-        <a href="find_id.jsp">아이디 찾기</a> |
-        <a href="find_pw.jsp">비밀번호 찾기</a> |
-        <a href="<%=request.getContextPath()%>/signup/signupAgree.jsp">회원가입</a>
-    </div><br>
+        <a href="${pageContext.request.contextPath}/login/find_id.jsp">아이디 찾기</a> |
+        <a href="${pageContext.request.contextPath}/login/find_pw.jsp">비밀번호 찾기</a> |
+        <a href="${pageContext.request.contextPath}/signup/signupAgree.jsp">회원가입</a>
+    </div>
 </form>
-</body>
 
 <script>
-    document.addEventListener("DOMContentLoaded", () => {
-        const pwInput   = document.getElementById("userpw");
-        const userid    = document.getElementById("userid");
-        const togglePw  = document.getElementById("togglePw");
-        const loginBtn  = document.getElementById("loginBtn");
-        const loginForm = document.getElementById("loginForm");
+    // 버튼 색상 변경
+    const uid = document.getElementById("userid");
+    const upw = document.getElementById("userpw");
+    const btn = document.getElementById("loginBtn");
 
-        const idError = document.getElementById("idError");
-        const pwError = document.getElementById("pwError");
-
-        /* 페이지 돌아왔을 때 값 비우기 */
-        userid.value = "";
-        pwInput.value = "";
-
-        /* 비밀번호 보기/숨기기 */
-        togglePw.addEventListener("click", () => {
-            if (pwInput.type === "password") {
-                pwInput.type = "text";
-                togglePw.src = "../img/eyeoff.png";
-            } else {
-                pwInput.type = "password";
-                togglePw.src = "../img/eye.png";
-            }
-        });
-
-        /* 버튼 색상 변경 */
-        function checkInputs() {
-            if (userid.value.trim() !== "" && pwInput.value.trim() !== "") {
-                loginBtn.classList.add("active");
-            } else {
-                loginBtn.classList.remove("active");
-            }
+    function checkInput() {
+        if(uid.value.length > 0 && upw.value.length > 0) {
+            btn.classList.add("active");
+            btn.style.backgroundColor = "#78866B";
+        } else {
+            btn.classList.remove("active");
+            btn.style.backgroundColor = "#A1A49D";
         }
+    }
+    uid.addEventListener("keyup", checkInput);
+    upw.addEventListener("keyup", checkInput);
 
-        userid.addEventListener("input", () => {
-            idError.textContent = "";
-            checkInputs();
-        });
+    // ✅ 비밀번호 보기/숨기기 토글 (eye.png <-> eyeoff.png)
+    const togglePw = document.getElementById("togglePw");
+    const CTX = "${pageContext.request.contextPath}";
 
-        pwInput.addEventListener("input", () => {
-            pwError.textContent = "";
-            checkInputs();
-        });
-
-        checkInputs(); // 초기 상태 설정
-
-        /* 제출 시 아이디/비밀번호 미입력 체크 */
-        loginForm.addEventListener("submit", (e) => {
-            let hasError = false;
-
-            // 기존 서버에서 내려온 문구 초기화
-            idError.textContent = "";
-            pwError.textContent = "";
-
-            if (userid.value.trim() === "") {
-                idError.textContent = "아이디를 입력해 주세요.";
-                hasError = true;
-            }
-            if (pwInput.value.trim() === "") {
-                pwError.textContent = "비밀번호를 입력해 주세요.";
-                hasError = true;
-            }
-
-            if (hasError) {
-                e.preventDefault(); // 전송 막기
-            }
-        });
+    togglePw.addEventListener("click", () => {
+        const isPw = upw.type === "password";
+        upw.type = isPw ? "text" : "password";
+        togglePw.src = isPw ? (CTX + "/img/eyeoff.png") : (CTX + "/img/eye.png");
     });
 </script>
+
+</body>
 </html>

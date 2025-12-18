@@ -3,7 +3,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>건강 페이지 - 가슴</title>
+    <title>건강 페이지 - 등</title>
 
     <style>
         * { box-sizing:border-box; margin:0; padding:0; }
@@ -18,7 +18,16 @@
             display:flex;align-items:center;justify-content:space-between;
         }
         .header-left{display:flex;align-items:center;gap:14px;}
-        .header-logo-box{width:34px;height:34px;border-radius:4px;background:#fff;}
+
+        /* 로고 이미지를 표시하도록 스타일 이름은 유지 */
+        .header-logo-box{
+            width:34px;
+            height:34px;
+            border-radius:4px;
+            object-fit:cover; /* 이미지 표시를 위해 추가 */
+            /* 기존 background:#fff;는 이미지로 대체되므로 제거하거나 유지할 수 있습니다. */
+        }
+
         .header-title{font-size:22px;font-weight:700;letter-spacing:.10em;}
         .header-nav{display:flex;align-items:center;gap:26px;font-size:15px;}
         .header-nav a{color:#fff;text-decoration:none;}
@@ -95,7 +104,9 @@
 
 <header>
     <div class="header-left">
-        <div class="header-logo-box"></div>
+        <img class="header-logo-box"
+             src="${pageContext.request.contextPath}/img/WebServerLogo2.png"
+             alt="MILLI ROAD Logo">
         <div class="header-title">MILLI ROAD</div>
     </div>
     <nav class="header-nav">
@@ -125,7 +136,7 @@
         </a>
     </div>
 
-    <div class="section-title">가슴</div>
+    <div class="section-title">등</div>
 
     <div class="filter-row">
         <button class="filter-btn filter-btn-active" data-type="ALL">전체</button>
@@ -146,44 +157,36 @@
         const buttons = document.querySelectorAll('.filter-btn');
         const listEl  = document.getElementById('workoutList');
 
+        // 등 부위 운동 데이터
         const data = {
-            DB: [
-                '덤벨 프레스',
-                '덤벨 풀오버',
-                '덤벨 플라이'
+            DB: [ // 덤벨
+                '벤트오버 덤벨로우',
+                '벤트오버 리버스 플라이',
+                '인클라인 덤벨로우'
             ],
             BB: [
-                '벤치 프레스',
-                '인클라인 벤치 프레스',
-                '디클라인 벤치 프레스'
+                '바벨 로우',
+                '바벨 데드리프트',
+                'T바 로우'
             ],
             BW: [
-                '푸쉬업',
-                '니 푸쉬업',
-                '클랩 푸쉬업'
+                '풀업',
+                '친업',
+                '슈퍼맨 백 익스텐션'
             ],
             BD: [
-                '밴드 체스트 프레스',
-                '밴드 체스트 플라이'
+                '밴드 풀어파트',
+                '밴드 라트 풀다운',
+                '밴드 로우'
             ],
             BALL: [
-                '스위스볼 푸쉬업',
-                '스위스볼 덤벨 프레스'
+                '스위스볼 백 익스텐션',
+                '스위스볼 힙 익스텐션'
             ]
         };
         data.ALL = [...data.DB, ...data.BB, ...data.BW, ...data.BD, ...data.BALL];
 
-        function mapType(t) {
-            switch (t) {
-                case 'DB': return '덤벨';
-                case 'BB': return '바벨';
-                case 'BW': return '맨몸';
-                case 'BD': return '밴드';
-                case 'BALL': return '볼';
-                default: return '';
-            }
-        }
-
+        // type 에 따라 리스트 다시 그리기
         function render(type) {
             const items = data[type] || [];
             listEl.innerHTML = '';
@@ -196,13 +199,26 @@
                 a.className = 'workout-btn';
                 a.textContent = name;
                 a.href = ctx + '/health_exercise_detail?part='
-                    + encodeURIComponent('가슴')
+                    + encodeURIComponent('등')
                     + '&type=' + encodeURIComponent(mapType(type))
                     + '&name=' + encodeURIComponent(name);
                 listEl.appendChild(a);
             });
         }
 
+        // 화면에 보여줄 기구명 매핑
+        function mapType(type) {
+            switch (type) {
+                case 'DB': return '덤벨';
+                case 'BB': return '바벨';
+                case 'BW': return '맨몸';
+                case 'BD': return '밴드';
+                case 'BALL': return '볼';
+                default: return '';
+            }
+        }
+
+        // 버튼 클릭 시 active 변경 + render
         buttons.forEach(btn => {
             btn.addEventListener('click', function () {
                 const type = this.getAttribute('data-type');
@@ -212,6 +228,7 @@
             });
         });
 
+        // 첫 로드시 전체 보기
         render('ALL');
     })();
 </script>

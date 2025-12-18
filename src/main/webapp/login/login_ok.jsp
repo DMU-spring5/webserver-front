@@ -1,115 +1,149 @@
-<%@ page contentType="text/html; charset=UTF-8" language="java" %>
-<%@ page import="java.io.*" %>
-<%@ page import="java.net.*" %>
-
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" trimDirectiveWhitespaces="true"%>
+<%@ page import="java.io.*, java.net.*, java.nio.charset.StandardCharsets" %>
 <%
     request.setCharacterEncoding("UTF-8");
-    String ctx = request.getContextPath();
+    String contextPath = request.getContextPath();
 
-    String userId = request.getParameter("userid");
-    String userPw = request.getParameter("userpw");
-    if (userId == null) userId = "";
-    if (userPw == null) userPw = "";
+    String userid = request.getParameter("userid");
+    String userpw = request.getParameter("userpw");
+    if (userid == null) userid = "";
+    if (userpw == null) userpw = "";
+    userid = userid.trim();
+    userpw = userpw.trim();
 
-    String redirectUrl = ctx + "/login/login.jsp?msg=" + URLEncoder.encode("로그인에 실패했습니다.", "UTF-8");
+// 최종 이동할 곳(여기만 바꾸면 됨)
+    String redirectTo = contextPath + "/main/main.jsp";
 
-    if (userId.trim().isEmpty() || userPw.trim().isEmpty()) {
-        redirectUrl = ctx + "/login/login.jsp?msg=" + URLEncoder.encode("아이디/비밀번호를 입력해주세요.", "UTF-8");
-        response.sendRedirect(redirectUrl);
-        return;
-    }
+// 로그인 실패시 이동
+    String failTo = contextPath + "/login/login.jsp?msg=fail";
 
-    String baseUrl = "https://webserver-backend.onrender.com";
-    String apiUrl  = baseUrl + "/api/v1/auth/login";
+// 입력 체크
+    if (userid.length() == 0 || userpw.length() == 0) {
+        redirectTo = contextPath + "/login/login.jsp?msg=empty";
+    } else {
 
-    String safeId = userId.replace("\\", "\\\\").replace("\"", "\\\"");
-    String safePw = userPw.replace("\\", "\\\\").replace("\"", "\\\"");
+        // ✅ 백엔드 로그인 API (필요하면 여기만 수정)
+        final String LOGIN_URL = "https://webserver-backend.onrender.com/api/v1/auth/login";
 
-    // 백엔드 스펙 불일치(400) 잡기 위해 여러 포맷 재시도
-    String[] bodies = new String[] {
-            "{"+ "\"userid\":\"" + safeId + "\"," + "\"userpw\":\"" + safePw + "\""+ "}",
-            "{"+ "\"userId\":\"" + safeId + "\"," + "\"userPw\":\"" + safePw + "\""+ "}",
-            "{"+ "\"userId\":\"" + safeId + "\"," + "\"password\":\"" + safePw + "\""+ "}"
-    };
-
-    int status = -1;
-    String json = "";
-    String accessToken = null;
-
-    for (int i = 0; i < bodies.length; i++) {
         HttpURLConnection conn = null;
+        BufferedReader br = null;
+
         try {
-            URL url = new URL(apiUrl);
+            URL url = new URL(LOGIN_URL);
             conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
-            conn.setConnectTimeout(10000);
-            conn.setReadTimeout(10000);
-            conn.setDoOutput(true);
+            conn.setConnectTimeout(8000);
+            conn.setReadTimeout(15000);
             conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
             conn.setRequestProperty("Accept", "application/json");
+            conn.setDoOutput(true);
+
+            // JSON 안전 처리
+            String safeId = userid.replace("\\", "\\\\").replace("\"", "\\\"");
+            String safePw = userpw.replace("\\", "\\\\").replace("\"", "\\\"");
+
+            // 백엔드 스펙: userId/password
+            String body = "{"
+                    + "\"userId\":\"" + safeId + "\","
+                    + "\"password\":\"" + safePw + "\""
+                    + "}";
 
             try (OutputStream os = conn.getOutputStream()) {
-                os.write(bodies[i].getBytes("UTF-8"));
+                os.write(body.getBytes(StandardCharsets.UTF_8));
             }
 
-            status = conn.getResponseCode();
-            InputStream is = (status >= 200 && status < 300) ? conn.getInputStream() : conn.getErrorStream();
+            int code = conn.getResponseCode();
+            InputStream is = (code >= 200 && code < 300) ? conn.getInputStream() : conn.getErrorStream();
 
+            br = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
             StringBuilder sb = new StringBuilder();
-            try (BufferedReader br = new BufferedReader(new InputStreamReader(is, "UTF-8"))) {
-                String line;
-                while ((line = br.readLine()) != null) sb.append(line);
-            }
-            json = sb.toString();
+            String line;
+            while ((line = br.readLine()) != null) sb.append(line);
+            String resp = sb.toString();
 
-            System.out.println("=== [login_ok] TRY#" + (i+1) + " STATUS=" + status);
-            System.out.println("=== [login_ok] TRY#" + (i+1) + " BODY=" + bodies[i]);
-            System.out.println("=== [login_ok] TRY#" + (i+1) + " RESP=" + json);
+            if (!(code >= 200 && code < 300)) {
+                redirectTo = failTo;
+            } else {
 
-            if (status >= 200 && status < 300) {
-                // accessToken 파싱(단순 문자열 탐색)
-                int idx = json.indexOf("\"accessToken\"");
-                if (idx >= 0) {
-                    int colon = json.indexOf(":", idx);
-                    int q1 = json.indexOf("\"", colon + 1);
-                    int q2 = json.indexOf("\"", q1 + 1);
-                    if (q1 >= 0 && q2 > q1) accessToken = json.substring(q1 + 1, q2);
-                }
-
-                if (accessToken == null) {
-                    idx = json.indexOf("\"token\"");
-                    if (idx >= 0) {
-                        int colon = json.indexOf(":", idx);
-                        int q1 = json.indexOf("\"", colon + 1);
-                        int q2 = json.indexOf("\"", q1 + 1);
-                        if (q1 >= 0 && q2 > q1) accessToken = json.substring(q1 + 1, q2);
+                // ===== 아주 단순 파싱: accessToken/token =====
+                String accessToken = null;
+                {
+                    String key1 = "\"accessToken\":\"";
+                    String key2 = "\"token\":\"";
+                    int p = resp.indexOf(key1);
+                    int klen = key1.length();
+                    if (p < 0) { p = resp.indexOf(key2); klen = key2.length(); }
+                    if (p >= 0) {
+                        int s = p + klen;
+                        int e = resp.indexOf("\"", s);
+                        if (e > s) accessToken = resp.substring(s, e);
                     }
                 }
 
-                break; // 성공이면 루프 종료
+                // nickname (optional)
+                String nickname = null;
+                {
+                    String key = "\"nickname\":\"";
+                    int p = resp.indexOf(key);
+                    if (p >= 0) {
+                        int s = p + key.length();
+                        int e = resp.indexOf("\"", s);
+                        if (e > s) nickname = resp.substring(s, e);
+                    }
+                }
+
+                // 숫자 PK(optional): "id":11 또는 "userId":11
+                Integer userPk = null;
+                {
+                    String[] keys = new String[] { "\"id\":", "\"userId\":" };
+                    for (int i=0;i<keys.length;i++){
+                        String key = keys[i];
+                        int p = resp.indexOf(key);
+                        if (p >= 0) {
+                            int s = p + key.length();
+                            while (s < resp.length() && Character.isWhitespace(resp.charAt(s))) s++;
+                            int e = s;
+                            while (e < resp.length() && Character.isDigit(resp.charAt(e))) e++;
+                            if (e > s) {
+                                try { userPk = Integer.parseInt(resp.substring(s, e)); } catch(Exception ignore){}
+                            }
+                            break;
+                        }
+                    }
+                }
+
+                if (accessToken == null || accessToken.trim().length() == 0) {
+                    redirectTo = failTo;
+                } else {
+                    // ✅ 세션 저장 (main.jsp는 accessToken을 보고 로그인 표시함)
+                    session.setAttribute("accessToken", accessToken);
+                    session.setAttribute("userid", userid);
+                    session.setAttribute("nickname", (nickname != null && nickname.trim().length() > 0) ? nickname : userid);
+
+                    // social_write.jsp가 숫자 PK를 요구하면 여기 세팅
+                    if (userPk != null && userPk.intValue() > 0) {
+                        session.setAttribute("userId", userPk.intValue());
+                    }
+
+                    // next 파라미터 있으면 그쪽으로(옵션)
+                    String next = request.getParameter("next");
+                    if (next != null && next.startsWith(contextPath)) {
+                        redirectTo = next;
+                    } else {
+                        redirectTo = contextPath + "/main/main.jsp";
+                    }
+                }
             }
 
         } catch (Exception e) {
-            System.out.println("=== [login_ok] EXCEPTION: " + e.getMessage());
-            json = "";
-            status = 500;
+            redirectTo = contextPath + "/login/login.jsp?msg=error";
         } finally {
-            if (conn != null) conn.disconnect();
+            try { if (br != null) br.close(); } catch(Exception ignore) {}
+            try { if (conn != null) conn.disconnect(); } catch(Exception ignore) {}
         }
     }
 
-    if (status >= 200 && status < 300) {
-        if (accessToken != null && !accessToken.trim().isEmpty()) {
-            session.setAttribute("accessToken", accessToken);
-            session.setMaxInactiveInterval(60 * 60);
-            redirectUrl = ctx + "/main/mainpage.jsp";
-        } else {
-            redirectUrl = ctx + "/login/login.jsp?msg=" + URLEncoder.encode("토큰을 받지 못했습니다.", "UTF-8");
-        }
-    } else {
-        // 400이면 스펙 불일치 가능성이 매우 큼. 일단 status는 그대로 보여줌
-        redirectUrl = ctx + "/login/login.jsp?msg=" + URLEncoder.encode("로그인 실패(" + status + ")", "UTF-8");
-    }
-
-    response.sendRedirect(redirectUrl);
+// ✅ 여기서만 딱 한번 이동 (return 안 씀 → Unreachable 컴파일 에러 제거)
+    try { out.clearBuffer(); } catch(Exception ignore) {}
+    response.sendRedirect(redirectTo);
 %>
