@@ -3,7 +3,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>건강 페이지 - 카테고리 선택</title>
+    <title>건강 페이지</title>
 
     <style>
         * { box-sizing:border-box; margin:0; padding:0; }

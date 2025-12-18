@@ -176,7 +176,7 @@
     </div>
 
     <button class="btn-confirm" type="button"
-            onclick="location.href='${pageContext.request.contextPath}/health'">
+            onclick="location.href=''">
         결과 확인
     </button>
 

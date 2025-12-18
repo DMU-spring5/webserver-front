@@ -259,7 +259,7 @@
 
     <div class="header-right">
         <span><%= (session.getAttribute("nickname")!=null ? session.getAttribute("nickname") : "") %> 님</span>
-        <button onclick="location.href='<%=ctx%>/login/login_out.jsp'">로그아웃</button>
+        <button onclick="location.href='../login/login_out.jsp'">로그아웃</button>
     </div>
 </header>
 
@@ -269,7 +269,7 @@
         <p class="sub">군 생활에 대한 솔직한 후기를 작성해 주세요.</p>
 
         <!-- 네 action 그대로 유지 -->
-        <form method="post" action="<%=ctx%>/views/social_write.jsp">
+        <form method="post" action="<%=ctx%>/social/social_write.jsp">
             <div class="box">
                 <div class="row">
                     <div class="label">공개 옵션</div>

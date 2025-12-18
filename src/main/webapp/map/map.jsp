@@ -92,7 +92,7 @@
 
 <div class="layout">
     <div class="left">
-        <div class="h1">대중교통 위치/시간표 - 첫 화면</div>
+        <div class="h1">대중교통 위치/시간표</div>
         <div class="sub">장소, 주소, 정류장을 검색해 주세요.</div>
 
         <div class="search-wrap">
