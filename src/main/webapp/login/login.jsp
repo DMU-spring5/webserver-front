@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>로그인 - MILLI ROAD</title>
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/index.css">
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/index.css">
 </head>
 <body class="login-body">
 
