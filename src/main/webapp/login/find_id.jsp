@@ -11,7 +11,7 @@
     <img src="<%=request.getContextPath()%>/img/WebServerLogo.png"
          alt="MILLI ROAD 로고" width="200">
 </div>
-<form id="findIdForm" action="find_id_ok.jsp" method="post">
+<form id="findIdForm" action="../WEB-INF/views/find_id_ok.jsp" method="post">
     <!-- 닉네임 -->
     <div class="nickname-box">
         <label for="nickname">닉네임</label><br>

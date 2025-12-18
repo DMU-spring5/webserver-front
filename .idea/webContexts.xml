@@ -6,6 +6,11 @@
         <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/social_board.jsp" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/social_detail.jsp" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/social_write.jsp" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/api/news_proxy.jsp" value="file://$PROJECT_DIR$/src/main/webapp/api" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/login/login_ok.jsp" value="file://$PROJECT_DIR$/src/main/webapp/login" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/main/main.jsp" value="file://$PROJECT_DIR$/src/main/webapp/main" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/main/mainpage.jsp" value="file://$PROJECT_DIR$/src/main/webapp" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/views/social_write.jsp" value="file://$PROJECT_DIR$/src/main/webapp/views" />
       </map>
     </option>
   </component>

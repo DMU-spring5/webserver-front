@@ -3,7 +3,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>건강 페이지 - 하체</title>
+    <title>건강 페이지 - 가슴</title>
 
     <style>
         * { box-sizing:border-box; margin:0; padding:0; }
@@ -99,13 +99,13 @@
         <div class="header-title">MILLI ROAD</div>
     </div>
     <nav class="header-nav">
-        <a href="#">뉴스</a>
+        <a href="${pageContext.request.contextPath}/main/mainpage.jsp">뉴스</a>
         <span>|</span>
         <a href="${pageContext.request.contextPath}/social/board">소셜</a>
         <span>|</span>
-        <a href="${pageContext.request.contextPath}/health" class="active">건강</a>
+        <a href="${pageContext.request.contextPath}/health/health.jsp" class="active">건강</a>
         <span>|</span>
-        <a href="${pageContext.request.contextPath}/main">지도</a>
+        <a href="${pageContext.request.contextPath}/map/map.jsp">지도</a>
     </nav>
     <div class="header-right">
         니인내조 님
@@ -125,7 +125,7 @@
         </a>
     </div>
 
-    <div class="section-title">하체</div>
+    <div class="section-title">가슴</div>
 
     <div class="filter-row">
         <button class="filter-btn filter-btn-active" data-type="ALL">전체</button>
@@ -148,28 +148,27 @@
 
         const data = {
             DB: [
-                '덤벨 데드리프트',
-                '고블릿 스쿼트',
-                '덤벨 스쿼트'
+                '덤벨 프레스',
+                '덤벨 풀오버',
+                '덤벨 플라이'
             ],
             BB: [
-                '바벨 백 스쿼트',
-                '바벨 프론트 스쿼트',
-                '바벨 루마니안 데드리프트'
+                '벤치 프레스',
+                '인클라인 벤치 프레스',
+                '디클라인 벤치 프레스'
             ],
             BW: [
-                '맨몸 스쿼트',
-                '런지',
-                '점프 스쿼트'
+                '푸쉬업',
+                '니 푸쉬업',
+                '클랩 푸쉬업'
             ],
             BD: [
-                '밴드 스쿼트',
-                '밴드 레그 컬',
-                '밴드 힙 어브덕션'
+                '밴드 체스트 프레스',
+                '밴드 체스트 플라이'
             ],
             BALL: [
-                '스위스볼 힙 브릿지',
-                '스위스볼 레그 컬'
+                '스위스볼 푸쉬업',
+                '스위스볼 덤벨 프레스'
             ]
         };
         data.ALL = [...data.DB, ...data.BB, ...data.BW, ...data.BD, ...data.BALL];
@@ -197,7 +196,7 @@
                 a.className = 'workout-btn';
                 a.textContent = name;
                 a.href = ctx + '/health_exercise_detail?part='
-                    + encodeURIComponent('하체')
+                    + encodeURIComponent('가슴')
                     + '&type=' + encodeURIComponent(mapType(type))
                     + '&name=' + encodeURIComponent(name);
                 listEl.appendChild(a);
@@ -219,4 +218,3 @@
 
 </body>
 </html>
-

@@ -3,7 +3,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>건강 페이지 - 칼로리 계산기</title>
+    <title>건강 페이지 - 칼로리 계산기 3단계</title>
 
     <style>
         * { box-sizing:border-box; margin:0; padding:0; }
@@ -14,7 +14,6 @@
             color:#333;
         }
 
-        /* 헤더 */
         header{
             height:64px;background:#78866B;color:#fff;
             padding:0 40px;
@@ -33,7 +32,6 @@
             background:#fff;color:#78866B;font-weight:600;cursor:pointer;
         }
 
-        /* 본문 */
         .page-wrap{
             max-width:1000px;
             margin:40px auto 80px;
@@ -43,19 +41,14 @@
             box-shadow:0 1px 3px rgba(0,0,0,0.06);
         }
 
-        /* 상단 탭 */
         .top-tabs{
             font-size:18px;
             margin-bottom:32px;
         }
-        .tab-link{
-            text-decoration:none;
-            margin-right:16px;
-        }
-        .tab-text-main{font-weight:700;color:#000;}    /* 계산기 */
+        .tab-link{text-decoration:none;margin-right:16px;}
+        .tab-text-main{font-weight:700;color:#000;}
         .tab-text-sub{font-weight:400;color:#b6b6b6;}
 
-        /* 단계 인디케이터 */
         .step-row{
             display:flex;
             gap:24px;
@@ -81,69 +74,28 @@
         .section-title{
             font-size:18px;
             font-weight:700;
-            margin-bottom:10px;
-        }
-        .section-sub{
-            font-size:14px;
-            color:#666;
             margin-bottom:26px;
         }
 
-        .row{
-            display:flex;
-            align-items:center;
-            gap:24px;
-            margin-bottom:18px;
-        }
-        .label{
-            width:90px;
-            font-size:15px;
-        }
-        .input-box{
-            width:140px;
-            height:40px;
-            border:1px solid #d7d7cf;
-            background:#f3f2ea;
-            display:flex;
-            align-items:center;
-            justify-content:space-between;
-            padding:0 10px;
-            font-size:15px;
-        }
-        .input-box input{
-            width:60px;
-            border:none;
-            outline:none;
-            background:transparent;
-            text-align:right;
-            font-size:15px;
-        }
-
-        .activity-row{
-            display:flex;
-            gap:18px;
-            margin:24px 0 36px;
-        }
-        .activity-btn{
-            width:80px;
-            height:80px;
-            border-radius:50%;
-            border:1px solid #d7d7cf;
-            background:#f3f2ea;
-            font-size:13px;
-            display:flex;
-            align-items:center;
-            justify-content:center;
+        .text-center{
             text-align:center;
-            cursor:pointer;
-        }
-        .activity-btn.active{
-            background:#d4c09f;
-            border-color:#d4c09f;
-            font-weight:600;
+            line-height:1.7;
         }
 
-        .btn-next{
+        .result-box{
+            margin:40px auto 30px;
+            max-width:620px;
+            background:#e9e7dd;
+            padding:26px 40px;
+            display:flex;
+            justify-content:space-between;
+            font-size:15px;
+        }
+        .result-box strong{
+            font-size:20px;
+        }
+
+        .btn-confirm{
             width:200px;
             height:44px;
             border-radius:2px;
@@ -164,13 +116,13 @@
         <div class="header-title">MILLI ROAD</div>
     </div>
     <nav class="header-nav">
-        <a href="#">뉴스</a>
+        <a href="${pageContext.request.contextPath}/main/mainpage.jsp">뉴스</a>
         <span>|</span>
         <a href="${pageContext.request.contextPath}/social/board">소셜</a>
         <span>|</span>
-        <a href="${pageContext.request.contextPath}/health" class="active">건강</a>
+        <a href="${pageContext.request.contextPath}/health/health.jsp" class="active">건강</a>
         <span>|</span>
-        <a href="${pageContext.request.contextPath}/main">지도</a>
+        <a href="${pageContext.request.contextPath}/map/map.jsp">지도</a>
     </nav>
     <div class="header-right">
         니인내조 님
@@ -193,60 +145,42 @@
         </a>
     </div>
 
-    <!-- 단계 버튼: 1단계 활성 -->
+    <!-- 단계 버튼: 3번만 검정 -->
     <div class="step-row">
-        <a class="step-circle active"
+        <a class="step-circle"
            href="${pageContext.request.contextPath}/health_calculator">1</a>
         <a class="step-circle"
            href="${pageContext.request.contextPath}/health_calculator2">2</a>
-        <a class="step-circle"
+        <a class="step-circle active"
            href="${pageContext.request.contextPath}/health_calculator3">3</a>
     </div>
 
-    <div class="section-title">니인내조 님에 대한 정보를 입력해 주세요.</div>
+    <div class="section-title text-center">
+        니인내조 님을 위한 추천 계획이 완성됐어요.
+    </div>
 
-    <div class="row">
-        <div class="label">나이</div>
-        <div class="input-box">
-            <input type="text" value="21">
-            <span>세</span>
+    <div class="text-center">
+        기초 대사량&nbsp;&nbsp;&nbsp;1402kcal<br>
+        활동 대사량&nbsp;&nbsp;&nbsp;1402kcal
+    </div>
+
+    <div class="result-box">
+        <div>
+            하루당 추천 소모 칼로리<br>
+            <strong>3242 kcal</strong>
         </div>
-
-        <div class="label">키</div>
-        <div class="input-box">
-            <input type="text" value="163">
-            <span>cm</span>
+        <div style="text-align:right;">
+            예상 실천 기간<br>
+            <strong>약 300주</strong>
         </div>
     </div>
 
-    <div class="section-title" style="margin-top:26px;">니인내조 님의 평소 활동량을 선택해 주세요.</div>
-
-    <div class="activity-row">
-        <div class="activity-btn">매우<br>적음</div>
-        <div class="activity-btn">적음</div>
-        <div class="activity-btn active">보통</div>
-        <div class="activity-btn">많음</div>
-        <div class="activity-btn">매우<br>많음</div>
-    </div>
-
-    <button class="btn-next" type="button"
-            onclick="location.href='${pageContext.request.contextPath}/health_calculator2'">
-        다음 단계
+    <button class="btn-confirm" type="button"
+            onclick="location.href=''">
+        결과 확인
     </button>
 
 </div>
-
-<script>
-    (function () {
-        const buttons = document.querySelectorAll('.activity-btn');
-        buttons.forEach(b => {
-            b.addEventListener('click', function () {
-                buttons.forEach(x => x.classList.remove('active'));
-                this.classList.add('active');
-            });
-        });
-    })();
-</script>
 
 </body>
 </html>

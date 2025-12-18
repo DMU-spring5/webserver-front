@@ -1,18 +1,9 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%
-    String part = request.getParameter("part");   // 부위: 어깨 & 팔, 가슴, 등, 하체, 유산소, 스포츠
-    String type = request.getParameter("type");   // 기구: 덤벨, 바벨, 맨몸, 밴드, 볼 등
-    String name = request.getParameter("name");   // 운동 이름
-
-    if (part == null)  part = "";
-    if (type == null)  type = "";
-    if (name == null)  name = "";
-%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>운동 칼로리 계산 - <%= name %></title>
+    <title>건강 페이지 - 칼로리 계산기</title>
 
     <style>
         * { box-sizing:border-box; margin:0; padding:0; }
@@ -23,6 +14,7 @@
             color:#333;
         }
 
+        /* 헤더 */
         header{
             height:64px;background:#78866B;color:#fff;
             padding:0 40px;
@@ -41,6 +33,7 @@
             background:#fff;color:#78866B;font-weight:600;cursor:pointer;
         }
 
+        /* 본문 */
         .page-wrap{
             max-width:1000px;
             margin:40px auto 80px;
@@ -53,50 +46,72 @@
         /* 상단 탭 */
         .top-tabs{
             font-size:18px;
-            margin-bottom:24px;
+            margin-bottom:32px;
         }
-        .tab-link{text-decoration:none;margin-right:16px;}
-        .tab-text-main{font-weight:700;color:#000;}
+        .tab-link{
+            text-decoration:none;
+            margin-right:16px;
+        }
+        .tab-text-main{font-weight:700;color:#000;}    /* 계산기 */
         .tab-text-sub{font-weight:400;color:#b6b6b6;}
 
-        /* 선택된 운동 정보 */
-        .info-box{
-            width:100%;
-            padding:18px 24px;
-            border-radius:2px;
-            border:1px solid #d7d7cf;
-            background:#f3f2ea;
-            margin-bottom:26px;
-            text-align:center;
-            line-height:1.6;
+        /* 단계 인디케이터 */
+        .step-row{
+            display:flex;
+            gap:24px;
+            margin-bottom:32px;
         }
-        .info-path{font-size:14px;color:#777;}
-        .info-name{font-size:18px;font-weight:700;}
+        .step-circle{
+            width:32px;height:32px;
+            border-radius:50%;
+            border:2px solid #d0d0d0;
+            display:flex;align-items:center;justify-content:center;
+            font-size:14px;
+            color:#999;
+            background:#f5f5f5;
+            cursor:pointer;
+            text-decoration:none;
+        }
+        .step-circle.active{
+            background:#000;
+            border-color:#000;
+            color:#fff;
+        }
+
+        .section-title{
+            font-size:18px;
+            font-weight:700;
+            margin-bottom:10px;
+        }
+        .section-sub{
+            font-size:14px;
+            color:#666;
+            margin-bottom:26px;
+        }
 
         .row{
             display:flex;
-            justify-content:space-between;
             align-items:center;
+            gap:24px;
             margin-bottom:18px;
         }
         .label{
-            width:120px;
+            width:90px;
             font-size:15px;
         }
         .input-box{
-            flex:1;
-            max-width:260px;
+            width:140px;
             height:40px;
             border:1px solid #d7d7cf;
             background:#f3f2ea;
             display:flex;
             align-items:center;
             justify-content:space-between;
-            padding:0 14px;
+            padding:0 10px;
             font-size:15px;
         }
         .input-box input{
-            width:90px;
+            width:60px;
             border:none;
             outline:none;
             background:transparent;
@@ -104,34 +119,31 @@
             font-size:15px;
         }
 
-        .intensity-row{display:flex;gap:10px;}
-        .intensity-btn{
-            min-width:72px;
-            height:32px;
-            border-radius:2px;
+        .activity-row{
+            display:flex;
+            gap:18px;
+            margin:24px 0 36px;
+        }
+        .activity-btn{
+            width:80px;
+            height:80px;
+            border-radius:50%;
             border:1px solid #d7d7cf;
             background:#f3f2ea;
-            font-size:14px;
+            font-size:13px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            text-align:center;
             cursor:pointer;
         }
-        .intensity-btn.active{
+        .activity-btn.active{
             background:#d4c09f;
             border-color:#d4c09f;
             font-weight:600;
         }
 
-        .result-box{
-            margin:36px auto 28px;
-            max-width:620px;
-            background:#e9e7dd;
-            padding:22px 40px;
-            display:flex;
-            justify-content:space-between;
-            font-size:15px;
-        }
-        .result-box strong{font-size:20px;}
-
-        .btn-confirm{
+        .btn-next{
             width:200px;
             height:44px;
             border-radius:2px;
@@ -152,13 +164,13 @@
         <div class="header-title">MILLI ROAD</div>
     </div>
     <nav class="header-nav">
-        <a href="#">뉴스</a>
+        <a href="${pageContext.request.contextPath}/main/mainpage.jsp">뉴스</a>
         <span>|</span>
         <a href="${pageContext.request.contextPath}/social/board">소셜</a>
         <span>|</span>
-        <a href="${pageContext.request.contextPath}/health" class="active">건강</a>
+        <a href="${pageContext.request.contextPath}/health/health.jsp" class="active">건강</a>
         <span>|</span>
-        <a href="${pageContext.request.contextPath}/main">지도</a>
+        <a href="${pageContext.request.contextPath}/map/map.jsp">지도</a>
     </nav>
     <div class="header-right">
         니인내조 님
@@ -170,70 +182,66 @@
 
     <!-- 상단 탭 -->
     <div class="top-tabs">
-        <a class="tab-link" href="${pageContext.request.contextPath}/health_main">
-            <span class="tab-text-main">운동 칼로리 검색</span>
+        <a class="tab-link"
+           href="${pageContext.request.contextPath}/health_main">
+            <span class="tab-text-sub">운동 칼로리 검색</span>
         </a>
         <span>|</span>
-        <a class="tab-link" href="${pageContext.request.contextPath}/health_calculator">
-            <span class="tab-text-sub">칼로리 계산기</span>
+        <a class="tab-link"
+           href="${pageContext.request.contextPath}/health_calculator">
+            <span class="tab-text-main">칼로리 계산기</span>
         </a>
     </div>
 
-    <!-- 선택된 운동 표시 -->
-    <div class="info-box">
-        <div class="info-path">
-            <%= part %>
-            <% if (!type.isEmpty()) { %> / <%= type %><% } %>
-        </div>
-        <div class="info-name"><%= name %></div>
+    <!-- 단계 버튼: 1단계 활성 -->
+    <div class="step-row">
+        <a class="step-circle active"
+           href="${pageContext.request.contextPath}/health_calculator">1</a>
+        <a class="step-circle"
+           href="${pageContext.request.contextPath}/health_calculator2">2</a>
+        <a class="step-circle"
+           href="${pageContext.request.contextPath}/health_calculator3">3</a>
     </div>
 
-    <!-- 운동 시간 -->
+    <div class="section-title">니인내조 님에 대한 정보를 입력해 주세요.</div>
+
     <div class="row">
-        <div class="label">운동 시간</div>
+        <div class="label">나이</div>
         <div class="input-box">
-            <input type="text" value="100">
-            <span>분</span>
+            <input type="text" value="21">
+            <span>세</span>
         </div>
-    </div>
 
-    <!-- 운동 강도 -->
-    <div class="row">
-        <div class="label">운동 강도</div>
-        <div class="intensity-row">
-            <button class="intensity-btn active" type="button">가볍게</button>
-            <button class="intensity-btn" type="button">적당히</button>
-            <button class="intensity-btn" type="button">강하게</button>
-        </div>
-    </div>
-
-    <!-- 현재 체중 -->
-    <div class="row">
-        <div class="label">현재 체중</div>
+        <div class="label">키</div>
         <div class="input-box">
-            <input type="text" value="100">
-            <span>KG</span>
+            <input type="text" value="163">
+            <span>cm</span>
         </div>
     </div>
 
-    <!-- 결과 박스 (지금은 고정값) -->
-    <div class="result-box">
-        <div>예상 소모 칼로리</div>
-        <div><strong>100kcal</strong></div>
+    <div class="section-title" style="margin-top:26px;">니인내조 님의 평소 활동량을 선택해 주세요.</div>
+
+    <div class="activity-row">
+        <div class="activity-btn">매우<br>적음</div>
+        <div class="activity-btn">적음</div>
+        <div class="activity-btn active">보통</div>
+        <div class="activity-btn">많음</div>
+        <div class="activity-btn">매우<br>많음</div>
     </div>
 
-    <button class="btn-confirm" type="button" onclick="history.back();">
-        뒤로 가기
+    <button class="btn-next" type="button"
+            onclick="location.href='${pageContext.request.contextPath}/health_calculator2'">
+        다음 단계
     </button>
 
 </div>
 
 <script>
     (function () {
-        const btns = document.querySelectorAll('.intensity-btn');
-        btns.forEach(b => {
+        const buttons = document.querySelectorAll('.activity-btn');
+        buttons.forEach(b => {
             b.addEventListener('click', function () {
-                btns.forEach(x => x.classList.remove('active'));
+                buttons.forEach(x => x.classList.remove('active'));
                 this.classList.add('active');
             });
         });

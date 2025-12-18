@@ -27,11 +27,11 @@
             <nav class="nav">
                 <a href="index.jsp" class="active">뉴스</a>
                 <span class="divider">|</span>
-                <a href="../views/social_board.jsp">소셜</a>
+                <a href="../social/social_board.jsp">소셜</a>
                 <span class="divider">|</span>
-                <a href="../views/health.jsp">건강</a>
+                <a href="../health/health.jsp">건강</a>
                 <span class="divider">|</span>
-                <a href="../views/map.jsp">지도</a>
+                <a href="../map/map.jsp">지도</a>
             </nav>
         </div>
     </div>
