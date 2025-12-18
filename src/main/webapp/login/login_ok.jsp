@@ -12,7 +12,7 @@
     userpw = userpw.trim();
 
 // 최종 이동할 곳(여기만 바꾸면 됨)
-    String redirectTo = contextPath + "/main/main.jsp";
+    String redirectTo = contextPath + "/main/mainpage.jsp";
 
 // 로그인 실패시 이동
     String failTo = contextPath + "/login/login.jsp?msg=fail";
@@ -130,7 +130,7 @@
                     if (next != null && next.startsWith(contextPath)) {
                         redirectTo = next;
                     } else {
-                        redirectTo = contextPath + "/main/main.jsp";
+                        redirectTo = contextPath + "/main/mainpage.jsp";
                     }
                 }
             }

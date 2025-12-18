@@ -8,7 +8,7 @@
     <!-- ===== 건강 영역 ===== -->
     <servlet>
         <servlet-name>healthPage</servlet-name>
-        <jsp-file>/views/health.jsp</jsp-file>
+        <jsp-file>/health/health.jsp</jsp-file>
     </servlet>
     <servlet-mapping>
         <servlet-name>healthPage</servlet-name>
@@ -17,7 +17,7 @@
 
     <servlet>
         <servlet-name>healthMainPage</servlet-name>
-        <jsp-file>/views/health_main.jsp</jsp-file>
+        <jsp-file>/health/health_main.jsp</jsp-file>
     </servlet>
     <servlet-mapping>
         <servlet-name>healthMainPage</servlet-name>
@@ -27,7 +27,7 @@
     <!-- 각 부위별 건강 페이지 -->
     <servlet>
         <servlet-name>healthShoulderPage</servlet-name>
-        <jsp-file>/views/health_shoulder.jsp</jsp-file>
+        <jsp-file>/health/health_shoulder.jsp</jsp-file>
     </servlet>
     <servlet-mapping>
         <servlet-name>healthShoulderPage</servlet-name>
@@ -36,7 +36,7 @@
 
     <servlet>
         <servlet-name>healthChestPage</servlet-name>
-        <jsp-file>/views/health_chest.jsp</jsp-file>
+        <jsp-file>/health/health_chest.jsp</jsp-file>
     </servlet>
     <servlet-mapping>
         <servlet-name>healthChestPage</servlet-name>
@@ -45,7 +45,7 @@
 
     <servlet>
         <servlet-name>healthBackPage</servlet-name>
-        <jsp-file>/views/health_back.jsp</jsp-file>
+        <jsp-file>/health/health_back.jsp</jsp-file>
     </servlet>
     <servlet-mapping>
         <servlet-name>healthBackPage</servlet-name>
@@ -54,7 +54,7 @@
 
     <servlet>
         <servlet-name>healthLegPage</servlet-name>
-        <jsp-file>/views/health_leg.jsp</jsp-file>
+        <jsp-file>/health/health_leg.jsp</jsp-file>
     </servlet>
     <servlet-mapping>
         <servlet-name>healthLegPage</servlet-name>
@@ -63,7 +63,7 @@
 
     <servlet>
         <servlet-name>healthCtPage</servlet-name>
-        <jsp-file>/views/health_ct.jsp</jsp-file>
+        <jsp-file>/health/health_ct.jsp</jsp-file>
     </servlet>
     <servlet-mapping>
         <servlet-name>healthCtPage</servlet-name>
@@ -72,7 +72,7 @@
 
     <servlet>
         <servlet-name>healthSportsPage</servlet-name>
-        <jsp-file>/views/health_sports.jsp</jsp-file>
+        <jsp-file>/health/health_sports.jsp</jsp-file>
     </servlet>
     <servlet-mapping>
         <servlet-name>healthSportsPage</servlet-name>
@@ -81,7 +81,7 @@
 
     <servlet>
         <servlet-name>healthExerciseDetailPage</servlet-name>
-        <jsp-file>/views/health_exercise_detail.jsp</jsp-file>
+        <jsp-file>/health/health_exercise_detail.jsp</jsp-file>
     </servlet>
     <servlet-mapping>
         <servlet-name>healthExerciseDetailPage</servlet-name>
@@ -90,7 +90,7 @@
 
     <servlet>
         <servlet-name>healthCalculatorPage</servlet-name>
-        <jsp-file>/views/health_calculator.jsp</jsp-file>
+        <jsp-file>/health/health_calculator.jsp</jsp-file>
     </servlet>
     <servlet-mapping>
         <servlet-name>healthCalculatorPage</servlet-name>
@@ -99,7 +99,7 @@
 
     <servlet>
         <servlet-name>healthCalculator2Page</servlet-name>
-        <jsp-file>/views/health_calculator2.jsp</jsp-file>
+        <jsp-file>/health/health_calculator2.jsp</jsp-file>
     </servlet>
     <servlet-mapping>
         <servlet-name>healthCalculator2Page</servlet-name>
@@ -108,7 +108,7 @@
 
     <servlet>
         <servlet-name>healthCalculator3Page</servlet-name>
-        <jsp-file>/views/health_calculator3.jsp</jsp-file>
+        <jsp-file>/health/health_calculator3.jsp</jsp-file>
     </servlet>
     <servlet-mapping>
         <servlet-name>healthCalculator3Page</servlet-name>
@@ -118,7 +118,7 @@
     <!-- ===== 소셜 영역 ===== -->
     <servlet>
         <servlet-name>socialBoardPage</servlet-name>
-        <jsp-file>/views/social_board.jsp</jsp-file>
+        <jsp-file>/social/social_board.jsp</jsp-file>
     </servlet>
     <servlet-mapping>
         <servlet-name>socialBoardPage</servlet-name>
@@ -127,7 +127,7 @@
 
     <servlet>
         <servlet-name>socialWritePage</servlet-name>
-        <jsp-file>/views/social_write.jsp</jsp-file>
+        <jsp-file>/social/social_write.jsp</jsp-file>
     </servlet>
     <servlet-mapping>
         <servlet-name>socialWritePage</servlet-name>
@@ -136,7 +136,7 @@
 
     <servlet>
         <servlet-name>socialDetailPage</servlet-name>
-        <jsp-file>/views/social_detail.jsp</jsp-file>
+        <jsp-file>/social/social_detail.jsp</jsp-file>
     </servlet>
     <servlet-mapping>
         <servlet-name>socialDetailPage</servlet-name>
@@ -145,7 +145,7 @@
 
     <servlet>
         <servlet-name>socialUnitPage</servlet-name>
-        <jsp-file>/views/social_unit.jsp</jsp-file>
+        <jsp-file>/social/social_unit.jsp</jsp-file>
     </servlet>
     <servlet-mapping>
         <servlet-name>socialUnitPage</servlet-name>
@@ -154,7 +154,7 @@
 
     <servlet>
         <servlet-name>socialUnitListPage</servlet-name>
-        <jsp-file>/views/social_unit_list.jsp</jsp-file>
+        <jsp-file>/social/social_unit_list.jsp</jsp-file>
     </servlet>
     <servlet-mapping>
         <servlet-name>socialUnitListPage</servlet-name>
@@ -163,7 +163,7 @@
 
     <servlet>
         <servlet-name>socialUnitWritePage</servlet-name>
-        <jsp-file>/views/social_unit_write.jsp</jsp-file>
+        <jsp-file>/social/social_unit_write.jsp</jsp-file>
     </servlet>
     <servlet-mapping>
         <servlet-name>socialUnitWritePage</servlet-name>
@@ -173,7 +173,7 @@
     <!-- ===== 지도 영역 ===== -->
     <servlet>
         <servlet-name>mapPage</servlet-name>
-        <jsp-file>/views/map.jsp</jsp-file>
+        <jsp-file>/map/map.jsp</jsp-file>
     </servlet>
     <servlet-mapping>
         <servlet-name>mapPage</servlet-name>
@@ -182,7 +182,7 @@
 
     <servlet>
         <servlet-name>mapWalkPage</servlet-name>
-        <jsp-file>/views/map_walk.jsp</jsp-file>
+        <jsp-file>/map/map_walk.jsp</jsp-file>
     </servlet>
     <servlet-mapping>
         <servlet-name>mapWalkPage</servlet-name>
@@ -191,7 +191,7 @@
 
     <servlet>
         <servlet-name>mapBusPage</servlet-name>
-        <jsp-file>/views/map_bus.jsp</jsp-file>
+        <jsp-file>/map/map_bus.jsp</jsp-file>
     </servlet>
     <servlet-mapping>
         <servlet-name>mapBusPage</servlet-name>
@@ -200,7 +200,7 @@
 
     <servlet>
         <servlet-name>mapSubwayPage</servlet-name>
-        <jsp-file>/views/map_subway.jsp</jsp-file>
+        <jsp-file>/map/map_subway.jsp</jsp-file>
     </servlet>
     <servlet-mapping>
         <servlet-name>mapSubwayPage</servlet-name>
@@ -209,7 +209,7 @@
 
     <servlet>
         <servlet-name>mapPinPage</servlet-name>
-        <jsp-file>/views/map_pin.jsp</jsp-file>
+        <jsp-file>/map/map_pin.jsp</jsp-file>
     </servlet>
     <servlet-mapping>
         <servlet-name>mapPinPage</servlet-name>
@@ -219,7 +219,7 @@
     <!-- ===== 메인 ===== -->
     <servlet>
         <servlet-name>mainPage</servlet-name>
-        <jsp-file>/main/main.jsp</jsp-file>
+        <jsp-file>/main/mainpage.jsp</jsp-file>
     </servlet>
     <servlet-mapping>
         <servlet-name>mainPage</servlet-name>

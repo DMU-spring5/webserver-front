@@ -29,7 +29,7 @@
                 <span class="divider">|</span>
                 <a href="../social/social_board.jsp">소셜</a>
                 <span class="divider">|</span>
-                <a href="../views/health.jsp">건강</a>
+                <a href="../health/health.jsp">건강</a>
                 <span class="divider">|</span>
                 <a href="../map/map.jsp">지도</a>
             </nav>
